@@ -2,20 +2,22 @@
 
 Aplicación web interna para **Turbine** que permite emitir, enviar y hacer el seguimiento de facturas **puntuales y recurrentes**, y perseguir los cobros de forma automática.
 
-Proyecto desarrollado con metodología **Scrum** en el marco de las asignaturas de Ingeniería de Requisitos / Ingeniería del Software (Universidad de Málaga).
+Proyecto desarrollado con metodología **Scrum** en el marco de las asignatura de Análisis y Diseño de Aplicaciones (Universidad de Málaga).
 
-## Qué hace
+## Qué hacemos
 
-- Alta y gestión de clientes (empresa + persona de contacto), con importación por CSV.
-- Facturas puntuales y recurrentes (emitidas el día 1), con prorrata en altas a mitad de mes.
-- PDF con la estética de Turbine, numeración correlativa, IVA y firma digital.
-- Envío por email, recordatorios los días 3 y 5 y flujo de impago hasta el cobro.
-- Detección automática de cobros mediante Stripe (simulado).
-- Roles: superadministrador, administrador y lector (con acceso solo a sus clientes asignados).
-- Dashboard de facturación y API REST documentada para sistemas externos.
+
+* Desarrollo en papel de manera técnica de todo lo relacionado con la arquitectura e Ingeniería del software:
+- Requisitos Funcionales y No funcionales.
+- Casos de Uso.
+- Diagramas de casos de Uso.
+- Informes de Scrum.
+- Diagramas de Clases.
+- Final: MicroProyecto aparte para poder enseñar una demo para el sprint 3.
 
 ## Stack
 
+(Si fuese un proyecto real)
 | Capa | Tecnología |
 | --- | --- |
 | Backend | Java 21 · Spring Boot 3 · Spring Security · Spring Data JPA |
@@ -28,25 +30,20 @@ Proyecto desarrollado con metodología **Scrum** en el marco de las asignaturas 
 ## Estructura del repositorio
 
 ```
-backend/    API REST, lógica de negocio y tareas programadas (Spring Boot)
-frontend/   Interfaz web responsive (React)
+aplicacion/   Interfaz web  (Demostración de prueba)
 docs/       Requisitos, arquitectura y diagramas UML (PlantUML)
-docker/     Dockerfile y docker-compose
+
 ```
 
 ## Puesta en marcha (local)
 
-> Requisitos: Java 21, Node 20+, Docker
+> Requisitos: Git 
 
-```bash
-# 1. Base de datos
-docker compose -f docker/docker-compose.yml up -d
-
-# 2. Backend  →  http://localhost:8080
-cd backend && ./mvnw spring-boot:run
-
-# 3. Frontend →  http://localhost:5173
-cd frontend && npm install && npm run dev
+```
+-Inicializar Git en tu carpeta con git init
+-Vincular cuenta con git config --global o similar
+-Hacer una pull inicial del proyecto
+-Crear tu rama y comenzar a trabajar.
 ```
 
 La documentación de la API está disponible en `http://localhost:8080/swagger-ui.html`.
@@ -54,9 +51,15 @@ La documentación de la API está disponible en `http://localhost:8080/swagger-u
 ## Forma de trabajo
 
 - `main` está protegida: todo cambio entra mediante **pull request** revisada por otra persona.
-- Ramas: `feature/<descripcion>`, `fix/<descripcion>`, `docs/<descripcion>`.
-- Commits descriptivos, en presente: `Añade cálculo de prorrata en Suscripcion`.
+- Ramas:  `docs<tu nombre>` | work<tunombre>. Ej: workYousef
+- Commits descriptivos, en presente: `EJ: Añado mi versión de los casos de uso`.
 
 ## Equipo
 
-_Nombres del equipo aquí._
+Néstor ---> Product Owner
+Yousef ---> Scrum Master
+Irene ---> Developer
+Miguel ---> Developer
+Adrian ---> Developer
+Javier ---> Developer
+Gonzalo ---> Developer
