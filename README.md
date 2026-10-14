@@ -55,11 +55,13 @@ La documentación de la API está disponible en `http://localhost:8080/swagger-u
 - Commits descriptivos, en presente: `EJ: Añado mi versión de los casos de uso`.
 
 ## Equipo
+```
+-Néstor ---> Product Owner
+-Yousef ---> Scrum Master
+-Irene ---> Developer
+-Miguel ---> Developer
+-Adrian ---> Developer
+-Javier ---> Developer
+-Gonzalo ---> Developer
 
-Néstor ---> Product Owner
-Yousef ---> Scrum Master
-Irene ---> Developer
-Miguel ---> Developer
-Adrian ---> Developer
-Javier ---> Developer
-Gonzalo ---> Developer
+```
