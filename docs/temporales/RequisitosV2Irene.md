@@ -116,66 +116,49 @@ Vamos a separarlos un poco por categorías:
 
 ## 4\. Requisitos no funcionales
 
-### NFR1. Seguridad integral (cifrado y control de acceso)
+* **NFR1. Seguridad integral (cifrado y control de acceso).** Protección de información sensible y autorización estricta para garantizar que cada usuario acceda solo a lo que le corresponde.
 
-* **Descripción:** Protección de información sensible y autorización estricta para garantizar que cada usuario acceda solo a lo que le corresponde.
-* **Dependencias:** FR1, FR10, FR2, FR3, FR16, FR19.
-* **Métrica / Criterio de aceptación:** Se cifrarán las contraseñas, datos fiscales y documentos. Tráfico 100% HTTPS. El sistema bloqueará el 100% de los intentos de acceso sin permiso (URL o API) usando un modelo de autorización centralizado. El código fuente no expondrá claves y el acceso a documentos exigirá sesión iniciada o enlace temporal.
-* **Método de verificación:** Inspección del código, uso de herramientas de ciberseguridad para buscar brechas y matriz de pruebas automáticas/manuales cruzando todos los roles con todos los recursos (incluyendo intentos de copia directa de URLs).
+  * Dependencias: FR1, FR10, FR2, FR3, FR16, FR19.
+  * Métrica / Criterio de aceptación: Se cifrarán las contraseñas, datos fiscales y documentos. Tráfico 100% HTTPS. El sistema bloqueará el 100% de los intentos de acceso sin permiso (URL o API) usando un modelo de autorización centralizado. El código fuente no expondrá claves y el acceso a documentos exigirá sesión iniciada o enlace temporal.
+  * Método de verificación: Inspección del código, uso de herramientas de ciberseguridad para buscar brechas y matriz de pruebas automáticas/manuales cruzando todos los roles con todos los recursos (incluyendo intentos de copia directa de URLs).
+* **NFR2. Rendimiento y eficiencia de uso.** Las pantallas y búsquedas habituales responden de forma casi inmediata; lo pesado va en segundo plano. Operativa rápida con pocos clics, sin necesidad de aprendizaje previo.
 
-### NFR2. Rendimiento y eficiencia de uso
+  * Dependencias: FR15, FR16, FR4, FR6.
+  * Métrica / Criterio de aceptación: El sistema debe ser rápido y fluido, garantizando que las búsquedas y las fichas de clientes se abran en menos de 1 segundo (incluso en el peor de los casos). Para evitar que la pantalla se quede "congelada", las operaciones pesadas trabajarán por detrás, mostrando únicamente un indicador visual de progreso al usuario.
+  * Método de verificación: Se someterá al sistema a pruebas de carga o "estrés" utilizando programas especiales que inyectarán datos inventados masivos, para comprobar que el sistema aguanta el tirón sin volverse lento. Pruebas de usabilidad con al menos 5 personas, midiendo tiempos y clics.
+* **NFR3. Escalabilidad.** Crecer en clientes, facturas y usuarios sin rehacer el modelo.
 
-* **Descripción:** Las pantallas y búsquedas habituales responden de forma casi inmediata; lo pesado va en segundo plano. Operativa rápida con pocos clics, sin necesidad de aprendizaje previo.
-* **Dependencias:** FR15, FR16, FR4, FR6.
-* **Métrica / Criterio de aceptación:** El sistema debe ser rápido y fluido, garantizando que las búsquedas y las fichas de clientes se abran en menos de 1 segundo (incluso en el peor de los casos). Para evitar que la pantalla se quede "congelada", las operaciones pesadas trabajarán por detrás, mostrando únicamente un indicador visual de progreso al usuario.
-* **Método de verificación:** Se someterá al sistema a pruebas de carga o "estrés" utilizando programas especiales que inyectarán datos inventados masivos, para comprobar que el sistema aguanta el tirón sin volverse lento. Pruebas de usabilidad con al menos 5 personas, midiendo tiempos y clics.
+  * Dependencias: FR15, FR7.
+  * Métrica / Criterio de aceptación: Paginación y filtrado en servidor (ninguna pantalla carga el histórico completo); la generación mensual procesa 3.000 clientes en un tiempo acotado y documentado.
+  * Método de verificación: Pruebas de volumen con datos sintéticos y revisión de las consultas.
+* **NFR4. Diseño responsive, accesibilidad e identidad corporativa.** Interfaz utilizable en móvil, tablet y escritorio, accesible y fiel a la imagen de Turbine.
 
-### NFR3. Escalabilidad
+  * Dependencias: FR13, FR16.
+  * Métrica / Criterio de aceptación: La web se adaptará perfectamente a móviles, tablets y monitores sin barras de desplazamiento horizontales. Desde el móvil se podrán hacer tareas urgentes, respetando siempre los colores y logos de Turbine.
+  * Método de verificación: Simular distintas pantallas con Chrome DevTools y usar herramientas automáticas (como Lighthouse) para comprobar que el diseño encaja y es accesible.
+* **NFR5. Fiabilidad e integridad transaccional.** Transacciones seguras sin pérdida de datos, duplicidades ni errores matemáticos. Importes exactos y fechas coherentes.
 
-* **Descripción:** Crecer en clientes, facturas y usuarios sin rehacer el modelo.
-* **Dependencias:** FR15, FR7.
-* **Métrica / Criterio de aceptación:** Paginación y filtrado en servidor (ninguna pantalla carga el histórico completo); la generación mensual procesa 3.000 clientes en un tiempo acotado y documentado.
-* **Método de verificación:** Pruebas de volumen con datos sintéticos y revisión de las consultas.
+  * Dependencias: FR7, FR8, FR10, FR12, FR6, FR16.
+  * Métrica / Criterio de aceptación: Transacciones ACID reales. Cero facturas o cobros duplicados aunque los usuarios hagan dobles clics masivos o la pasarela envíe el mismo aviso de pago dos veces. Importes cuadrados al céntimo (sin errores de redondeo float) y totales que coincidan exactamente en PDF, base de datos y dashboard.
+  * Método de verificación: Enviar cobros repetidos aposta y simular clics simultáneos masivos en un entorno de pruebas para confirmar que el sistema bloquea los duplicados. Además, pruebas unitarias de prorrateo, impuestos y totales (incluyendo fin de mes y años bisiestos) y conciliación automática PDF–BD–dashboard.
+* **NFR6. Disponibilidad y recuperación.** Las caídas breves no pierden emisiones y los datos son recuperables.
 
-### NFR4. Diseño responsive, accesibilidad e identidad corporativa
+  * Dependencias: FR7, FR18.
+  * Métrica / Criterio de aceptación: Copias de seguridad diarias. Si el servidor se cae, el sistema debe recuperarse en menos de 4 horas sin perder datos ni duplicar las facturas que se estaban generando durante el apagón.
+  * Método de verificación: Simulacro de restauración documentado y prueba de caída durante la generación recurrente.
+* **NFR7. Trazabilidad e inmutabilidad.** Todo cambio económico o de permisos es rastreable y el pasado no se puede reescribir.
 
-* **Descripción:** Interfaz utilizable en móvil, tablet y escritorio, accesible y fiel a la imagen de Turbine.
-* **Dependencias:** FR13, FR16.
-* **Métrica / Criterio de aceptación:** La web se adaptará perfectamente a móviles, tablets y monitores sin barras de desplazamiento horizontales. Desde el móvil se podrán hacer tareas urgentes, respetando siempre los colores y logos de Turbine.
-* **Método de verificación:** Simular distintas pantallas con Chrome DevTools y usar herramientas automáticas (como Lighthouse) para comprobar que el diseño encaja y es accesible.
+  * Dependencias: FR8, FR12, FR17.
+  * Métrica / Criterio de aceptación: Todo queda grabado en el registro de auditoría (quién, qué y cuándo) y es imborrable. Una factura ya emitida es sagrada y jamás se puede alterar.
+  * Método de verificación: Intentar modificar o borrar registros e históricos con diferentes tipos de usuario para comprobar que el sistema bloquea cualquier manipulación.
+* **NFR8. Protección de datos y conservación.** Minimización y conservación de datos personales y contables según la ley, sin invalidar facturas históricas.
 
-### NFR5. Fiabilidad e integridad transaccional
+  * Dependencias: FR4, FR16, FR17.
+  * Métrica / Criterio de aceptación: Los datos privados de un contacto se pueden ocultar (anonimizar) sin que esto rompa las facturas antiguas donde aparecía. Las descargas de datos temporales caducan y desaparecen solas.
+  * Método de verificación: Hacer pruebas con datos inventados, borrar contactos y confirmar que sus facturas históricas siguen intactas, legales y accesibles.
+* **NFR9. Mantenibilidad, compatibilidad y despliegue.** Código testeado, infraestructura reproducible y soporte multinavegador e internacional.
 
-* **Descripción:** Transacciones seguras sin pérdida de datos, duplicidades ni errores matemáticos. Importes exactos y fechas coherentes.
-* **Dependencias:** FR7, FR8, FR10, FR12, FR6, FR16.
-* **Métrica / Criterio de aceptación:** Transacciones ACID reales. Cero facturas o cobros duplicados aunque los usuarios hagan dobles clics masivos o la pasarela envíe el mismo aviso de pago dos veces. Importes cuadrados al céntimo (sin errores de redondeo float) y totales que coincidan exactamente en PDF, base de datos y dashboard.
-* **Método de verificación:** Enviar cobros repetidos aposta y simular clics simultáneos masivos en un entorno de pruebas para confirmar que el sistema bloquea los duplicados. Además, pruebas unitarias de prorrateo, impuestos y totales (incluyendo fin de mes y años bisiestos) y conciliación automática PDF–BD–dashboard.
-
-### NFR6. Disponibilidad y recuperación
-
-* **Descripción:** Las caídas breves no pierden emisiones y los datos son recuperables.
-* **Dependencias:** FR7, FR18.
-* **Métrica / Criterio de aceptación:** Copias de seguridad diarias. Si el servidor se cae, el sistema debe recuperarse en menos de 4 horas sin perder datos ni duplicar las facturas que se estaban generando durante el apagón.
-* **Método de verificación:** Simulacro de restauración documentado y prueba de caída durante la generación recurrente.
-
-### NFR7. Trazabilidad e inmutabilidad
-
-* **Descripción:** Todo cambio económico o de permisos es rastreable y el pasado no se puede reescribir.
-* **Dependencias:** FR8, FR12, FR17.
-* **Métrica / Criterio de aceptación:** Todo queda grabado en el registro de auditoría (quién, qué y cuándo) y es imborrable. Una factura ya emitida es sagrada y jamás se puede alterar.
-* **Método de verificación:** Intentar modificar o borrar registros e históricos con diferentes tipos de usuario para comprobar que el sistema bloquea cualquier manipulación.
-
-### NFR8. Protección de datos y conservación
-
-* **Descripción:** Minimización y conservación de datos personales y contables según la ley, sin invalidar facturas históricas.
-* **Dependencias:** FR4, FR16, FR17.
-* **Métrica / Criterio de aceptación:** Los datos privados de un contacto se pueden ocultar (anonimizar) sin que esto rompa las facturas antiguas donde aparecía. Las descargas de datos temporales caducan y desaparecen solas.
-* **Método de verificación:** Hacer pruebas con datos inventados, borrar contactos y confirmar que sus facturas históricas siguen intactas, legales y accesibles.
-
-### NFR9. Mantenibilidad, compatibilidad y despliegue
-
-* **Descripción:** Código testeado, infraestructura reproducible y soporte multinavegador e internacional.
-* **Dependencias:** FR10, FR16, FR18, FR19.
-* **Métrica / Criterio de aceptación:** Al menos el 80% de la lógica de negocio y económica tendrá pruebas automáticas. Existirán manuales claros para instalar el sistema desde cero. Los archivos exportados (CSV) se codificarán en UTF-8 (sin caracteres rotos). Las plantillas admitirán multidioma (es/en) y funcionarán en cualquier navegador moderno.
-* **Método de verificación:** Revisión de cobertura de código, prueba de despliegue siguiendo únicamente el manual de instalación, y apertura en distintos navegadores exportando textos con caracteres especiales.
+  * Dependencias: FR10, FR16, FR18, FR19.
+  * Métrica / Criterio de aceptación: Al menos el 80% de la lógica de negocio y económica tendrá pruebas automáticas. Existirán manuales claros para instalar el sistema desde cero. Los archivos exportados (CSV) se codificarán en UTF-8 (sin caracteres rotos). Las plantillas admitirán multidioma (es/en) y funcionarán en cualquier navegador moderno.
+  * Método de verificación: Revisión de cobertura de código, prueba de despliegue siguiendo únicamente el manual de instalación, y apertura en distintos navegadores exportando textos con caracteres especiales.
 
