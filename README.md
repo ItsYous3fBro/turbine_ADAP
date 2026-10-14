@@ -51,7 +51,7 @@ La documentación de la API está disponible en `http://localhost:8080/swagger-u
 ## Forma de trabajo
 
 - `main` está protegida: todo cambio entra mediante **pull request** revisada por otra persona.
-- Ramas:  `work<tu nombre>` | work<tunombre> . Ej: workYousef
+- Ramas:  `work<tu nombre>` . Ej: workYousef
 - Commits descriptivos, en presente: `EJ: Añado mi versión de los casos de uso`.
 
 ## Equipo
