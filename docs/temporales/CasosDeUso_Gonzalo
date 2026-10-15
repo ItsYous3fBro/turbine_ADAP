@@ -1,0 +1,40 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Administrador" as Administrador
+actor "Empleado" as Empleado
+actor "Sistema de pagos" as SistemaPagos
+actor "Servicio de notificaciones" as ServicioNotificaciones
+
+Administrador --|> Empleado
+
+rectangle "Sistema de facturación y seguimiento de cobros - Turbine" {
+  usecase "Gestionar usuarios" as CasoUso_GestionarUsuarios
+  usecase "Consultar dashboard" as CasoUso_ConsultarDashboard
+  usecase "Iniciar sesión" as CasoUso_IniciarSesion
+  usecase "Gestionar clientes" as CasoUso_GestionarClientes
+  usecase "Gestionar facturas" as CasoUso_GestionarFacturas
+  usecase "Consultar facturas" as CasoUso_ConsultarFacturas
+  usecase "Comprobar pago" as CasoUso_ComprobarPago
+  usecase "Enviar factura" as CasoUso_EnviarFactura
+  usecase "Enviar recordatorio\nde pago" as CasoUso_EnviarRecordatorio
+}
+
+Administrador --> CasoUso_GestionarUsuarios
+Administrador --> CasoUso_ConsultarDashboard
+
+Empleado --> CasoUso_IniciarSesion
+Empleado --> CasoUso_GestionarClientes
+Empleado --> CasoUso_GestionarFacturas
+Empleado --> CasoUso_ConsultarFacturas
+Empleado --> CasoUso_ComprobarPago
+
+SistemaPagos --> CasoUso_ComprobarPago
+
+ServicioNotificaciones --> CasoUso_EnviarFactura
+ServicioNotificaciones --> CasoUso_EnviarRecordatorio
+
+CasoUso_GestionarFacturas .> CasoUso_EnviarFactura : <<include>>
+
+@enduml
