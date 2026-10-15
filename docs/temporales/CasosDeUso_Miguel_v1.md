@@ -1,46 +1,61 @@
-@startuml
+# Casos de uso — Turbine
 
-left to right direction
+## CU01. Iniciar sesión
 
-title Sistema de facturación y seguimiento de cobros - Turbine
+- **Actores:** Empleado y administrador.
+- **Descripción:** Acceder al sistema con sus credenciales para utilizar las funciones permitidas según su rol.
+- **Requisitos de Adrián:** FR40, FR42.
 
-actor "Empleado" as Empleado
-actor "Administrador" as Admin
-actor "Sistema de pagos" as Pagos
-actor "Servicio de notificaciones" as Notificaciones
+## CU02. Gestionar clientes
 
-Admin -|> Empleado
+- **Actores:** Empleado y administrador.
+- **Descripción:** Registrar, consultar y modificar los datos de los clientes y sus contactos. Los clientes se desactivan en lugar de borrarse.
+- **Requisitos de Adrián:** FR25, FR26, FR27, FR29, FR46; UR1.
 
+## CU03. Gestionar facturas
 
-usecase "Iniciar sesión" as Login
+- **Actores:** Empleado y administrador.
+- **Descripción:** Crear y modificar borradores de facturas, añadir conceptos y previsualizarlas antes de emitirlas. Según este diagrama, incluye el envío de la factura.
+- **Requisitos de Adrián:** FR1, FR3, FR8, FR9; UR2.
 
-usecase "Gestionar clientes" as Clientes
+## CU04. Consultar facturas
 
-usecase "Gestionar facturas" as Facturas
-usecase "Consultar facturas" as ConsultarFacturas
-usecase "Enviar factura" as EnviarFactura
+- **Actores:** Empleado y administrador.
+- **Descripción:** Buscar facturas y consultar sus datos y su estado, por ejemplo, si están emitidas, vencidas o pagadas.
+- **Requisitos de Adrián:** FR2, FR53; UR3, UR8.
 
-usecase "Comprobar pago" as ComprobarPago
-usecase "Enviar recordatorio\nde pago" as Recordatorio
+## CU05. Enviar factura
 
-usecase "Gestionar usuarios" as Usuarios
-usecase "Consultar dashboard" as Dashboard
+- **Actores:** Empleado y administrador mediante la gestión de facturas; servicio de notificaciones.
+- **Descripción:** Enviar la factura al cliente por correo electrónico y registrar el resultado. Si el envío falla, se puede reintentar sin duplicar la factura.
+- **Requisitos de Adrián:** FR3, FR16, FR18.
 
+## CU06. Comprobar pago
 
-Empleado --> Login
-Empleado --> Clientes
-Empleado --> Facturas
-Empleado --> ConsultarFacturas
-Empleado --> ComprobarPago
+- **Actores:** Empleado, administrador y sistema de pagos.
+- **Descripción:** Consultar si una factura está pagada a partir de la información recibida del sistema de pagos, evitando contabilizar dos veces un mismo evento.
+- **Requisitos de Adrián:** FR19, FR20, FR21; UR3.
 
-Admin --> Usuarios
-Admin --> Dashboard
+## CU07. Enviar recordatorio de pago
 
-Facturas ..> EnviarFactura : <<include>>
+- **Actores:** Servicio de notificaciones.
+- **Descripción:** Enviar avisos automáticos cuando una factura sigue pendiente de pago, respetando los plazos, la frecuencia y las pausas configuradas.
+- **Requisitos de Adrián:** FR22, FR23, FR24.
 
-Pagos --> ComprobarPago
+## CU08. Gestionar usuarios
 
-Notificaciones --> EnviarFactura
-Notificaciones --> Recordatorio
+- **Actor:** Administrador autorizado.
+- **Descripción:** Crear, invitar y desactivar usuarios. No se permite el autorregistro y se conserva el historial de los usuarios desactivados.
+- **Requisitos de Adrián:** FR43, FR45; UR11.
 
-@enduml
+## CU09. Consultar dashboard
+
+- **Actor:** Administrador.
+- **Descripción:** Consultar las métricas de facturación y cobros para conocer la situación económica en periodos semanales, mensuales y trimestrales.
+- **Requisitos de Adrián:** FR50, FR51; UR13.
+
+## Notas del modelo
+
+- En este diagrama, el administrador hereda las funciones del empleado.
+- La correspondencia indica los requisitos relacionados: esta versión sencilla no cubre todos sus detalles.
+- La relación `<<include>>` significa que gestionar una factura implica enviarla siempre. Si también se permite guardar solo un borrador, convendría cambiar esa relación.
