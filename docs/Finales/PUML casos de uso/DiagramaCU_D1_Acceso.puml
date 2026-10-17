@@ -1,0 +1,47 @@
+@startuml DiagramaCU_D1_Acceso
+title D1 · Acceso, usuarios y permisos
+left to right direction
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam usecase {
+  BackgroundColor #F5F8FF
+  BorderColor #3B6FD8
+}
+skinparam note {
+  BackgroundColor #FFFBE6
+  BorderColor #C9B458
+}
+actor "Usuario estándar" as US
+actor "Administrador" as AD
+actor "Superadministrador" as SA
+actor "Empleado invitado" as INV
+actor "Proveedor de identidad\n(Microsoft)" as MS
+AD -|> US
+SA -|> AD
+
+rectangle "Gestor de facturas Turbine" {
+  usecase CU01 as "CU-01 Iniciar sesión
+--
+puntos de extensión:
+recuperación (paso 1)"
+  usecase "CU-02 Recuperar\ncontraseña" as CU02
+  usecase "CU-03 Activar cuenta" as CU03
+  usecase "CU-04 Gestionar usuarios\nestándar" as CU04
+  usecase "CU-05 Gestionar roles\nde administración" as CU05
+  usecase "CU-06 Asignar y delegar\nclientes" as CU06
+}
+US --> CU01
+US --> CU02
+INV --> CU03
+AD --> CU04
+AD --> CU06
+SA --> CU05
+CU01 --> MS
+CU03 --> MS
+CU04 --> INV
+CU02 ..> CU01 : <<extend>>
+note on link
+  condición: el empleado no
+  recuerda su contraseña
+end note
+@enduml

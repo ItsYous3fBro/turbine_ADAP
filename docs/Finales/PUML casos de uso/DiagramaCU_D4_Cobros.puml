@@ -1,0 +1,35 @@
+@startuml DiagramaCU_D4_Cobros
+title D4 · Cobros
+left to right direction
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam usecase {
+  BackgroundColor #F5F8FF
+  BorderColor #3B6FD8
+}
+skinparam note {
+  BackgroundColor #FFFBE6
+  BorderColor #C9B458
+}
+actor "Administrador" as AD
+actor "Temporizador" as TM
+actor "Pasarela de pago\n(Stripe)" as PP
+actor "Cliente" as CL
+actor "Proveedor de correo" as PC
+
+rectangle "Gestor de facturas Turbine" {
+  usecase "CU-28 Enviar recordatorios\nde cobro" as CU28
+  usecase "CU-29 Registrar cobro\nde la pasarela" as CU29
+  usecase "CU-30 Importar movimientos\nbancarios" as CU30
+  usecase "CU-31 Vincular cobro\ncon factura" as CU31
+  usecase "CU-32 Conciliar cobros\nmanualmente" as CU32
+}
+TM --> CU28
+CU28 --> CL
+CU28 --> PC
+PP --> CU29
+AD --> CU30
+AD --> CU32
+CU29 ..> CU31 : <<include>>
+CU30 ..> CU31 : <<include>>
+@enduml

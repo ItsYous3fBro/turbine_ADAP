@@ -1,0 +1,41 @@
+@startuml DiagramaCU_D6_Control
+title D6 · Información y configuración
+left to right direction
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam usecase {
+  BackgroundColor #F5F8FF
+  BorderColor #3B6FD8
+}
+skinparam note {
+  BackgroundColor #FFFBE6
+  BorderColor #C9B458
+}
+actor "Usuario estándar" as US
+actor "Administrador" as AD
+actor "Superadministrador" as SA
+actor "Temporizador" as TM
+actor "Gestoría" as GE
+AD -|> US
+SA -|> AD
+
+rectangle "Gestor de facturas Turbine" {
+  usecase "CU-39 Consultar dashboard\nfinanciero" as CU39
+  usecase "CU-40 Definir objetivos\nfinancieros" as CU40
+  usecase "CU-41 Exportar informes\ny datos" as CU41
+  usecase "CU-42 Enviar informes\nprogramados" as CU42
+  usecase "CU-43 Consultar auditoría" as CU43
+  usecase "CU-44 Consultar salud\ndel sistema" as CU44
+  usecase "CU-45 Configurar parámetros\ndel negocio" as CU45
+  usecase "CU-46 Editar plantillas\nde mensajes" as CU46
+}
+US --> CU41
+AD --> CU39
+AD --> CU40
+TM --> CU42
+CU42 --> GE
+SA --> CU43
+SA --> CU44
+SA --> CU45
+SA --> CU46
+@enduml
