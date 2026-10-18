@@ -19,57 +19,57 @@ actor "Proveedor de correo" as PC
 AD -|> US
 
 rectangle "Gestor de facturas Turbine" {
-  usecase CU17 as "CU-17 Crear factura puntual
+  usecase CU15 as "CU-15 Crear factura puntual
 --
 puntos de extensión:
 aprobación (paso 7)"
-  usecase "CU-18 Generar facturas\nrecurrentes" as CU18
-  usecase CU24 as "CU-24 Rectificar o anular
+  usecase "CU-16 Generar facturas\nrecurrentes" as CU16
+  usecase CU22 as "CU-22 Rectificar o anular
 factura
 --
 puntos de extensión:
 aprobación (paso 6)"
-  usecase "CU-19 Emitir factura" as CU19
-  usecase "CU-20 Retener para\naprobación" as CU20
-  usecase CU21 as "CU-21 Resolver aprobación
+  usecase "CU-17 Emitir factura" as CU17
+  usecase "CU-18 Retener para\naprobación" as CU18
+  usecase CU19 as "CU-19 Resolver aprobación
 pendiente
 --
 puntos de extensión:
 aprobación concedida (paso 4)"
-  usecase "CU-22 Enviar factura" as CU22
-  usecase "CU-23 Reenviar factura" as CU23
-  usecase "CU-25 Declarar factura\nincobrable" as CU25
-  usecase "CU-26 Cerrar periodo\nde facturación" as CU26
-  usecase "CU-27 Consultar facturas\ny estado de cobro" as CU27
-  usecase "CU-47 Registrar rebote\nde envío" as CU47
+  usecase "CU-20 Enviar factura" as CU20
+  usecase "CU-21 Reenviar factura" as CU21
+  usecase "CU-23 Declarar factura\nincobrable" as CU23
+  usecase "CU-24 Cerrar periodo\nde facturación" as CU24
+  usecase "CU-25 Consultar facturas\ny estado de cobro" as CU25
+  usecase "CU-26 Registrar rebote\nde envío" as CU26
 }
-US --> CU17
-US --> CU23
-US --> CU27
-TM --> CU18
-AD --> CU21
+US --> CU15
+US --> CU21
+US --> CU25
+TM --> CU16
+AD --> CU19
+AD --> CU22
+AD --> CU23
 AD --> CU24
-AD --> CU25
-AD --> CU26
-PC --> CU47
-CU22 --> CL
-CU22 --> PC
-CU17 ..> CU19 : <<include>>
-CU18 ..> CU19 : <<include>>
-CU24 ..> CU19 : <<include>>
-CU19 ..> CU22 : <<include>>
-CU23 ..> CU22 : <<include>>
-CU20 ..> CU17 : <<extend>>
+PC --> CU26
+CU20 --> CL
+CU20 --> PC
+CU15 ..> CU17 : <<include>>
+CU16 ..> CU17 : <<include>>
+CU22 ..> CU17 : <<include>>
+CU17 ..> CU20 : <<include>>
+CU21 ..> CU20 : <<include>>
+CU18 ..> CU15 : <<extend>>
 note on link
   condición de retención
-  (definida en CU-20)
+  (definida en CU-18)
 end note
-CU20 ..> CU24 : <<extend>>
+CU18 ..> CU22 : <<extend>>
 note on link
   condición de retención
-  (definida en CU-20)
+  (definida en CU-18)
 end note
-CU19 ..> CU21 : <<extend>>
+CU17 ..> CU19 : <<extend>>
 note on link
   condición: la operación
   aprobada es una factura

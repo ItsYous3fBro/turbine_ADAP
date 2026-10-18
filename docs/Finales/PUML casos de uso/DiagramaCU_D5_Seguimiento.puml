@@ -15,32 +15,32 @@ actor "Usuario estándar" as US
 actor "Temporizador" as TM
 
 rectangle "Gestor de facturas Turbine" {
-  usecase "CU-33 Gestionar\ntrabajo diario" as CU33
-  usecase CU34 as "CU-34 Gestionar incidencia
+  usecase "CU-31 Gestionar\ntrabajo diario" as CU31
+  usecase CU32 as "CU-32 Gestionar incidencia
 --
 puntos de extensión:
 pausa (paso 1)"
-  usecase "CU-35 Pausar recordatorios\nde una factura" as CU35
-  usecase CU36 as "CU-36 Buscar clientes
+  usecase "CU-33 Pausar recordatorios\nde una factura" as CU33
+  usecase CU34 as "CU-34 Buscar clientes
 y facturas
 --
 puntos de extensión:
 acción masiva (paso 3)"
-  usecase "CU-37 Ejecutar\nacción masiva" as CU37
-  usecase "CU-38 Aplicar vencimientos\nprogramados" as CU38
+  usecase "CU-35 Ejecutar\nacción masiva" as CU35
+  usecase "CU-36 Aplicar vencimientos\nprogramados" as CU36
 }
+US --> CU31
+US --> CU32
 US --> CU33
 US --> CU34
 US --> CU35
-US --> CU36
-US --> CU37
-TM --> CU38
-CU35 ..> CU34 : <<extend>>
+TM --> CU36
+CU33 ..> CU32 : <<extend>>
 note on link
   condición: la incidencia afecta
   al cobro de una factura
 end note
-CU37 ..> CU36 : <<extend>>
+CU35 ..> CU34 : <<extend>>
 note on link
   condición: se seleccionan
   varios resultados

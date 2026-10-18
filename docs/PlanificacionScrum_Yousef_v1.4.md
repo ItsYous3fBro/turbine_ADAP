@@ -37,25 +37,22 @@ Anexos: checklists, glosario y fuentes
 
 | **Versión** | **Fecha** | **Autor/a** | **Cambios** |
 |---|---|---|---|
-| 1.0 | *[dd/mm/aaaa]* | *[Nombre]* | Versión inicial del plan de equipo. |
-| 1.1 | 14/10/2026 | Yousef AL Haidar | Adaptación a proyecto teórico de análisis y diseño: se eliminan alcance y supuestos; se adaptan roles, RACI, fichas, definiciones, backlog y hoja de ruta. |
-| 1.2 | 14/10/2026 | Yousef AL Haidar | Sprints 1 y 2 ajustados al primer parcial (20/10); nueva forma de trabajo con versiones temporales y archivos finales; canales de comunicación; preparación de la exposición. |
+| 1.0 | 30/09/2026 | Yousef Al Haidaar| Versión inicial del plan de equipo. |
+| 1.1 | 07/10/2026 | Yousef AL Haidar | Adaptación a proyecto teórico de análisis y diseño: se eliminan alcance y supuestos; se adaptan roles, RACI, fichas, definiciones, backlog y hoja de ruta. |
+| 1.2 | 14/10/2026 | Yousef AL Haidar | Sprints 1 y 2 ajustados al primer parcial (20/10); nueva filosofía de trabajo con versiones temporales y archivos finales; canales de comunicación; preparación de la exposición. |
 |   |   |   |   |
 |   |   |   |   |
 
 # 1. Visión y objetivos
 
-> **Cómo usarlo:** Rellena esta sección en el Sprint 0 con el Product Owner y los stakeholders. Es la base del Product Goal: todo el trabajo del backlog debe acercarse a él. Según la Guía Scrum, el Product Goal describe un estado futuro del producto que sirve de meta para el equipo.
 
-## 1.1 Visión del producto
-
-**Visión:** para Turbine H, que necesita un gestor de facturación interno, Factugest es una aplicación web que emite, envía y hace el seguimiento de facturas puntuales y recurrentes y de sus cobros. A diferencia de soluciones genéricas como Holded, se centra en la operativa de Turbine: pocos clics, uso desde cualquier dispositivo y recordatorios y cobros automáticos. El proyecto no construye la aplicación: la analiza y la diseña.
+**Visión:** Turbine H necesita un gestor de facturación interno, Factugest es una aplicación web que emite, envía y hace el seguimiento de facturas puntuales y recurrentes y de sus cobros. A diferencia de soluciones genéricas como Holded, se centra en la operativa de Turbine: pocos clics, uso desde cualquier dispositivo y recordatorios y cobros automáticos. El proyecto no construye la aplicación: la analiza y la diseña.
 
 | **Visión** | Una aplicación web capaz de emitir, gestionar y seguir facturas puntuales y recurrentes, y sus cobros. |
 |---|---|
 | **Product Goal actual** | Diseñar de forma teórica la aplicación siguiendo buenas prácticas de ingeniería y arquitectura del software: requisitos, casos de uso, diagramas UML, documentación e informes Scrum, más una demo ilustrativa en el Sprint 3. |
 
-## 1.2 Objetivos y métricas de éxito
+## 1.1 Objetivos y métricas de éxito
 
 | **Nº** | **Objetivo** | **Métrica / indicador** | **Meta y fecha** |
 |---|---|---|---|
@@ -66,7 +63,7 @@ Anexos: checklists, glosario y fuentes
 | O5 | Presentar una demo ilustrativa (micro-proyecto) | Demo de los flujos principales mostrada en la Review | Sprint 3 |
 | O6 | Aplicar Scrum y documentarlo | Un informe Scrum (Review y Retro) por sprint | Cada sprint |
 
-## 1.3 Épicas
+## 1.2 Épicas
 
 Seis bloques de trabajo, uno por tipo de entregable. Se descomponen en elementos del backlog durante el refinamiento.
 
@@ -81,9 +78,9 @@ Seis bloques de trabajo, uno por tipo de entregable. Se descomponen en elementos
 
 # 2. Equipo y roles
 
-La Guía Scrum define tres responsabilidades dentro del Scrum Team: un Product Owner, un Scrum Master y los Developers, y recomienda equipos de 10 personas o menos. Con 7 miembros, la composición recomendada es 1 PO, 1 SM y 5 Developers.
+La Guía Scrum define tres responsabilidades dentro del Scrum Team: un Product Owner, un Scrum Master y los Developers. Con 7 miembros, la composición utilizada es 1 PO, 1 SM y 5 Developers.
 
-> **Cómo usarlo:** Scrum no define jerarquías entre los Developers. Como el proyecto es teórico, cada especialización indica qué artefacto lidera cada persona (requisitos, casos de uso, clases, arquitectura, calidad, documentación), pero todos comparten la responsabilidad del incremento y se ayudan entre áreas.
+
 
 ## 2.1 Directorio del equipo
 
@@ -147,14 +144,13 @@ Rotar tareas de facilitación reparte la carga y evita depender de una sola pers
 
 | **Responsabilidad** | **S1** | **S2** | **S3** | **S4** | **S5** | **S6** |
 |---|---|---|---|---|---|---|
-| Facilitador/a de la retrospectiva | *[Nombre]* | *[Nombre]* | *[Nombre]* | *[Nombre]* | *[Nombre]* | *[Nombre]* |
-| Encargado/a del acta (Review y Retro) | *[Nombre]* | *[Nombre]* | *[Nombre]* | *[Nombre]* | *[Nombre]* | *[Nombre]* |
-| Guardián/a del tablero | *[Nombre]* | *[Nombre]* | *[Nombre]* | *[Nombre]* | *[Nombre]* | *[Nombre]* |
-| Responsable de la exposición | *[Nombre]* | *[Nombre]* | *[Nombre]* | *[Nombre]* | *[Nombre]* | *[Nombre]* |
+| Facilitador/a de la retrospectiva | Yousef | Yousef | *[Nombre]* | *[Nombre]* | *[Nombre]* | *[Nombre]* |
+| Encargado/a del acta (Review y Retro) | Yousef | Yousef | *[Nombre]* | *[Nombre]* | *[Nombre]* | *[Nombre]* |
+| Guardián/a del tablero | Yousef | Yousef | *[Nombre]* | *[Nombre]* | *[Nombre]* | *[Nombre]* |
+| Responsable de la exposición | Decidido Por el profesor | Decidido por el profesor | *[Nombre]* | *[Nombre]* | *[Nombre]* | *[Nombre]* |
 
 # 3. Reparto de trabajo por miembro
 
-> **Cómo usarlo:** Una ficha por persona con sus responsabilidades permanentes, el trabajo habitual de cada sprint, los artefactos que lidera y quién le suple. Es un punto de partida: durante el sprint cada uno toma trabajo del tablero según prioridad y ayuda donde haga falta.
 
 Responsabilidades comunes a todos los Developers: participar en el refinamiento y las estimaciones; revisar los artefactos de otros miembros (pull request); cumplir la Definición de Terminado; asistir a todos los eventos; señalar impedimentos en el Daily; usar las plantillas y la nomenclatura comunes.
 
@@ -163,7 +159,7 @@ Responsabilidades comunes a todos los Developers: participar en el refinamiento 
 | **Nombre** | Nestor Rodriguez |
 |---|---|
 | **Especialización** | Visión, backlog y validación con el cliente |
-| **Dedicación al proyecto** | *[XX]* % del tiempo semanal |
+| **Dedicación al proyecto** | 16 % del tiempo semanal |
 | **Responsabilidades permanentes** | Define y comunica el Product Goal y la visión del producto.<br>Crea, ordena y mantiene el Product Backlog (única persona que fija prioridades).<br>Se reúne con cada subgrupo para fusionar las versiones temporales en el archivo final de la tarea.<br>Redacta el informe y la documentación de cada tarea a partir de su archivo final.<br>Valida cada requisito y caso de uso frente a la entrevista con el cliente. |
 | **Trabajo típico en cada sprint** | Antes del sprint: refina y prioriza los elementos del backlog.<br>Sprint Planning: propone el objetivo del sprint y resuelve dudas.<br>Durante el sprint: responde dudas en menos de 24 h y valida artefactos según se completan.<br>Sprint Review: presenta el objetivo, recoge feedback y actualiza el backlog. |
 | **Artefactos y entregables que posee** | Product Backlog priorizado, Product Goal, informes y documentación de cada tarea, preguntas abiertas al cliente. |
@@ -175,7 +171,7 @@ Responsabilidades comunes a todos los Developers: participar en el refinamiento 
 | **Nombre** | Yousef AL Haidar |
 |---|---|
 | **Especialización** | Proceso Scrum, coordinación e informes |
-| **Dedicación al proyecto** | *[XX]* % del tiempo semanal |
+| **Dedicación al proyecto** | 16 % del tiempo semanal |
 | **Responsabilidades permanentes** | Facilita los eventos Scrum y vela por que respeten su duración máxima (timebox).<br>Detecta y elimina impedimentos; resuelve dudas y peticiones de ayuda (por privado o etiquetado en el grupo).<br>Recoge por privado las sugerencias de cada miembro para la Sprint Review.<br>Redacta los informes Scrum y plantea la presentación de cada entrega.<br>Mantiene una copia de seguridad local del repositorio. |
 | **Trabajo típico en cada sprint** | Convoca y facilita Planning, Daily, Review y Retrospectiva.<br>Actualiza el registro de impedimentos y el burndown.<br>Comprueba que se cumplen la Definición de Terminado y los acuerdos de equipo.<br>Hace seguimiento de las acciones de mejora acordadas en la retrospectiva. |
 | **Artefactos y entregables que posee** | Calendario de eventos, registro de impedimentos, burndown y velocidad, informes Scrum. |
@@ -187,7 +183,7 @@ Responsabilidades comunes a todos los Developers: participar en el refinamiento 
 | **Nombre** | Irene |
 |---|---|
 | **Especialización** | Arquitectura, estándares de modelado y coherencia técnica |
-| **Dedicación al proyecto** | *[XX]* % del tiempo semanal |
+| **Dedicación al proyecto** | 16 % del tiempo semanal |
 | **Responsabilidades permanentes** | Propone y documenta las decisiones de arquitectura con el equipo (sin jerarquía sobre el resto).<br>Define los estándares de modelado: notación UML, plantillas de requisitos y casos de uso, nomenclatura e identificadores.<br>Revisa que los artefactos sean coherentes entre sí (actores, clases, requisitos).<br>Colabora en la redacción de los requisitos funcionales y no funcionales. |
 | **Trabajo típico en cada sprint** | Inicio del sprint: prepara las plantillas y los criterios de modelado de los artefactos del sprint.<br>Mantiene el registro de decisiones de arquitectura (ADR).<br>Revisa los diagramas más complejos antes de su aprobación. |
 | **Artefactos y entregables que posee** | Documento de arquitectura, ADR, guía de estilo de modelado y plantillas. |
@@ -199,7 +195,7 @@ Responsabilidades comunes a todos los Developers: participar en el refinamiento 
 | **Nombre** | Adrian |
 |---|---|
 | **Especialización** | Modelo de dominio: requisitos funcionales y diagrama de clases |
-| **Dedicación al proyecto** | *[XX]* % del tiempo semanal |
+| **Dedicación al proyecto** | 16 % del tiempo semanal |
 | **Responsabilidades permanentes** | Redacta los requisitos funcionales a partir de la entrevista.<br>Diseña el modelo de dominio: entidades, atributos, relaciones y multiplicidades.<br>Mantiene el diagrama de clases y el modelo de datos coherentes con los casos de uso.<br>Documenta las reglas de negocio (plazos de pago, estados de factura, recurrencia). |
 | **Trabajo típico en cada sprint** | Identifica en la entrevista los requisitos y reglas del área del sprint.<br>Actualiza el diagrama de clases cuando cambian requisitos o casos de uso.<br>Revisa con Miguel la trazabilidad entre requisitos y casos de uso. |
 | **Artefactos y entregables que posee** | Catálogo de requisitos funcionales, reglas de negocio, diagrama de clases y modelo de datos. |
@@ -211,7 +207,7 @@ Responsabilidades comunes a todos los Developers: participar en el refinamiento 
 | **Nombre** | Javier |
 |---|---|
 | **Especialización** | Usabilidad: requisitos no funcionales, prototipos y demo |
-| **Dedicación al proyecto** | *[XX]* % del tiempo semanal |
+| **Dedicación al proyecto** | 16 % del tiempo semanal |
 | **Responsabilidades permanentes** | Redacta los requisitos no funcionales, siempre medibles (usabilidad, seguridad, rendimiento, portabilidad).<br>Diseña los prototipos (wireframes) de las pantallas principales.<br>Lidera la demo ilustrativa del Sprint 3.<br>Cuida que el diseño respete la estética de Turbine y funcione en móvil, tablet y PC. |
 | **Trabajo típico en cada sprint** | Antes del sprint: bocetos de las pantallas de los casos de uso candidatos.<br>Define el criterio de verificación de cada requisito no funcional.<br>Prepara el material visual para la Sprint Review. |
 | **Artefactos y entregables que posee** | Catálogo de requisitos no funcionales, prototipos y demo del Sprint 3. |
@@ -223,7 +219,7 @@ Responsabilidades comunes a todos los Developers: participar en el refinamiento 
 | **Nombre** | Miguel |
 |---|---|
 | **Especialización** | Casos de uso y calidad: revisión y trazabilidad |
-| **Dedicación al proyecto** | *[XX]* % del tiempo semanal |
+| **Dedicación al proyecto** | 16 % del tiempo semanal |
 | **Responsabilidades permanentes** | Elabora el diagrama de casos de uso y sus especificaciones junto a Gonzalo y Yousef.<br>Mantiene la matriz de trazabilidad entre requisitos y casos de uso.<br>Revisa los artefactos antes de su aprobación y registra las observaciones.<br>Verifica que cada elemento cumple la Definición de Terminado. |
 | **Trabajo típico en cada sprint** | Inicio del sprint: define los criterios de revisión de los artefactos comprometidos.<br>Revisa cada artefacto según se completa, no al final del sprint.<br>Elabora un breve informe de calidad del sprint (observaciones abiertas y resueltas). |
 | **Artefactos y entregables que posee** | Diagrama y especificaciones de casos de uso, matriz de trazabilidad, registro de observaciones. |
@@ -235,7 +231,7 @@ Responsabilidades comunes a todos los Developers: participar en el refinamiento 
 | **Nombre** | Gonzalo |
 |---|---|
 | **Especialización** | Casos de uso, repositorio y documentación |
-| **Dedicación al proyecto** | *[XX]* % del tiempo semanal |
+| **Dedicación al proyecto** | 16 % del tiempo semanal |
 | **Responsabilidades permanentes** | Colabora en el diagrama y las especificaciones de casos de uso.<br>Administra el repositorio GitHub: ramas, pull requests y estructura de la carpeta docs/.<br>Mantiene los diagramas PlantUML compilando sin errores y sus imágenes exportadas.<br>Coordina la maquetación final de la documentación entregable. |
 | **Trabajo típico en cada sprint** | Integra en main los artefactos aprobados y exporta los diagramas.<br>Mantiene el README y el índice de la documentación.<br>Prepara la versión de los documentos que se entrega al cierre del sprint. |
 | **Artefactos y entregables que posee** | Repositorio, README, carpeta docs/, diagramas exportados y documento final. |
@@ -244,19 +240,18 @@ Responsabilidades comunes a todos los Developers: participar en el refinamiento 
 
 # 4. Acuerdos de equipo (Working Agreement)
 
-> **Cómo usarlo:** Se define entre todos en el Sprint 0 y se revisa en las retrospectivas. Debe estar visible y ser breve: los acuerdos que nadie recuerda no sirven. Las plantillas de team charter recomiendan cubrir propósito, comunicación, decisiones, reuniones, colaboración, estándares de trabajo y resolución de conflictos.
 
 | **Área** | **Acuerdo del equipo (ejemplos editables)** |
 |---|---|
-| **Propósito del equipo** | *[Qué valor entregamos y qué impacto queremos tener]* |
-| **Horarios y disponibilidad** | *[Horas núcleo en las que todos estamos disponibles: L–V de 10:00 a 14:00]*<br>*[Ausencias planificadas se comunican con al menos 48 h de antelación y se anotan en la capacidad del sprint]* |
-| **Herramientas** | *[Repositorio: GitHub (web o local) · Chat principal: WhatsApp · Llamadas y dudas largas: Discord (creado por Javier) · Diagramas: PlantUML]* |
+| **Propósito del equipo** | *[Un diseño teorico de la aplicacion con una demo final, la prioridad son el diseño, documentacion, la arquitectura, y organizacion del equipo. Ademas, todo mientras se respetan las buenas practicas de la Ingeniería/Arquitectura del Software]* |
+| **Horarios y disponibilidad** | *[Horario de reunion total: Fines de semana 10:00-12:00. Horarios de reunion parcial: 10:00 12:00 o 16:00-19:00.]*  |
+| **Herramientas** | *[Repositorio: GitHub web con copia local · Chat principal: WhatsApp · Llamadas y dudas largas: Discord (creado por Javier) · Diagramas: PlantUML]* |
 | **Comunicación** | *[Canal principal: grupo de WhatsApp. Cada subida a GitHub se avisa allí]*<br>*[Discord para llamadas y dudas largas; no sustituye al grupo de WhatsApp]*<br>*[Dudas, ayuda o problemas: privado al Scrum Master o etiquetarle en el grupo]* |
 | **Reuniones** | *[Check-in de máx. 5 minutos a mitad de sprint: avances, obstáculos, malentendidos y quién necesita ayuda]*<br>*[Las reuniones (check-in, preparación de la exposición) se convocan con fecha y hora]*<br>*[Los temas largos se tratan después, por Discord]* |
-| **Toma de decisiones** | *[Decisiones de prioridad: las toma el PO]*<br>*[Decisiones sobre cómo modelar: las toman los Developers por consenso; si no hay acuerdo, votación con "puño de cinco" y se acepta la decisión ≥3]*<br>*[Las decisiones relevantes se anotan en el registro de decisiones]* |
+| **Toma de decisiones** | *[Decisiones de prioridad: las toma el Scrum Master junto al subgrupo afectado]*<br>*[Decisiones sobre cómo modelar: las toman los Developers por consenso; si no hay acuerdo, votación y se acepta la decisión ≥3]*<br>*[Las decisiones relevantes se anotan en el registro de decisiones]* |
 | **Repositorio y control de versiones** | *[Solo se suben archivos .md con el formato Tarea_Nombre_vN.md (p. ej., CasosdeUso_Miguel_v1.md)]*<br>*[Las versiones temporales van en su carpeta; los archivos finales, en la de la tarea]*<br>*[Cada subida lleva un commit descriptivo y se avisa en WhatsApp por si alguien va a hacer push]*<br>*[Quien trabaje en local hace siempre git pull antes de empezar y vigila las subidas de los demás]* |
 | **Límites de trabajo en curso (WIP)** | *[Máx. 2 tareas en "En curso" por persona; terminar antes de empezar]* |
-| **Ayuda y colaboración** | *[Si llevas más de 2 h bloqueado/a, pides ayuda; los artefactos complejos se trabajan en parejas]* |
+| **Ayuda y colaboración** | *[Si llevas más de 1 h bloqueado/a, pides ayuda; los artefactos complejos se trabajan en parejas]* |
 | **Gestión de conflictos** | *[1) Hablarlo directamente entre las personas implicadas; 2) llevarlo al Scrum Master; 3) tratarlo en la retrospectiva]*<br>*[Se critica el trabajo, nunca a la persona]* |
 | **Cultura y reconocimiento** | *[Celebramos los objetivos de sprint cumplidos; reconocemos la ayuda entre compañeros]* |
 | **Incumplimiento de acuerdos** | *[Se recuerda en el Daily o la Retro; sin culpables, con acciones de mejora]* |
@@ -271,11 +266,11 @@ Desde el Sprint 2 cada tarea (requisitos, casos de uso…) sigue estos pasos:
 - **Entrega:** el subgrupo sube el archivo final de la tarea; Nestor redacta el informe y la documentación correspondientes.
 - **Seguimiento:** en el check-in de mitad de sprint se revisa cómo va cada tarea y quién necesita ayuda.
 
-**Firmado / aceptado por el equipo el** *[dd/mm/aaaa]*:
+**Firmado / aceptado por el equipo el** *[14/10/2026]*:
 
-| *[Nombre]* | *[Nombre]* | *[Nombre]* | *[Nombre]* |
+| Yousef | Nestor | Irene | Miguel |
 |---|---|---|---|
-| *[Nombre]* | *[Nombre]* | *[Nombre]* |   |
+| Adrian | Javier | Gonzalo |   |
 
 # 5. Definiciones: Ready, Done, historias y estimación
 
@@ -333,23 +328,23 @@ Se estima en puntos de historia (esfuerzo relativo, no horas), usando planning p
 
 # 6. Product Backlog
 
-> **Cómo usarlo:** El Product Backlog es una lista ordenada de todo lo que necesita el proyecto; el PO la mantiene viva. Aquí cada elemento es un artefacto de análisis y diseño. Prioridad MoSCoW: Must (imprescindible), Should (importante), Could (deseable), Won't (no en esta versión). Las filas van de más a menos prioritaria; los puntos son una estimación inicial.
 
 | **ID** | **Épica** | **Historia de usuario** | **Prioridad** | **Pts** | **Sprint** | **Estado** |
 |---|---|---|---|---|---|---|
-| H-001 | E1 | Requisitos funcionales: versiones temporales (S1) y archivo final trazado a la entrevista | Must | 5 | S1–S2 | En curso |
-| H-002 | E1 | Requisitos no funcionales medibles: versiones temporales (S1) y archivo final | Must | 3 | S1–S2 | En curso |
+| H-001 | E1 | Requisitos funcionales: versiones temporales (S1) y archivo final trazado a la entrevista | Must | 5 | S1–S2 | Hecho |
+| H-002 | E1 | Requisitos no funcionales medibles: versiones temporales (S1) y archivo final | Must | 3 | S1–S2 | Hecho |
 | H-003 | E2 | Casos de uso: versiones temporales V1 | Must | 3 | S1 | Hecho |
 | H-004 | E5 | Exposición del primer parcial (20/10): requisitos, casos de uso, documento de casos de uso, documentación e informe Scrum | Must | 5 | S2 | En curso |
-| H-005 | E2 | Documento de casos de uso: especificación de cada caso y requisitos en los que se basa | Must | 5 | S2 | En curso |
-| H-006 | E2 | Diagrama de casos de uso final (archivo único consensuado) | Must | 3 | S2 | En curso |
+| H-005 | E2 | Documento de casos de uso: especificación de cada caso y requisitos en los que se basa | Must | 5 | S2 | Hecho |
+| H-006 | E2 | Diagrama de casos de uso final (archivo único consensuado) | Must | 3 | S2 | Hecho |
 | H-007 | E3 | Diagrama de clases de dominio | Must | 8 | S3 | Pendiente |
 | H-008 | E4 | Documento de arquitectura y registro de decisiones (ADR) | Should | 5 | S3 | Pendiente |
-| H-009 | E6 | Prototipos y demo ilustrativa de los flujos principales | Should | 8 | S3 | Pendiente |
-| H-010 | E3 | Diagramas dinámicos (secuencia o actividad) de los casos críticos | Could | 5 | S4 | Pendiente |
-| H-011 | E1 | Matriz de trazabilidad requisitos ↔ casos de uso ↔ clases | Should | 3 | S4 | Pendiente |
-| H-012 | E4 | Documento final consolidado | Must | 5 | S5 | Pendiente |
+| H-009 | E3 | Diagramas dinámicos (secuencia o actividad) de los casos críticos | Could | 5 | S4 | Pendiente |
+| H-010 | E1 | Matriz de trazabilidad requisitos ↔ casos de uso ↔ clases | Should | 3 | S4 | Pendiente |
+| H-011 | E4 | Documento final consolidado | Must | 5 | S5 | Pendiente |
+| H-012 | E6 | Prototipos y demo ilustrativa de los flujos principales | Should | 13 | S5 | Pendiente |
 | H-013 | E5 | Informe Scrum de cada sprint (Review y Retro) | Must | 2 | Todos | Recurrente |
+
 |   |   |   |   |   |   |   |
 |   |   |   |   |   |   |   |
 
@@ -357,14 +352,13 @@ Se estima en puntos de historia (esfuerzo relativo, no horas), usando planning p
 
 # 7. Hoja de ruta y entregables
 
-> **Cómo usarlo:** Vista general de los sprints y sus hitos. Los Sprints 1 y 2 duran 10 días para que el segundo cierre el 19/10, un día antes de la exposición. Desde el Sprint 3, sprints de 2 semanas (fechas previstas).
 
 | **Sprint** | **Fechas** | **Objetivo** | **Hito / entregable** | **Entrega** |
 |---|---|---|---|---|
 | S0 | 30/09 | Organización inicial: roles, acuerdos y backlog. | Equipo organizado; repositorio creado; backlog inicial. | — |
 | S1 | 01/10 – 09/10 | <br>Primeras versiones (V1) de requisitos funcionales y no funcionales y de casos de uso. | Versiones V1 subidas a GitHub. | — |
 | S2 | 10/10 – 19/10 | Cerrar requisitos y casos de uso a partir de las versiones temporales y preparar la exposición. | Archivos finales (sáb. 17/10); documento de casos de uso; informe Scrum; presentación. | Primer parcial (20/10) |
-| S3 | 21/10 – 03/11 | Modelo de dominio, arquitectura y demo ilustrativa. | Diagrama de clases; documento de arquitectura; demo de los flujos principales. | Demo |
+| S3 | 21/10 – 03/11 | Modelo de dominio, arquitectura y planteamiento demo ilustrativa. | Diagrama de clases; documento de arquitectura; demo de los flujos principales. | Demo |
 | S4 | 04/11 – 17/11 | Diagramas dinámicos y trazabilidad. | Diagramas de secuencia o actividad; matriz de trazabilidad. | — |
 | S5 | 18/11 – 01/12 | Revisión de calidad y documentación completa. | Documento consolidado y revisado. | Versión candidata |
 | S6 | 02/12 – 15/12 | Cierre: correcciones, entrega final y retrospectiva del proyecto. | Entrega final; informe Scrum final; lecciones aprendidas. | Entrega final |
@@ -375,11 +369,12 @@ Anota festivos, exámenes, entregas de otras asignaturas y vacaciones que afecte
 
 | **Fecha o periodo** | **Evento** | **Impacto en el equipo** |
 |---|---|---|
-| 15/10 o 16/10 (noche) · [hh:mm] | Check-in del equipo (máx. 5 min) | Ver avances, obstáculos y quién necesita ayuda |
-| Sáb. 17/10 | Fecha límite de los archivos finales de requisitos y casos de uso | Todo terminado antes de preparar la exposición |
-| Lun. 19/10 · [hh:mm] | Reunión de preparación de la exposición | Cierre del Sprint 2: ensayo, Review y Retro |
-| Mar. 20/10 | Primer parcial: exposición | Entrega fija |
-| *[dd/mm – dd/mm]* | *[Periodo de exámenes]* | *[Capacidad reducida al 50 %]* |
+| 17/10  · [16:00] | Check-in del equipo (máx. 5 min) | Ver avances, obstáculos y quién necesita ayuda |
+| 18/10 · [10:00] | Fecha límite de los archivos finales de requisitos y casos de uso | Todo terminado antes de preparar la exposición |
+| 18/10 · [11:00] | Reunión de preparación de la exposición | Cierre del Sprint 2: ensayo, Review y Retro |
+|19/10 · [15:00] | Ultimo check de la exposicion, repaso y asignacion de roles representativos. | Todo a punto para la presentacion. |
+| Mar. 20/10 · [08:45] | Primer parcial: exposición | Entrega fija |
+
 
 # 8. Eventos Scrum y calendario
 

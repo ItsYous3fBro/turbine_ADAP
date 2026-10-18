@@ -20,22 +20,18 @@ AD -|> US
 SA -|> AD
 
 rectangle "Gestor de facturas Turbine" {
-  usecase "CU-39 Consultar dashboard\nfinanciero" as CU39
-  usecase "CU-40 Definir objetivos\nfinancieros" as CU40
-  usecase "CU-41 Exportar informes\ny datos" as CU41
-  usecase "CU-42 Enviar informes\nprogramados" as CU42
-  usecase "CU-43 Consultar auditoría" as CU43
-  usecase "CU-44 Consultar salud\ndel sistema" as CU44
-  usecase "CU-45 Configurar parámetros\ndel negocio" as CU45
-  usecase "CU-46 Editar plantillas\nde mensajes" as CU46
+  usecase "CU-37 Consultar dashboard\nfinanciero" as CU37
+  usecase "CU-38 Definir objetivos\nfinancieros" as CU38
+  usecase "CU-39 Exportar informes\ny datos" as CU39
+  usecase "CU-40 Enviar informes\nprogramados" as CU40
+  usecase "CU-41 Supervisar el sistema" as CU41
+  usecase "CU-42 Configurar el sistema" as CU42
 }
-US --> CU41
-AD --> CU39
-AD --> CU40
-TM --> CU42
-CU42 --> GE
-SA --> CU43
-SA --> CU44
-SA --> CU45
-SA --> CU46
+US --> CU39
+AD --> CU37
+AD --> CU38
+TM --> CU40
+CU40 --> GE
+SA --> CU41
+SA --> CU42
 @enduml

@@ -18,18 +18,16 @@ actor "Cliente" as CL
 actor "Proveedor de correo" as PC
 
 rectangle "Gestor de facturas Turbine" {
-  usecase "CU-28 Enviar recordatorios\nde cobro" as CU28
-  usecase "CU-29 Registrar cobro\nde la pasarela" as CU29
-  usecase "CU-30 Importar movimientos\nbancarios" as CU30
-  usecase "CU-31 Vincular cobro\ncon factura" as CU31
-  usecase "CU-32 Conciliar cobros\nmanualmente" as CU32
+  usecase "CU-27 Enviar recordatorios\nde cobro" as CU27
+  usecase "CU-28 Registrar cobro\nde la pasarela" as CU28
+  usecase "CU-29 Conciliar cobros" as CU29
+  usecase "CU-30 Vincular cobro\ncon factura" as CU30
 }
-TM --> CU28
-CU28 --> CL
-CU28 --> PC
-PP --> CU29
-AD --> CU30
-AD --> CU32
-CU29 ..> CU31 : <<include>>
-CU30 ..> CU31 : <<include>>
+TM --> CU27
+CU27 --> CL
+CU27 --> PC
+PP --> CU28
+AD --> CU29
+CU28 ..> CU30 : <<include>>
+CU29 ..> CU30 : <<include>>
 @enduml
