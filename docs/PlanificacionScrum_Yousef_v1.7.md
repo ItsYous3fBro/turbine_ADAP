@@ -9,10 +9,10 @@ Equipo de 7 personas · 6 sprints · proyecto teórico de análisis y diseño de
 | **Cliente / stakeholder principal** | Turbine H · Alejandro Ruiz |
 | **Product Owner** | *Nestor Rodriguez* |
 | **Scrum Master** | *Yousef AL Haidar* |
-| **Fecha de inicio / fin** | *[30/09/2026]* – *[dd/mm/aaaa]* |
+| **Fecha de inicio / fin** | 30/09/2026 – 15/12/2026 |
 | **Duración del sprint** | S1–S2: 10 días (hasta la exposición del 20/10) · desde S3: 2 semanas |
 | **Número de sprints** | 6 + Sprint 0 de preparación |
-| **Versión del documento** | 1.2 · 14/10/2026 |
+| **Versión del documento** | 1.6 · 18/10/2026 |
 
 ### Contenido
 
@@ -37,10 +37,10 @@ Anexos: checklists, glosario y fuentes
 
 | **Versión** | **Fecha** | **Autor/a** | **Cambios** |
 |---|---|---|---|
-| 1.0 | 30/09/2026 | Yousef Al Haidaar| Versión inicial del plan de equipo. |
+| 1.0 | 30/09/2026 | Yousef AL Haidar | Versión inicial del plan de equipo. |
 | 1.1 | 07/10/2026 | Yousef AL Haidar | Adaptación a proyecto teórico de análisis y diseño: se eliminan alcance y supuestos; se adaptan roles, RACI, fichas, definiciones, backlog y hoja de ruta. |
 | 1.2 | 14/10/2026 | Yousef AL Haidar | Sprints 1 y 2 ajustados al primer parcial (20/10); nueva filosofía de trabajo con versiones temporales y archivos finales; canales de comunicación; preparación de la exposición. |
-|   |   |   |   |
+| 1.6 | 18/10/2026 | Yousef AL Haidar | Cierre de los Sprints 1 y 2: capacidad, seguimiento (burndown y velocidad), impedimentos, riesgos, decisiones, actas de Review, Retrospectiva, acciones de mejora y plan de comunicación. |
 |   |   |   |   |
 
 # 1. Visión y objetivos
@@ -56,12 +56,12 @@ Anexos: checklists, glosario y fuentes
 
 | **Nº** | **Objetivo** | **Métrica / indicador** | **Meta y fecha** |
 |---|---|---|---|
-| O1 | Definir los requisitos funcionales y no funcionales | Archivo final de requisitos consensuado; cada requisito trazado a la entrevista; RNF medibles | Sprint 2 (sáb. 17/10) |
-| O2 | Modelar los casos de uso | Diagrama PlantUML sin errores y documento de casos de uso que indica en qué requisitos se basa cada caso | Sprint 2 (sáb. 17/10) |
+| O1 | Definir los requisitos funcionales y no funcionales | Archivo final de requisitos consensuado; cada requisito trazado a la entrevista; RNF medibles | Sprint 2 (dom. 18/10) · **Cumplido** |
+| O2 | Modelar los casos de uso | Diagrama PlantUML sin errores y documento de casos de uso que indica en qué requisitos se basa cada caso | Sprint 2 (dom. 18/10) · **Cumplido** |
 | O3 | Modelar la estructura del sistema | Diagrama de clases coherente con los casos de uso | Sprint 3 |
 | O4 | Documentar la arquitectura | Documento de arquitectura y decisiones aprobado por el PO | Sprint 3 |
 | O5 | Presentar una demo ilustrativa (micro-proyecto) | Demo de los flujos principales mostrada en la Review | Sprint 3 |
-| O6 | Aplicar Scrum y documentarlo | Un informe Scrum (Review y Retro) por sprint | Cada sprint |
+| O6 | Aplicar Scrum y documentarlo | Un informe Scrum (Review y Retro) por sprint | Cada sprint · S1 y S2 cumplidos |
 
 ## 1.2 Épicas
 
@@ -86,13 +86,13 @@ La Guía Scrum define tres responsabilidades dentro del Scrum Team: un Product O
 
 | **Nº** | **Nombre** | **Rol Scrum** | **Especialización** | **Dedic.** | **Contacto / canal** |
 |---|---|---|---|---|---|
-| 1 | *Nestor* | Product Owner (PO) | Visión, backlog y validación con el cliente | *[XX]* % | *git/NestorDZ* |
-| 2 | *Yousef* | Scrum Master (SM) | Proceso Scrum, coordinación e informes | *[XX]* % | *git/ItsYous3fBro* |
-| 3 | *Irene* | Developer | Arquitectura y estándares de modelado | *[XX]* % | *git/Irenegm06* |
-| 4 | *Adrian* | Developer | Modelo de dominio: requisitos funcionales y clases | *[XX]* % | *git/AdriRodriM22* |
-| 5 | *Javier* | Developer | Usabilidad: requisitos no funcionales, prototipos y demo | *[XX]* % | *git/JavirMartinez22* |
-| 6 | *Miguel* | Developer | Casos de uso y calidad: revisión y trazabilidad | *[XX]* % | *git/MiguelPPA06* |
-| 7 | *Gonzalo* | Developer | Casos de uso, repositorio y documentación | *[XX]* % | *git/GMerida33* |
+| 1 | *Nestor* | Product Owner (PO) | Visión, backlog y validación con el cliente | 16 % | *git/NestorDZ* |
+| 2 | *Yousef* | Scrum Master (SM) | Proceso Scrum, coordinación e informes | 16 % | *git/ItsYous3fBro* |
+| 3 | *Irene* | Developer | Arquitectura y estándares de modelado | 16 % | *git/Irenegm06* |
+| 4 | *Adrian* | Developer | Modelo de dominio: requisitos funcionales y clases | 16 % | *git/AdriRodriM22* |
+| 5 | *Javier* | Developer | Usabilidad: requisitos no funcionales, prototipos y demo | 16 % | *git/JavirMartinez22* |
+| 6 | *Miguel* | Developer | Casos de uso y calidad: revisión y trazabilidad | 16 % | *git/MiguelPPA06* |
+| 7 | *Gonzalo* | Developer | Casos de uso, repositorio y documentación | 16 % | *git/GMerida33* |
 
 ## 2.2 Responsabilidades por rol
 
@@ -147,7 +147,7 @@ Rotar tareas de facilitación reparte la carga y evita depender de una sola pers
 | Facilitador/a de la retrospectiva | Yousef | Yousef | *[Nombre]* | *[Nombre]* | *[Nombre]* | *[Nombre]* |
 | Encargado/a del acta (Review y Retro) | Yousef | Yousef | *[Nombre]* | *[Nombre]* | *[Nombre]* | *[Nombre]* |
 | Guardián/a del tablero | Yousef | Yousef | *[Nombre]* | *[Nombre]* | *[Nombre]* | *[Nombre]* |
-| Responsable de la exposición | Decidido Por el profesor | Decidido por el profesor | *[Nombre]* | *[Nombre]* | *[Nombre]* | *[Nombre]* |
+| Responsable de la exposición | Decidido por el profesor | Decidido por el profesor | *[Nombre]* | *[Nombre]* | *[Nombre]* | *[Nombre]* |
 
 # 3. Reparto de trabajo por miembro
 
@@ -241,20 +241,20 @@ Responsabilidades comunes a todos los Developers: participar en el refinamiento 
 # 4. Acuerdos de equipo (Working Agreement)
 
 
-| **Área** | **Acuerdo del equipo (ejemplos editables)** |
+| **Área** | **Acuerdo del equipo** |
 |---|---|
-| **Propósito del equipo** | *[Un diseño teorico de la aplicacion con una demo final, la prioridad son el diseño, documentacion, la arquitectura, y organizacion del equipo. Ademas, todo mientras se respetan las buenas practicas de la Ingeniería/Arquitectura del Software]* |
-| **Horarios y disponibilidad** | *[Horario de reunion total: Fines de semana 10:00-12:00. Horarios de reunion parcial: 10:00 12:00 o 16:00-19:00.]*  |
-| **Herramientas** | *[Repositorio: GitHub web con copia local · Chat principal: WhatsApp · Llamadas y dudas largas: Discord (creado por Javier) · Diagramas: PlantUML]* |
-| **Comunicación** | *[Canal principal: grupo de WhatsApp. Cada subida a GitHub se avisa allí]*<br>*[Discord para llamadas y dudas largas; no sustituye al grupo de WhatsApp]*<br>*[Dudas, ayuda o problemas: privado al Scrum Master o etiquetarle en el grupo]* |
-| **Reuniones** | *[Check-in de máx. 5 minutos a mitad de sprint: avances, obstáculos, malentendidos y quién necesita ayuda]*<br>*[Las reuniones (check-in, preparación de la exposición) se convocan con fecha y hora]*<br>*[Los temas largos se tratan después, por Discord]* |
-| **Toma de decisiones** | *[Decisiones de prioridad: las toma el Scrum Master junto al subgrupo afectado]*<br>*[Decisiones sobre cómo modelar: las toman los Developers por consenso; si no hay acuerdo, votación y se acepta la decisión ≥3]*<br>*[Las decisiones relevantes se anotan en el registro de decisiones]* |
-| **Repositorio y control de versiones** | *[Solo se suben archivos .md con el formato Tarea_Nombre_vN.md (p. ej., CasosdeUso_Miguel_v1.md)]*<br>*[Las versiones temporales van en su carpeta; los archivos finales, en la de la tarea]*<br>*[Cada subida lleva un commit descriptivo y se avisa en WhatsApp por si alguien va a hacer push]*<br>*[Quien trabaje en local hace siempre git pull antes de empezar y vigila las subidas de los demás]* |
-| **Límites de trabajo en curso (WIP)** | *[Máx. 2 tareas en "En curso" por persona; terminar antes de empezar]* |
-| **Ayuda y colaboración** | *[Si llevas más de 1 h bloqueado/a, pides ayuda; los artefactos complejos se trabajan en parejas]* |
-| **Gestión de conflictos** | *[1) Hablarlo directamente entre las personas implicadas; 2) llevarlo al Scrum Master; 3) tratarlo en la retrospectiva]*<br>*[Se critica el trabajo, nunca a la persona]* |
-| **Cultura y reconocimiento** | *[Celebramos los objetivos de sprint cumplidos; reconocemos la ayuda entre compañeros]* |
-| **Incumplimiento de acuerdos** | *[Se recuerda en el Daily o la Retro; sin culpables, con acciones de mejora]* |
+| **Propósito del equipo** | Un diseño teórico de la aplicación con una demo final; la prioridad son el diseño, la documentación, la arquitectura y la organización del equipo, siempre respetando las buenas prácticas de la Ingeniería y la Arquitectura del Software. |
+| **Horarios y disponibilidad** | Reunión de todo el equipo: fines de semana de 10:00 a 12:00. Reuniones parciales: 10:00–12:00 o 16:00–19:00. |
+| **Herramientas** | Repositorio: GitHub web con copia local · Chat principal: WhatsApp · Llamadas y dudas largas: Discord (creado por Javier) · Diagramas: PlantUML |
+| **Comunicación** | Canal principal: grupo de WhatsApp. Cada subida a GitHub se avisa allí.<br>Discord para llamadas y dudas largas; no sustituye al grupo de WhatsApp.<br>Dudas, ayuda o problemas: privado al Scrum Master o etiquetarle en el grupo. |
+| **Reuniones** | Check-in de máx. 5 minutos a mitad de sprint: avances, obstáculos, malentendidos y quién necesita ayuda.<br>Las reuniones (check-in, preparación de la exposición) se convocan con fecha y hora.<br>Los temas largos se tratan después, por Discord. |
+| **Toma de decisiones** | Decisiones de prioridad: las toma el Scrum Master junto al subgrupo afectado.<br>Decisiones sobre cómo modelar: las toman los Developers por consenso; si no hay acuerdo, votación y se acepta la decisión con ≥3 votos.<br>Las decisiones relevantes se anotan en el registro de decisiones (12.3). |
+| **Repositorio y control de versiones** | Solo se suben archivos .md con el formato Tarea_Nombre_vN.md (p. ej., CasosdeUso_Miguel_v1.md).<br>Las versiones temporales van en su carpeta; los archivos finales, en la de la tarea.<br>Cada subida lleva un commit descriptivo y se avisa en WhatsApp por si alguien va a hacer push.<br>Quien trabaje en local hace siempre git pull antes de empezar y vigila las subidas de los demás. |
+| **Límites de trabajo en curso (WIP)** | Máx. 2 tareas en "En curso" por persona; terminar antes de empezar. |
+| **Ayuda y colaboración** | Si llevas más de 1 h bloqueado/a, pides ayuda; los artefactos complejos se trabajan en parejas. |
+| **Gestión de conflictos** | 1) Hablarlo directamente entre las personas implicadas; 2) llevarlo al Scrum Master; 3) tratarlo en la retrospectiva.<br>Se critica el trabajo, nunca a la persona. |
+| **Cultura y reconocimiento** | Celebramos los objetivos de sprint cumplidos; reconocemos la ayuda entre compañeros. |
+| **Incumplimiento de acuerdos** | Se recuerda en el check-in o la Retro; sin culpables, con acciones de mejora. |
 
 ## 4.1 Flujo de trabajo de los artefactos
 
@@ -266,7 +266,7 @@ Desde el Sprint 2 cada tarea (requisitos, casos de uso…) sigue estos pasos:
 - **Entrega:** el subgrupo sube el archivo final de la tarea; Nestor redacta el informe y la documentación correspondientes.
 - **Seguimiento:** en el check-in de mitad de sprint se revisa cómo va cada tarea y quién necesita ayuda.
 
-**Firmado / aceptado por el equipo el** *[14/10/2026]*:
+**Firmado / aceptado por el equipo el** 14/10/2026:
 
 | Yousef | Nestor | Irene | Miguel |
 |---|---|---|---|
@@ -278,7 +278,7 @@ Desde el Sprint 2 cada tarea (requisitos, casos de uso…) sigue estos pasos:
 
 Es el compromiso de calidad del incremento y forma parte de la Guía Scrum: un artefacto solo cuenta como terminado si cumple todos los puntos. Si no, vuelve al Product Backlog.
 
-| **✓** | **Criterio de terminado (ejemplos editables)** |
+| **✓** | **Criterio de terminado** |
 |---|---|
 | ☐ | El artefacto cumple los criterios de aceptación de su elemento del backlog. |
 | ☐ | Usa la plantilla y la nomenclatura comunes (identificadores, actores, clases). |
@@ -289,13 +289,13 @@ Es el compromiso de calidad del incremento y forma parte de la Guía Scrum: un a
 | ☐ | Sin observaciones de revisión abiertas. |
 | ☐ | Archivo final subido a GitHub con el nombre acordado y anunciado en el grupo. |
 | ☐ | Aceptado por el Product Owner. |
-| ☐ | *[Criterio propio del proyecto]* |
+| ☐ | Las especificaciones de casos de uso siguen la plantilla del cheatsheet (Cockburn) y no mencionan elementos de interfaz. |
 
 ## 5.2 Definición de Preparado (Definition of Ready)
 
 Ojo: la Definition of Ready no forma parte de la Guía Scrum oficial; es una práctica opcional muy extendida. Sirve para que las historias lleguen al Sprint Planning listas para trabajarse, pero no debe convertirse en una barrera burocrática.
 
-| **✓** | **Criterio de preparado (ejemplos editables)** |
+| **✓** | **Criterio de preparado** |
 |---|---|
 | ☐ | Está redactado como elemento del backlog con un entregable claro. |
 | ☐ | Tiene criterios de aceptación verificables. |
@@ -319,12 +319,12 @@ Se estima en puntos de historia (esfuerzo relativo, no horas), usando planning p
 
 | **Puntos** | **Significado** | **Ejemplo de referencia** |
 |---|---|---|
-| 1 | Trivial: cambio pequeño y bien conocido. | *[Corregir una errata o un identificador]* |
-| 2 | Pequeño y claro. | *[Añadir un requisito a un catálogo existente]* |
-| 3 | Sencillo, con algo de trabajo en una capa. | *[Especificar un caso de uso sencillo]* |
-| 5 | Mediano; afecta a varias capas. | *[Diagrama de casos de uso de un área]* |
-| 8 | Grande, con incertidumbre; valorar dividirla. | *[Diagrama de clases de dominio completo]* |
-| 13+ | Demasiado grande: dividir antes de comprometer. | *[Todo el catálogo de requisitos de una vez]* |
+| 1 | Trivial: cambio pequeño y bien conocido. | Corregir una errata o un identificador |
+| 2 | Pequeño y claro. | Añadir un requisito a un catálogo existente |
+| 3 | Sencillo, con algo de trabajo en una capa. | Especificar un caso de uso sencillo |
+| 5 | Mediano; afecta a varias capas. | Diagrama de casos de uso de un área |
+| 8 | Grande, con incertidumbre; valorar dividirla. | Diagrama de clases de dominio completo |
+| 13+ | Demasiado grande: dividir antes de comprometer. | Todo el catálogo de requisitos de una vez |
 
 # 6. Product Backlog
 
@@ -334,19 +334,17 @@ Se estima en puntos de historia (esfuerzo relativo, no horas), usando planning p
 | H-001 | E1 | Requisitos funcionales: versiones temporales (S1) y archivo final trazado a la entrevista | Must | 5 | S1–S2 | Hecho |
 | H-002 | E1 | Requisitos no funcionales medibles: versiones temporales (S1) y archivo final | Must | 3 | S1–S2 | Hecho |
 | H-003 | E2 | Casos de uso: versiones temporales V1 | Must | 3 | S1 | Hecho |
-| H-004 | E5 | Exposición del primer parcial (20/10): requisitos, casos de uso, documento de casos de uso, documentación e informe Scrum | Must | 5 | S2 | En curso |
+| H-004 | E5 | Exposición del primer parcial (20/10): requisitos, casos de uso, documento de casos de uso, documentación e informe Scrum | Must | 5 | S2 | Hecho (presentación lista; se expone el 20/10) |
 | H-005 | E2 | Documento de casos de uso: especificación de cada caso y requisitos en los que se basa | Must | 5 | S2 | Hecho |
-| H-006 | E2 | Diagrama de casos de uso final (archivo único consensuado) | Must | 3 | S2 | Hecho |
+| H-006 | E2 | Diagrama de casos de uso final (archivo único consensuado) | Must | 3 | S2 | Hecho (6 diagramas por área) |
 | H-007 | E3 | Diagrama de clases de dominio | Must | 8 | S3 | Pendiente |
 | H-008 | E4 | Documento de arquitectura y registro de decisiones (ADR) | Should | 5 | S3 | Pendiente |
 | H-009 | E3 | Diagramas dinámicos (secuencia o actividad) de los casos críticos | Could | 5 | S4 | Pendiente |
-| H-010 | E1 | Matriz de trazabilidad requisitos ↔ casos de uso ↔ clases | Should | 3 | S4 | Pendiente |
+| H-010 | E1 | Matriz de trazabilidad requisitos ↔ casos de uso ↔ clases | Should | 3 | S4 | En curso (requisitos ↔ casos de uso hecha en S2; faltan las clases) |
 | H-011 | E4 | Documento final consolidado | Must | 5 | S5 | Pendiente |
 | H-012 | E6 | Prototipos y demo ilustrativa de los flujos principales | Should | 13 | S5 | Pendiente |
-| H-013 | E5 | Informe Scrum de cada sprint (Review y Retro) | Must | 2 | Todos | Recurrente |
-
-|   |   |   |   |   |   |   |
-|   |   |   |   |   |   |   |
+| H-013 | E5 | Informe Scrum de cada sprint (Review y Retro) | Must | 2 | Todos | Recurrente (S1 y S2 hechos) |
+| H-014 | E1 | Confirmar con el cliente las cuestiones abiertas P1–P12 del documento de casos de uso | Should | 2 | S3 | Pendiente (nueva en la Review del S2) |
 
 *Estados sugeridos: Pendiente · Ready · En sprint · En curso · Hecho · Recurrente · Descartada.*
 
@@ -356,8 +354,8 @@ Se estima en puntos de historia (esfuerzo relativo, no horas), usando planning p
 | **Sprint** | **Fechas** | **Objetivo** | **Hito / entregable** | **Entrega** |
 |---|---|---|---|---|
 | S0 | 30/09 | Organización inicial: roles, acuerdos y backlog. | Equipo organizado; repositorio creado; backlog inicial. | — |
-| S1 | 01/10 – 09/10 | <br>Primeras versiones (V1) de requisitos funcionales y no funcionales y de casos de uso. | Versiones V1 subidas a GitHub. | — |
-| S2 | 10/10 – 19/10 | Cerrar requisitos y casos de uso a partir de las versiones temporales y preparar la exposición. | Archivos finales (sáb. 17/10); documento de casos de uso; informe Scrum; presentación. | Primer parcial (20/10) |
+| S1 | 01/10 – 09/10 | Primeras versiones (V1) de requisitos funcionales y no funcionales y de casos de uso. | Versiones V1 subidas a GitHub. | — |
+| S2 | 10/10 – 19/10 | Cerrar requisitos y casos de uso a partir de las versiones temporales y preparar la exposición. | Archivos finales (dom. 18/10); documento de casos de uso; informe Scrum; presentación. | Primer parcial (20/10) |
 | S3 | 21/10 – 03/11 | Modelo de dominio, arquitectura y planteamiento demo ilustrativa. | Diagrama de clases; documento de arquitectura; demo de los flujos principales. | Demo |
 | S4 | 04/11 – 17/11 | Diagramas dinámicos y trazabilidad. | Diagramas de secuencia o actividad; matriz de trazabilidad. | — |
 | S5 | 18/11 – 01/12 | Revisión de calidad y documentación completa. | Documento consolidado y revisado. | Versión candidata |
@@ -369,11 +367,11 @@ Anota festivos, exámenes, entregas de otras asignaturas y vacaciones que afecte
 
 | **Fecha o periodo** | **Evento** | **Impacto en el equipo** |
 |---|---|---|
-| 17/10  · [16:00] | Check-in del equipo (máx. 5 min) | Ver avances, obstáculos y quién necesita ayuda |
-| 18/10 · [10:00] | Fecha límite de los archivos finales de requisitos y casos de uso | Todo terminado antes de preparar la exposición |
-| 18/10 · [11:00] | Reunión de preparación de la exposición | Cierre del Sprint 2: ensayo, Review y Retro |
-|19/10 · [15:00] | Ultimo check de la exposicion, repaso y asignacion de roles representativos. | Todo a punto para la presentacion. |
-| Mar. 20/10 · [08:45] | Primer parcial: exposición | Entrega fija |
+| Sáb. 17/10 · 16:00 | Check-in del equipo (máx. 5 min) | Ver avances, obstáculos y quién necesita ayuda |
+| Dom. 18/10 · 10:00 | Fecha límite de los archivos finales de requisitos y casos de uso | Todo terminado antes de preparar la exposición |
+| Dom. 18/10 · 11:00 | Reunión de preparación de la exposición | Cierre del Sprint 2: ensayo, Review y Retro |
+| Lun. 19/10 · 15:00 | Último check de la exposición, repaso y asignación de roles de exposición. | Todo a punto para la presentación. |
+| Mar. 20/10 · 08:45 | Primer parcial: exposición | Entrega fija |
 
 
 # 8. Eventos Scrum y calendario
@@ -400,12 +398,19 @@ Estructura recomendada (basada en la guía de TeamRetro): capacidad → objetivo
 | 3 | Acordar el objetivo | 20 min | Redactar en una frase el Sprint Goal antes de elegir trabajo. |
 | 4 | Seleccionar trabajo | 60 min | Revisar historias frente al objetivo, su estado Ready y su tamaño; parar al llegar a la capacidad. |
 | 5 | Planificar el trabajo | 90 min | Dividir historias en tareas, detectar dependencias y riesgos, validar estimaciones. |
-| 6 | Confirmar y comprometer | 10 min | Repetir objetivo y alcance; comprobar la confianza del equipo . |
+| 6 | Confirmar y comprometer | 10 min | Repetir objetivo y alcance; comprobar la confianza del equipo. |
 
+# 9. Capacidad del equipo
 
-# 9. Fichas de sprint (Sprint 1 a 6)
+El equipo mide la capacidad en **puntos de historia**, no en horas: cada miembro dedica en torno al 16 % de su tiempo semanal y no se registran horas individuales. La velocidad real de cada sprint (sección 11.3) es la referencia para comprometer el siguiente, con un margen del 20 % para imprevistos (exámenes, entregas de otras asignaturas).
 
+| **Sprint** | **Días** | **Disponibilidad del equipo** | **Ausencias / incidencias** | **Compromiso** | **Velocidad de referencia** |
+|---|---|---|---|---|---|
+| S1 | 9 (01/10 – 09/10) | 7 personas · 16 % · reunión total en fin de semana (10:00–12:00) | Sin ausencias registradas; tiempo perdido al plantear el proyecto como práctico | 26 pts | — (primer sprint) |
+| S2 | 10 (10/10 – 19/10) | 7 personas · 16 % · check-in, reunión de preparación y último repaso | Sin ausencias registradas; carga concentrada en el fin de semana del 17–18/10 | 23 pts | 12 pts (S1) |
+| S3 | 14 (21/10 – 03/11) | 7 personas · 16 % | *[Exámenes o entregas de otras asignaturas]* | *[Recomendado: 18–20 pts]* | 17,5 pts (media S1–S2) |
 
+# 10. Fichas de sprint (Sprint 1 a 6)
 
 **Sprint 0 (preparación):** reunir al equipo, acordar el Working Agreement, redactar la visión y las épicas, crear el backlog inicial, crear el repositorio GitHub y las plantillas.
 
@@ -413,83 +418,81 @@ Estructura recomendada (basada en la guía de TeamRetro): capacidad → objetivo
 
 | **Fechas** | 01/10/2026 – 09/10/2026 |
 |---|---|
-| **Objetivo del sprint (Sprint Goal)** | Organizar el equipo, crear el repositorio y elaborar las primeras versiones (V1) de los requisitos funcionales y no funcionales y de los casos de uso. Nos damos cuenta de que hemos planteado mal el proyecto(es solo diseño) |
-| **Capacidad y compromiso** |  Puntos comprometidos: 26 |
-| **Dependencias y riesgos** | Creacion del repositorio;estructura de la app; Reunion intra-sprint.  |
+| **Objetivo del sprint (Sprint Goal)** | Organizar el equipo, crear el repositorio y elaborar las primeras versiones (V1) de los requisitos funcionales y no funcionales y de los casos de uso. Nos damos cuenta de que hemos planteado mal el proyecto (es solo diseño). |
+| **Capacidad y compromiso** | Puntos comprometidos: 26 |
+| **Dependencias y riesgos** | Creación del repositorio; estructura de la app; reunión intra-sprint. |
 
 ### Sprint Backlog
 
 | **ID** | **Historia / tarea** | **Responsable** | **Pts** | **Horas** | **Estado** |
 |---|---|---|---|---|---|
-| 1 | <br>Comentar la reunión y compartir información.<br>Repartido roles | TODOS |   | 2 | **COMPLETADO** |
-| 2 | Crear el repositorio, dividir la tarea y plantear ligeramente los casos de uso.<br>Repasar básicos git | Repositorio -> Yousef<br>Plantear casos de uso-><br>Todos<br>Division de tarea -> Todos. |   | 72 | **COMPLETADO** |
-| 3 | Comparar y fijar requisitos Funcionales y No funcionales.<br>Casos de Uso-> Imagen mental y comienzo de la creación.<br>Comienzo de la documentación.<br>Informes generales en cada subgrupo.<br> | Documentación -> Nestor<br>Requisitos F y No F -> Irene, Adrian y Javier<br>CD de uso -> Miguel Y Gonzalo, Yousef |   | 72 | **COMPLETADO (V1)** |
-|   |   |   |   |   |   |
-|   |   |   |   |   |   |
+| 1 | Comentar la reunión y compartir información.<br>Repartir roles | TODOS |   | 2 | **COMPLETADO** |
+| 2 | Crear el repositorio, dividir la tarea y plantear ligeramente los casos de uso.<br>Repasar básicos de git | Repositorio -> Yousef<br>Plantear casos de uso -> Todos<br>División de tarea -> Todos |   | 72 | **COMPLETADO** |
+| 3 | Comparar y fijar requisitos funcionales y no funcionales.<br>Casos de uso -> imagen mental y comienzo de la creación.<br>Comienzo de la documentación.<br>Informes generales en cada subgrupo. | Documentación -> Nestor<br>Requisitos F y NF -> Irene, Adrian y Javier<br>Casos de uso -> Miguel, Gonzalo y Yousef |   | 72 | **COMPLETADO (V1)** |
 
 ### Carga por miembro
 
 | **Miembro (rol)** | **Historias / tareas** | **Observaciones** |
-|---|---|---|---|---|
-| Nestor · PO | Redacción de la documentación de los requisitos	 | COMPLETADO PARCIALMENTE |
-| Yousef · SM | Creacion del repositorio y documentacion scrum | COMPLETADO PARCIALMENTE |
-| Irene · Developer | Elaboración del documento de requisitos| COMPLETADO PARCIALMENTE  |
-| Adrian · Developer | Elaboración del documento de requisitos |  COMPLETADO PARCIALMENTE |
-| Javier · Developer |   Elaboración del documento de requisitos | COMPLETADO PARCIALMENTE  |
-| Miguel · Developer |   Elaboración del diagrama de casos de uso |  COMPLETADO PARCIALMENTE  |
-| Gonzalo · Developer |   Elaboración del diagrama de casos de uso |  COMPLETADO PARCIALMENTE  |
+|---|---|---|
+| Nestor · PO | Redacción de la documentación de los requisitos | COMPLETADO PARCIALMENTE |
+| Yousef · SM | Creación del repositorio y documentación Scrum | COMPLETADO PARCIALMENTE |
+| Irene · Developer | Elaboración del documento de requisitos | COMPLETADO PARCIALMENTE |
+| Adrian · Developer | Elaboración del documento de requisitos | COMPLETADO PARCIALMENTE |
+| Javier · Developer | Elaboración del documento de requisitos | COMPLETADO PARCIALMENTE |
+| Miguel · Developer | Elaboración del diagrama de casos de uso | COMPLETADO PARCIALMENTE |
+| Gonzalo · Developer | Elaboración del diagrama de casos de uso | COMPLETADO PARCIALMENTE |
 
 ### Resultado (se rellena en la Review)
 
-| **Objetivo cumplido** |  *[Parcial]*|
+| **Objetivo cumplido** | Parcial |
 |---|---|
-| **Puntos completados** | *12* |
-| **Notas** | Las versiones finales de requisitos y casos de uso pasan al Sprint 2. Las sugerencias de cada miembro se recogen por privado para la Sprint Review. Ademas nos hemos dado cuenta de que hemos planteado de manera práctica el proyecto cuando es meramente teórico|
+| **Puntos completados** | 12 de 26 |
+| **Notas** | Las versiones finales de requisitos y casos de uso pasan al Sprint 2. Las sugerencias de cada miembro se recogen por privado para la Sprint Review. Además, nos hemos dado cuenta de que habíamos planteado el proyecto de manera práctica cuando es meramente teórico: se reorienta el backlog (v1.1 del plan, 07/10). |
 
 ## Sprint 2
 
 | **Fechas** | 10/10/2026 – 19/10/2026 |
 |---|---|
 | **Objetivo del sprint (Sprint Goal)** | Cerrar los requisitos funcionales y no funcionales y los casos de uso a partir de las versiones temporales, y preparar la exposición del primer parcial (20/10). |
-| **Capacidad y compromiso** | Puntos comprometidos: 23 |
-| **Dependencias y riesgos** | Archivos finales listos el sábado 17/10; reunión de preparación el lunes 19/10. Riesgo: conflictos al subir a GitHub a la vez (avisar en WhatsApp antes de cada push). |
+| **Capacidad y compromiso** | Puntos comprometidos: 23 · Velocidad de referencia: 12 (S1) |
+| **Dependencias y riesgos** | Archivos finales listos el dom. 18/10 (10:00); reunión de preparación el 18/10 (11:00) y último repaso el lun. 19/10. Riesgo: conflictos al subir a GitHub a la vez (avisar en WhatsApp antes de cada push). |
 
 ### Sprint Backlog
 
 | **ID** | **Historia / tarea** | **Responsable** | **Pts** | **Horas** | **Estado** |
 |---|---|---|---|---|---|
-| 1 | H-001 / H-002 · Requisitos F y NF: versiones temporales (Requisitos_Nombre_vN.md) y archivo final consensuado con el PO | Irene, Adrian, Javier | 8 |   | En curso |
-| 2 | H-005 / H-006 · Casos de uso: versiones temporales, diagrama final y documento de casos de uso con los requisitos en que se basa cada caso | Miguel, Gonzalo, Yousef | 8 |   | En curso |
-| 3 | Informe y documentación de cada tarea a partir de los archivos finales | Nestor | 3 |   | Pendiente |
-| 4 | H-013 · Informe Scrum del Sprint 1 y Sprint Review (sugerencias por privado) | Yousef | 2 |   | En curso |
-| 5 | H-004 · Presentación del primer parcial | Yousef (planteamiento) · Todos | 5 |   | En curso |
-| 6 | Check-in (jue. 15 o vie. 16) y reunión de preparación (lun. 19/10) | Todos | — |   | Pendiente |
+| 1 | H-001 / H-002 · Requisitos F y NF: versiones temporales (Requisitos_Nombre_vN.md) y archivo final consensuado con el PO | Irene, Adrian, Javier | 8 |   | Hecho |
+| 2 | H-005 / H-006 · Casos de uso: versiones temporales, diagrama final y documento de casos de uso con los requisitos en que se basa cada caso | Miguel, Gonzalo, Yousef | 8 |   | Hecho |
+| 3 | Informe y documentación de cada tarea a partir de los archivos finales | Nestor | 3 |   | Hecho |
+| 4 | H-013 · Informe Scrum del Sprint 1 y Sprint Review (sugerencias por privado) | Yousef | 2 |   | Hecho |
+| 5 | H-004 · Presentación del primer parcial | Yousef (planteamiento) · Todos | 5 |   | Hecho |
+| 6 | Check-in (sáb. 17/10), reunión de preparación (dom. 18/10) y último repaso (lun. 19/10) | Todos | — |   | Hecho |
 
 ### Carga por miembro
 
 | **Miembro (rol)** | **Historias / tareas** | **Observaciones** |
-|---|---|---|---|---|
-| Nestor · PO | Redacción de la documentación de los requisitos y la presentacion | COMPLETADO |
-| Yousef · SM | Elaboracion del diagrama de casos de uso y su documento | COMPLETADO |
-| Irene · Developer | Elaboración del documento de requisitos| COMPLETADO  |
-| Adrian · Developer | Elaboración del documento de requisitos |  COMPLETADO |
-| Javier · Developer |   Elaboración del documento de requisitos | COMPLETADO |
-| Miguel · Developer |   Elaboracion del diagrama de casos de uso y su documento |  COMPLETADO |
-| Gonzalo · Developer |   Elaboracion del diagrama de casos de uso y su documento |  COMPLETADO  |
+|---|---|---|
+| Nestor · PO | Redacción de la documentación de los requisitos y la presentación | COMPLETADO |
+| Yousef · SM | Elaboración del diagrama de casos de uso y su documento | COMPLETADO |
+| Irene · Developer | Elaboración del documento de requisitos | COMPLETADO |
+| Adrian · Developer | Elaboración del documento de requisitos | COMPLETADO |
+| Javier · Developer | Elaboración del documento de requisitos | COMPLETADO |
+| Miguel · Developer | Elaboración del diagrama de casos de uso y su documento | COMPLETADO |
+| Gonzalo · Developer | Elaboración del diagrama de casos de uso y su documento | COMPLETADO |
 
 ### Resultado (se rellena en la Review)
 
-| **Objetivo cumplido** | *[Sí]*  |
+| **Objetivo cumplido** | Sí |
 |---|---|
-| **Puntos completados** | *23* |
-| **Notas** | Se ha completado todo, y el equipo esta contento con la nueva filosofia o metodo de trabajo |
+| **Puntos completados** | 23 de 23 |
+| **Notas** | Se ha completado todo y el equipo está contento con la nueva filosofía de trabajo (versiones temporales y fusión con el PO). Resultado: documento de requisitos v3 (68 requisitos), 42 casos de uso en 6 diagramas UML con su especificación y trazabilidad, y la presentación del primer parcial. |
 
 ## Sprint 3
 
 | **Fechas** | 21/10/2026 – 03/11/2026 |
 |---|---|
 | **Objetivo del sprint (Sprint Goal)** | Modelar el dominio (diagrama de clases), documentar la arquitectura y presentar la demo ilustrativa. |
-| **Capacidad y compromiso** | *[Capacidad: ___ h · Puntos comprometidos: ___ · Velocidad de referencia: ___]* |
+| **Capacidad y compromiso** | *[Capacidad: ___ h · Puntos comprometidos: ___ · Velocidad de referencia: 17,5]* |
 | **Dependencias y riesgos** | *[Personas ausentes, dependencias externas, riesgos del sprint]* |
 
 ### Sprint Backlog
@@ -628,41 +631,49 @@ Columnas del tablero con su límite de trabajo en curso (WIP). Un tablero visibl
 
 | **Backlog del sprint** | **En curso** | **En revisión** | **Validación PO** | **Hecho** | **Bloqueado** |
 |---|---|---|---|---|---|
-| Límite WIP: — | Límite WIP: *[10]* | Límite WIP: *[4]* | Límite WIP: *[4]* | Límite WIP: — | Límite WIP: *[0-2]* |
+| Límite WIP: — | Límite WIP: 10 | Límite WIP: 4 | Límite WIP: 4 | Límite WIP: — | Límite WIP: 0–2 |
 | Elementos comprometidos y sin empezar | Alguien lo está elaborando | Pull request abierta | El PO lo valida | Cumple la DoD | Con impedimento registrado |
+
+**Estado al cierre del Sprint 2 (18/10):** todos los elementos del Sprint Backlog en «Hecho»; ninguno bloqueado.
 
 ## 11.2 Burndown del sprint
 
-Puntos restantes por día. La línea ideal baja de forma lineal desde los puntos comprometidos hasta 0 al día 10.
+Puntos restantes por día. La línea ideal baja de forma lineal desde los puntos comprometidos hasta 0 al último día.
 
-| **Sprint __** | **D1** | **D2** | **D3** | **D4** | **D5** | **D6** | **D7** | **D8** | **D9** | **D10** |
+**Sprint 2** (D1 = 10/10 · D10 = 19/10). La línea real está reconstruida a partir de las fechas de cierre de cada elemento: los artefactos finales se cerraron el 18/10 (D9) y el informe y la presentación el 19/10 (D10).
+
+| **Sprint 2** | **D1** | **D2** | **D3** | **D4** | **D5** | **D6** | **D7** | **D8** | **D9** | **D10** |
 |---|---|---|---|---|---|---|---|---|---|---|
-| **Ideal** |   |   |   |   |   |   |   |   |   |   |
-| **Real** |   |   |   |   |   |   |   |   |   |   |
+| **Ideal** | 23 | 20,4 | 17,9 | 15,3 | 12,8 | 10,2 | 7,7 | 5,1 | 2,6 | 0 |
+| **Real** | 23 | 23 | 23 | 23 | 23 | 20 | 14 | 7 | 7 | 0 |
+
+**Lectura:** el trabajo se avanzó en versiones temporales durante todo el sprint, pero ningún elemento cumplía la Definición de Terminado hasta la fusión final con el PO. Por eso el burndown cae al final. Para el Sprint 3 se marcará un hito intermedio (acción A-04).
+
+**Sprint 1:** no se registró burndown diario; solo el resultado final, ya que el planteamiento era incorrecto (12 de 26 puntos). 
 
 ## 11.3 Velocidad del equipo
 
 | **Sprint** | **Pts comprometidos** | **Pts completados** | **Capacidad (h)** | **% objetivo cumplido** | **Notas** |
 |---|---|---|---|---|---|
-| S1 |   |   |   |   |   |
-| S2 |   |   |   |   |   |
+| S1 | 26 | 12 | — (se mide en puntos) | Parcial (46 % de los puntos) | Proyecto planteado inicialmente como práctico; versiones finales trasladadas a S2. |
+| S2 | 23 | 23 | — (se mide en puntos) | Sí (100 %) | Nueva forma de trabajo con versiones temporales y fusión con el PO. |
 | S3 |   |   |   |   |   |
 | S4 |   |   |   |   |   |
 | S5 |   |   |   |   |   |
 | S6 |   |   |   |   |   |
-| Media |   |   |   |   |   |
+| Media | 24,5 | 17,5 | — | — | Referencia para comprometer el S3: 18–20 pts. |
 
-*Usa la velocidad para calibrar, no para comparar personas ni presionar al equipo: mide una capacidad, no un rendimiento individual.*
+*Usamos la velocidad para calibrar, no para comparar personas ni presionar al equipo: medimos capacidad, no un rendimiento individual.*
 
 ## 11.4 Indicadores adicionales
 
-| **Indicador** | **Qué mide** | **Frecuencia** |
-|---|---|---|
-| Cumplimiento del objetivo del sprint | ¿Se logró el Sprint Goal? (Sí / Parcial / No) | Cada sprint |
-| Observaciones de revisión | Observaciones abiertas y resueltas en los artefactos | Cada sprint |
-| Tiempo de ciclo | Días desde "En curso" hasta "Hecho" | Cada sprint |
-| Trazabilidad | % de requisitos con al menos un caso de uso asociado | Cada sprint |
-| Satisfacción del equipo | Voto de 1 a 5 en la retrospectiva | Cada sprint |
+| **Indicador** | **Qué mide** | **Frecuencia** | **S1** | **S2** |
+|---|---|---|---|---|
+| Cumplimiento del objetivo del sprint | ¿Se logró el Sprint Goal? (Sí / Parcial / No) | Cada sprint | Parcial | Sí |
+| Observaciones de revisión | Observaciones abiertas y resueltas en los artefactos | Cada sprint | — (sin revisión formal) | Casos de uso: varias rondas de revisión crítica; todas las observaciones resueltas antes del cierre |
+| Tiempo de ciclo | Días desde "En curso" hasta "Hecho" | Cada sprint | 9 días | ≈ 9 días (cierre concentrado al final) |
+| Trazabilidad | % de requisitos con al menos un caso de uso asociado | Cada sprint | 10% | 100 % (28/28 FR y 18/18 UR) |
+| Satisfacción del equipo | Voto de 1 a 5 en la retrospectiva | Cada sprint | 2 | 5 |
 
 # 12. Impedimentos, riesgos y decisiones
 
@@ -672,9 +683,11 @@ El Scrum Master lo actualiza a diario. Un impedimento es cualquier cosa que fren
 
 | **ID** | **Fecha** | **Descripción** | **Afectado/a** | **Responsable** | **Estado** | **Resuelto** |
 |---|---|---|---|---|---|---|
-| I-01 | *[dd/mm]* | *[Ejemplo: falta información del cliente sobre la tabla de precios por tramo]* | *[Requisitos]* | *[PO]* | *[Abierto]* |   |
-|   |   |   |   |   |   |   |
-|   |   |   |   |   |   |   |
+| I-01 | 01–07/10 | El proyecto se planteó como desarrollo práctico (programar la app) cuando es un diseño teórico; parte del trabajo del S1 no servía. | Todo el equipo | SM y PO | Cerrado | 07/10 (plan v1.1: backlog orientado a artefactos) |
+| I-02 | 09/10 | Sin un formato común, las versiones de cada miembro eran difíciles de comparar y fusionar. | Subgrupos de requisitos y casos de uso | SM | Cerrado | 14/10 (versiones temporales Tarea_Nombre_vN.md y fusión con el PO) |
+| I-03 | 10/10 | Riesgo de conflictos al subir a GitHub varias personas a la vez. | Todo el equipo | SM | Cerrado | 14/10 (aviso en WhatsApp antes de cada push y git pull antes de empezar) |
+| I-04 | 15/10 | La entrevista deja aspectos ambiguos (matriz de permisos, prorrateo, anulación, umbrales de aprobación…). | Casos de uso y requisitos | Subgrupo de requisitos | Abierto | Decisiones provisionales registradas como P1–P12; pendiente de confirmar con el cliente (H-014) |
+| I-05 | 16/10 | Un único diagrama de casos de uso era ilegible y el modelo tenía casos pequeños repetitivos. | Subgrupo de casos de uso | Subgrupo de Casos de Uso | Cerrado | 18/10 (6 diagramas por área; 47 → 42 casos al agrupar) |
 
 ## 12.2 Registro de riesgos
 
@@ -682,26 +695,30 @@ Puntuación = probabilidad (1–5) × impacto (1–5). Verde 1–7: vigilar en r
 
 | **ID** | **Riesgo** | **Categoría** | **P** | **I** | **Punt.** | **Resp.** | **Mitigación** | **Estado** |
 |---|---|---|---|---|---|---|---|---|
-| R-01 | *[Ausencias por exámenes o enfermedad reducen la capacidad]* | *[Recursos]* | 4 | 3 | 12 | *[SM]* | *[Registrar disponibilidad en cada Planning; margen del 20 %]* | *[Abierto]* |
-| R-02 | *[Estimaciones demasiado optimistas al principio]* | *[Planificación]* | 4 | 3 | 12 | *[PO]* | *[Calibrar en S1–S2; dividir historias grandes]* | *[Abierto]* |
-| R-03 | *[Conocimiento concentrado en una sola persona (factor bus)]* | *[Equipo]* | 3 | 4 | 12 | *[Irene]* | *[Trabajo en parejas y suplentes definidos]* | *[Abierto]* |
-| R-04 | *[Artefactos de distintos subgrupos que no encajan entre sí]* | *[Calidad]* | 3 | 4 | 12 | *[Miguel]* | *[Plantillas y nomenclatura comunes; revisión cruzada antes de integrar]* | *[Abierto]* |
-| R-05 | *[Requisitos ambiguos o contradictorios en la entrevista]* | *[Requisitos]* | 3 | 3 | 9 | *[PO]* | *[Lista de preguntas abiertas al cliente; registrar los supuestos]* | *[Abierto]* |
-|   |   |   |   |   |   |   |   |   |
+| R-01 | Ausencias por exámenes o enfermedad reducen la capacidad | Recursos | 4 | 3 | 12 | SM | Registrar disponibilidad en cada Planning; margen del 20 % | Abierto (sin incidencias en S1–S2) |
+| R-02 | Estimaciones demasiado optimistas al principio | Planificación | 4 | 3 | 12 | PO | Calibrar en S1–S2; dividir historias grandes | Materializado en S1 (12/26); mitigado en S2 con la velocidad de referencia |
+| R-03 | Conocimiento concentrado en una sola persona (factor bus) | Equipo | 3 | 4 | 12 | SM | Trabajo en parejas y suplentes definidos | Abierto |
+| R-04 | Artefactos de distintos subgrupos que no encajan entre sí | Calidad | 3 | 4 | 12 | PO | Plantillas y nomenclatura comunes; revisión cruzada antes de integrar | Mitigado en S2 (trazabilidad 100 % requisitos ↔ casos de uso) |
+| R-05 | Requisitos ambiguos o contradictorios en la entrevista | Requisitos | 3 | 3 | 9 | PO | Lista de preguntas abiertas al cliente; registrar los supuestos | Abierto (P1–P12 registradas; ver I-04) |
+| R-06 | Trabajo concentrado en los últimos días del sprint | Planificación | 4 | 3 | 12 | SM | Hito intermedio con versión obligatoria en el check-in; burndown cada 2–3 días | Abierto (observado en S2) |
 |   |   |   |   |   |   |   |   |   |
 
 ## 12.3 Registro de decisiones
 
 | **ID** | **Fecha** | **Decisión** | **Contexto y alternativas** | **Decidida por** |
 |---|---|---|---|---|
-| D-01 | *[dd/mm]* | Stack de referencia (teórico): Spring Boot + React + PostgreSQL | Alternativas: Django + HTMX, React + NestJS, React + Go. Se elige por la experiencia del equipo en Java y SQL. | Equipo |
-| D-02 | *[dd/mm]* | Diagramas UML en PlantUML dentro de docs/ | Alternativas: draw.io, StarUML. PlantUML se versiona en Git y se revisa por pull request. | Equipo |
-| D-03 | *[dd/mm]* | Una rama por persona (work<nombre>) y pull request obligatoria a main | Alternativa: ramas por tarea. | Equipo |
-|   |   |   |   |   |
+| D-01 | 07/10 | Stack de referencia (teórico): Spring Boot + React + PostgreSQL | Alternativas: Django + HTMX, React + NestJS, React + Go. Se elige por la experiencia del equipo en Java y SQL. | Equipo |
+| D-02 | 07/10 | Diagramas UML en PlantUML dentro de docs/ | Alternativas: draw.io, StarUML. PlantUML se versiona en Git y se revisa por pull request. | Equipo |
+| D-03 | 07/10 | Una rama por persona (work<nombre>) y pull request obligatoria a main | Alternativa: ramas por tarea. | Equipo |
+| D-04 | 07/10 | El proyecto es un diseño teórico: el backlog se orienta a artefactos (requisitos, casos de uso, UML, documentación) y la demo queda para el S3 | Antes se había planteado como desarrollo práctico de la aplicación (I-01). | Equipo |
+| D-05 | 14/10 | Versiones temporales por persona (Tarea_Nombre_vN.md) y fusión final con el PO | Alternativa: un único archivo compartido por subgrupo, con más conflictos (I-02). | Equipo |
+| D-06 | 14/10 | Check-in de 5 min a mitad de sprint en lugar de un Daily diario; seguimiento asíncrono por WhatsApp | Siete personas con horarios distintos; un Daily diario no era viable. | Equipo |
+| D-07 | 16/10 | Especificar los casos de uso con la plantilla del cheatsheet (Cockburn) y sacar lo común a reglas transversales (R1–R6) | Alternativa: repetir sesión, permisos y errores en cada ficha. | Subgrupo de casos de uso  |
+| D-08 | 16/10 | Dividir el modelo en 6 diagramas de casos de uso por área | Alternativa: un único diagrama con todos los casos, ilegible (I-05). | Miguel  |
+| D-09 | 18/10 | Agrupar casos con el mismo actor y objetivo (47 → 42) | Se mantienen separados los casos con actores distintos y los que aportan relaciones include/extend. | Irene |
 
 # 13. Sprint Review y Retrospectiva
 
-> **Cómo usarlo:** Copia estas dos plantillas al final de cada sprint. Son eventos distintos: la Review mira el producto (con stakeholders); la Retrospectiva mira el proceso (solo el equipo).
 
 ## 13.1 Agenda de la Sprint Review (2 h)
 
@@ -709,20 +726,33 @@ Puntuación = probabilidad (1–5) × impacto (1–5). Verde 1–7: vigilar en r
 |---|---|
 | 10 min | El PO recuerda el objetivo del sprint y qué historias estaban comprometidas. |
 | 60 min | Presentación de los artefactos terminados por quienes los han elaborado: diagramas y documentos reales, no resúmenes. |
-| 20 min | Feedback de los stakeholders; qué se ha aprendido. |
+| 20 min | Feedback del PO; qué se ha aprendido. |
 | 20 min | El PO revisa el backlog y la hoja de ruta; se comenta la capacidad del próximo sprint. |
 | 10 min | Cierre: acuerdos, próximos pasos y fecha de la siguiente Review. |
 
 ## 13.2 Acta de la Sprint Review
 
-| **Sprint / fecha** | *[Sprint _ · dd/mm/aaaa]* |
+### Sprint 1
+
+| **Sprint / fecha** | Sprint 1 · 09/10/2026 |
 |---|---|
-| **Asistentes** | *[Nombres del equipo y stakeholders]* |
-| **Objetivo del sprint** | *[Texto]* → Cumplido: *[Sí / Parcial / No]* |
-| **Historias completadas** | *[IDs y títulos]* |
-| **Historias no completadas** | *[IDs y motivo]* |
-| **Feedback recibido** | *[Comentarios de los stakeholders]* |
-| **Cambios al backlog** | *[Historias nuevas, cambios de prioridad, descartes]* |
+| **Asistentes** | Nestor (PO), Yousef (SM), Irene, Adrian, Javier, Miguel, Gonzalo |
+| **Objetivo del sprint** | Organizar el equipo, crear el repositorio y elaborar las V1 de requisitos y casos de uso → Cumplido: Parcial |
+| **Historias completadas** | H-003 (casos de uso V1); organización del equipo, reparto de roles y repositorio creado |
+| **Historias no completadas** | H-001 y H-002 (archivo final de requisitos): solo V1; pasan al Sprint 2 |
+| **Feedback recibido** | Sugerencias por privado al SM: el proyecto se había planteado como práctico cuando es teórico, y faltaba un formato común para las versiones de cada miembro. |
+| **Cambios al backlog** | Backlog reorientado a artefactos de análisis y diseño; H-004, H-005 y H-006 planificadas para el Sprint 2. |
+
+### Sprint 2
+
+| **Sprint / fecha** | Sprint 2 · 18/10/2026 (reunión de preparación de la exposición) |
+|---|---|
+| **Asistentes** | Nestor (PO), Yousef (SM), Irene, Adrian, Javier, Miguel, Gonzalo |
+| **Objetivo del sprint** | Cerrar requisitos y casos de uso y preparar la exposición del 20/10 → Cumplido: Sí |
+| **Historias completadas** | H-001, H-002 (documento de requisitos v3: 68 requisitos), H-005, H-006 (42 casos de uso, 6 diagramas y especificación), H-013 (informe Scrum), H-004 (presentación lista) |
+| **Historias no completadas** | Ninguna. La exposición se realiza el 20/10. |
+| **Feedback recibido** | Pendiente del feedback del profesorado tras la exposición del 20/10. Internamente: la división en 6 diagramas y la revisión crítica mejoraron la claridad del modelo. |
+| **Cambios al backlog** | Nueva H-014 (confirmar P1–P12 con el cliente); H-010 pasa a «En curso» (trazabilidad requisitos ↔ casos de uso ya hecha); H-007 y H-008 preparadas para el Sprint 3. |
 
 ## 13.3 Retrospectiva (1,5 h)
 
@@ -730,9 +760,10 @@ Formato base: Qué fue bien · Qué no fue bien · Qué probaremos. Antes de la 
 
 | **Qué fue bien** | **Qué no fue bien** | **Qué probaremos** |
 |---|---|---|
-| *[ ]* | *[ ]* | *[ ]* |
-|   |   |   |
-|   |   |   |
+| (S1) Reparto claro en dos subgrupos y roles definidos desde el principio. | (S1) Planteamos el proyecto como práctico y perdimos tiempo. | Validar el alcance con el enunciado y el profesorado en cada Sprint Planning. |
+| (S2) La nueva forma de trabajo con versiones temporales y fusión con el PO. | (S1) No se registró el burndown diario. | Actualizar el burndown cada 2–3 días. |
+| (S2) La revisión crítica de los casos de uso detectó errores antes de entregar. | (S2) El trabajo se cerró en los últimos días del sprint. | Versión intermedia obligatoria en el check-in de mitad de sprint. |
+| (S2) Comunicación rápida por WhatsApp y llamadas por Discord. | (S1) Estimaciones demasiado optimistas (12 de 26 puntos). | Comprometer según la velocidad media (≈ 18–20 pts en S3). |
 
 ## 13.4 Acciones de mejora
 
@@ -740,31 +771,32 @@ Una retrospectiva sin acciones no cambia nada. Cada acción tiene responsable y 
 
 | **ID** | **Sprint** | **Acción** | **Responsable** | **Fecha límite** | **Estado** |
 |---|---|---|---|---|---|
-| A-01 | *[S1]* | *[Ejemplo: revisar las PR en menos de 24 h]* | *[Nombre]* | *[dd/mm]* | *[Pendiente]* |
-|   |   |   |   |   |   |
-|   |   |   |   |   |   |
+| A-01 | S1 | Reorientar el backlog y el plan a un proyecto teórico | Yousef y Nestor | 07/10 | Hecho |
+| A-02 | S1 | Formato común de versiones temporales y fusión con el PO | Yousef | 14/10 | Hecho |
+| A-03 | S2 | Actualizar el burndown cada 2–3 días | Yousef | 03/11 | Pendiente |
+| A-04 | S2 | Versión intermedia obligatoria de cada artefacto en el check-in de mitad de sprint | Todos | 27/10 | Pendiente |
+| A-05 | S2 | Revisión cruzada entre subgrupos antes de cada fusión | Nestor | 03/11 | Pendiente |
 
-**Voto de satisfacción del equipo (1–5):** *[ ]*
+**Voto de satisfacción del equipo (1–5):** S1: *[ ]* · S2: *[ ]*
 
 # 14. Partes interesadas y comunicación
 
 | **Persona / grupo** | **Rol / interés** | **Influencia** | **Interés** | **Cómo y cuándo comunicar** | **Contacto** |
 |---|---|---|---|---|---|
-| *Alejandro Ruiz (Turbine)* | *Cliente: aporta los requisitos y resuelve dudas* | *[Alta]* | *[Alto]* | *[Preguntas por escrito a través del profesorado]* | *[ ]* |
-| *Profesorado de la asignatura* | *Evalúa los entregables y las exposiciones* | *[Alta]* | *[Alto]* | *[Sprint Review y entregas]* | *[correo]* |
-|   |   |   |   |   |   |
-|   |   |   |   |   |   |
+| Alejandro Ruiz (Turbine) | Cliente: aporta los requisitos y resuelve dudas | Alta | Alto | Preguntas por escrito a través del profesorado (p. ej., las cuestiones abiertas P1–P12) | A través del profesorado |
+| Profesorado de la asignatura | Evalúa los entregables y las exposiciones | Alta | Alto | Sprint Review, entregas y exposiciones (primer parcial: 20/10) | Correo institucional y campus virtual |
+| Equipo Ramón Llull (7 miembros) | Elabora los artefactos y aplica Scrum | Alta | Alto | Check-in de mitad de sprint, WhatsApp y Discord | Grupo de WhatsApp |
 
 ## Plan de comunicación interna
 
 | **Comunicación** | **Frecuencia** | **Canal** | **Responsable** |
 |---|---|---|---|
-| Check-in del equipo | A mitad de sprint (máx. 5 min) | *[Discord o WhatsApp]* | *[Facilita el SM]* |
-| Aviso de cada subida a GitHub | Cada commit | *[WhatsApp]* | *[Quien sube]* |
-| Informe y documentación de cada tarea | Al cerrar cada tarea | *[GitHub]* | *[Nestor (PO)]* |
-| Dudas, bloqueos y peticiones de ayuda | Cuando surjan | *[Privado al SM o etiquetarle en WhatsApp]* | *[Todos]* |
-| Llamadas y dudas largas | Cuando haga falta | *[Discord]* | *[Todos]* |
-| Sugerencias para la Sprint Review | Al cierre de cada sprint | *[Privado al SM]* | *[Todos]* |
+| Check-in del equipo | A mitad de sprint (máx. 5 min) | Discord o WhatsApp | Facilita el SM |
+| Aviso de cada subida a GitHub | Cada commit | WhatsApp | Quien sube |
+| Informe y documentación de cada tarea | Al cerrar cada tarea | GitHub | Nestor (PO) |
+| Dudas, bloqueos y peticiones de ayuda | Cuando surjan | Privado al SM o etiquetarle en WhatsApp | Todos |
+| Llamadas y dudas largas | Cuando haga falta | Discord | Todos |
+| Sugerencias para la Sprint Review | Al cierre de cada sprint | Privado al SM | Todos |
 
 # Anexos
 
@@ -786,21 +818,21 @@ Una retrospectiva sin acciones no cambia nada. Cada acción tiene responsable y 
 
 ✓  Calculada la capacidad del Sprint 1 (sección 9).
 
-## B. Checklist de cierre de sprint
+## B. Checklist de cierre de sprint (Sprint 2)
 
 ✓  Todos los elementos "Hecho" cumplen la Definición de Terminado.
 
 ✓  Los archivos finales de cada tarea están subidos a GitHub y anunciados en el grupo.
 
-☐  Sprint Review realizada y acta rellenada.
+✓  Sprint Review realizada y acta rellenada (13.2).
 
-✓  Retrospectiva realizada y acciones asignadas.
+✓  Retrospectiva realizada y acciones asignadas (13.3 y 13.4).
 
 ✓  Velocidad y burndown actualizados (sección 11).
 
 ✓  Backlog reordenado y estimado para el siguiente sprint.
 
-☐  Registro de riesgos e impedimentos revisado.
+✓  Registro de riesgos e impedimentos revisado (sección 12).
 
 ✓  Sprint Planning del siguiente sprint convocado.
 
@@ -816,7 +848,7 @@ Una retrospectiva sin acciones no cambia nada. Cada acción tiene responsable y 
 | Definition of Done | Estándar de calidad que debe cumplir una historia para considerarse terminada. |
 | Definition of Ready | Práctica opcional: criterios para que una historia pueda entrar en un sprint. |
 | Velocidad | Puntos de historia completados por sprint; referencia para planificar. |
-| Capacidad | Horas realmente disponibles del equipo en un sprint. |
+| Capacidad | Trabajo que el equipo puede asumir en un sprint (en este proyecto, en puntos). |
 | Timebox | Duración máxima fija de un evento. |
 | Impedimento | Obstáculo que frena al equipo y que no puede resolver por sí mismo. |
 | Artefacto | Producto de trabajo del análisis y diseño: requisito, caso de uso, diagrama o documento. |
