@@ -37,9 +37,9 @@ Anexos: checklists, glosario y fuentes
 
 | **Versión** | **Fecha** | **Autor/a** | **Cambios** |
 |---|---|---|---|
-| 1.0 | 30/09/2026 | Yousef AL Haidar | Versión inicial del plan de equipo. |
-| 1.1 | 07/10/2026 | Yousef AL Haidar | Adaptación a proyecto teórico de análisis y diseño: se eliminan alcance y supuestos; se adaptan roles, RACI, fichas, definiciones, backlog y hoja de ruta. |
-| 1.2 | 14/10/2026 | Yousef AL Haidar | Sprints 1 y 2 ajustados al primer parcial (20/10); nueva filosofía de trabajo con versiones temporales y archivos finales; canales de comunicación; preparación de la exposición. |
+| 1.0 | 30/09/2026 | Yousef Al Haidar | Versión inicial del plan de equipo. |
+| 1.1 | 07/10/2026 | Yousef Al Haidar | Adaptación a proyecto teórico de análisis y diseño: se eliminan alcance y supuestos; se adaptan roles, RACI, fichas, definiciones, backlog y hoja de ruta. |
+| 1.2 | 14/10/2026 | Yousef Al Haidar | Sprints 1 y 2 ajustados al primer parcial (20/10); nueva filosofía de trabajo con versiones temporales y archivos finales; canales de comunicación; preparación de la exposición. |
 | 1.6 | 18/10/2026 | Yousef AL Haidar | Cierre de los Sprints 1 y 2: capacidad, seguimiento (burndown y velocidad), impedimentos, riesgos, decisiones, actas de Review, Retrospectiva, acciones de mejora y plan de comunicación. |
 |   |   |   |   |
 
