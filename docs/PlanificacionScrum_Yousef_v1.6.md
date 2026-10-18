@@ -400,76 +400,58 @@ Estructura recomendada (basada en la guía de TeamRetro): capacidad → objetivo
 | 3 | Acordar el objetivo | 20 min | Redactar en una frase el Sprint Goal antes de elegir trabajo. |
 | 4 | Seleccionar trabajo | 60 min | Revisar historias frente al objetivo, su estado Ready y su tamaño; parar al llegar a la capacidad. |
 | 5 | Planificar el trabajo | 90 min | Dividir historias en tareas, detectar dependencias y riesgos, validar estimaciones. |
-| 6 | Confirmar y comprometer | 10 min | Repetir objetivo y alcance; comprobar la confianza del equipo ("puño de cinco"). |
+| 6 | Confirmar y comprometer | 10 min | Repetir objetivo y alcance; comprobar la confianza del equipo . |
 
-# 9. Capacidad del equipo
 
-> **Cómo usarlo:** Antes de cada Sprint Planning, estima las horas reales que cada miembro puede dedicar al proyecto, restando ausencias y aplicando un factor de foco. En este proyecto todos elaboran artefactos, también el PO y el SM.
+# 9. Fichas de sprint (Sprint 1 a 6)
 
-**Fórmula: horas de foco = semanas del sprint × horas por semana × factor de foco. Los Sprints 1 y 2 (10 días) cuentan como 1,5 semanas. Ejemplo: 1,5 × 6 h × 80 % ≈ 7 h por persona.**
 
-## Capacidad base por sprint
 
-| **Nº** | **Miembro** | **Semanas** | **Ausencias (días)** | **Horas / semana** | **Factor foco** | **Horas de foco** |
-|---|---|---|---|---|---|---|
-| 1 | Nestor · PO | 1,5 | 0 | *[XX] h* | 80 % | *[__] h* |
-| 2 | Yousef · SM | 1,5 | 0 | *[XX] h* | 80 % | *[__] h* |
-| 3 | Irene · Arquitectura | 1,5 | 0 | *[XX] h* | 80 % | *[__] h* |
-| 4 | Adrian · Modelo de dominio | 1,5 | 0 | *[XX] h* | 80 % | *[__] h* |
-| 5 | Javier · Usabilidad | 1,5 | 0 | *[XX] h* | 80 % | *[__] h* |
-| 6 | Miguel · Casos de uso y calidad | 1,5 | 0 | *[XX] h* | 80 % | *[__] h* |
-| 7 | Gonzalo · Repositorio y documentación | 1,5 | 0 | *[XX] h* | 80 % | *[__] h* |
-|   | TOTAL equipo |   |   |   |   | *[__] h* |
-
-# 10. Fichas de sprint (Sprint 1 a 6)
-
-> **Cómo usarlo:** Una ficha por sprint. Se rellena en el Sprint Planning (objetivo, capacidad y backlog) y se cierra en la Review (resultado). La columna «Responsable» es quien lidera la tarea; puede haber trabajo en parejas.
-
-**Sprint 0 (preparación):** reunir al equipo, acordar el Working Agreement, redactar la visión y las épicas, crear el backlog inicial, crear el repositorio GitHub y las plantillas, y definir la DoR y la DoD.
+**Sprint 0 (preparación):** reunir al equipo, acordar el Working Agreement, redactar la visión y las épicas, crear el backlog inicial, crear el repositorio GitHub y las plantillas.
 
 ## Sprint 1
 
 | **Fechas** | 01/10/2026 – 09/10/2026 |
 |---|---|
-| **Objetivo del sprint (Sprint Goal)** | Organizar el equipo, crear el repositorio y elaborar las primeras versiones (V1) de los requisitos funcionales y no funcionales y de los casos de uso. |
-| **Capacidad y compromiso** | *[Capacidad: ___ h · Puntos comprometidos: ___ · Velocidad de referencia: ___]* |
-| **Dependencias y riesgos** | *[Personas ausentes, dependencias externas, riesgos del sprint]* |
+| **Objetivo del sprint (Sprint Goal)** | Organizar el equipo, crear el repositorio y elaborar las primeras versiones (V1) de los requisitos funcionales y no funcionales y de los casos de uso. Nos damos cuenta de que hemos planteado mal el proyecto(es solo diseño) |
+| **Capacidad y compromiso** |  Puntos comprometidos: 26 |
+| **Dependencias y riesgos** | Creacion del repositorio;estructura de la app; Reunion intra-sprint.  |
 
 ### Sprint Backlog
 
 | **ID** | **Historia / tarea** | **Responsable** | **Pts** | **Horas** | **Estado** |
 |---|---|---|---|---|---|
 | 1 | <br>Comentar la reunión y compartir información.<br>Repartido roles | TODOS |   | 2 | **COMPLETADO** |
-| 2 | Crear el repositorio, dividir la tarea y plantear ligeramente los casos de uso.<br>Repasar básicos git | Repositorio -> Yousef<br>Plantear casos de uso-><br>Todos menos Yousef<br>Division de tarea -> Todos. |   | 72 | **COMPLETADO** |
+| 2 | Crear el repositorio, dividir la tarea y plantear ligeramente los casos de uso.<br>Repasar básicos git | Repositorio -> Yousef<br>Plantear casos de uso-><br>Todos<br>Division de tarea -> Todos. |   | 72 | **COMPLETADO** |
 | 3 | Comparar y fijar requisitos Funcionales y No funcionales.<br>Casos de Uso-> Imagen mental y comienzo de la creación.<br>Comienzo de la documentación.<br>Informes generales en cada subgrupo.<br> | Documentación -> Nestor<br>Requisitos F y No F -> Irene, Adrian y Javier<br>CD de uso -> Miguel Y Gonzalo, Yousef |   | 72 | **COMPLETADO (V1)** |
 |   |   |   |   |   |   |
 |   |   |   |   |   |   |
 
 ### Carga por miembro
 
-| **Miembro (rol)** | **Historias / tareas** | **Horas plan** | **Horas disp.** | **Observaciones** |
+| **Miembro (rol)** | **Historias / tareas** | **Observaciones** |
 |---|---|---|---|---|
-| Nestor · PO |   |   | *[__]* |   |
-| Yousef · SM |   |   | *[__]* |   |
-| Irene · Arquitectura |   |   | *[__]* |   |
-| Adrian · Modelo de dominio |   |   | *[__]* |   |
-| Javier · Usabilidad |   |   | *[__]* |   |
-| Miguel · Casos de uso y calidad |   |   | *[__]* |   |
-| Gonzalo · Repositorio y documentación |   |   | *[__]* |   |
+| Nestor · PO | Redacción de la documentación de los requisitos	 | COMPLETADO PARCIALMENTE |
+| Yousef · SM | Creacion del repositorio y documentacion scrum | COMPLETADO PARCIALMENTE |
+| Irene · Developer | Elaboración del documento de requisitos| COMPLETADO PARCIALMENTE  |
+| Adrian · Developer | Elaboración del documento de requisitos |  COMPLETADO PARCIALMENTE |
+| Javier · Developer |   Elaboración del documento de requisitos | COMPLETADO PARCIALMENTE  |
+| Miguel · Developer |   Elaboración del diagrama de casos de uso |  COMPLETADO PARCIALMENTE  |
+| Gonzalo · Developer |   Elaboración del diagrama de casos de uso |  COMPLETADO PARCIALMENTE  |
 
 ### Resultado (se rellena en la Review)
 
-| **Objetivo cumplido** | *[Sí / Parcial / No]* |
+| **Objetivo cumplido** |  *[Parcial]*|
 |---|---|
-| **Puntos completados** | *[___ de ___]* · Historias completadas: *[___ de ___]* |
-| **Notas** | Las versiones finales de requisitos y casos de uso pasan al Sprint 2. Las sugerencias de cada miembro se recogen por privado para la Sprint Review. |
+| **Puntos completados** | *12* |
+| **Notas** | Las versiones finales de requisitos y casos de uso pasan al Sprint 2. Las sugerencias de cada miembro se recogen por privado para la Sprint Review. Ademas nos hemos dado cuenta de que hemos planteado de manera práctica el proyecto cuando es meramente teórico|
 
 ## Sprint 2
 
 | **Fechas** | 10/10/2026 – 19/10/2026 |
 |---|---|
 | **Objetivo del sprint (Sprint Goal)** | Cerrar los requisitos funcionales y no funcionales y los casos de uso a partir de las versiones temporales, y preparar la exposición del primer parcial (20/10). |
-| **Capacidad y compromiso** | *[Capacidad: ___ h · Puntos comprometidos: ___ · Velocidad de referencia: ___]* |
+| **Capacidad y compromiso** | Puntos comprometidos: 23 |
 | **Dependencias y riesgos** | Archivos finales listos el sábado 17/10; reunión de preparación el lunes 19/10. Riesgo: conflictos al subir a GitHub a la vez (avisar en WhatsApp antes de cada push). |
 
 ### Sprint Backlog
@@ -485,22 +467,22 @@ Estructura recomendada (basada en la guía de TeamRetro): capacidad → objetivo
 
 ### Carga por miembro
 
-| **Miembro (rol)** | **Historias / tareas** | **Horas plan** | **Horas disp.** | **Observaciones** |
+| **Miembro (rol)** | **Historias / tareas** | **Observaciones** |
 |---|---|---|---|---|
-| Nestor · PO |   |   | *[__]* |   |
-| Yousef · SM |   |   | *[__]* |   |
-| Irene · Arquitectura |   |   | *[__]* |   |
-| Adrian · Modelo de dominio |   |   | *[__]* |   |
-| Javier · Usabilidad |   |   | *[__]* |   |
-| Miguel · Casos de uso y calidad |   |   | *[__]* |   |
-| Gonzalo · Repositorio y documentación |   |   | *[__]* |   |
+| Nestor · PO | Redacción de la documentación de los requisitos y la presentacion | COMPLETADO |
+| Yousef · SM | Elaboracion del diagrama de casos de uso y su documento | COMPLETADO |
+| Irene · Developer | Elaboración del documento de requisitos| COMPLETADO  |
+| Adrian · Developer | Elaboración del documento de requisitos |  COMPLETADO |
+| Javier · Developer |   Elaboración del documento de requisitos | COMPLETADO |
+| Miguel · Developer |   Elaboracion del diagrama de casos de uso y su documento |  COMPLETADO |
+| Gonzalo · Developer |   Elaboracion del diagrama de casos de uso y su documento |  COMPLETADO  |
 
 ### Resultado (se rellena en la Review)
 
-| **Objetivo cumplido** | *[Sí / Parcial / No]* |
+| **Objetivo cumplido** | *[Sí]*  |
 |---|---|
-| **Puntos completados** | *[___ de ___]* · Historias completadas: *[___ de ___]* |
-| **Notas** | *[Qué se movió al siguiente sprint y por qué]* |
+| **Puntos completados** | *23* |
+| **Notas** | Se ha completado todo, y el equipo esta contento con la nueva filosofia o metodo de trabajo |
 
 ## Sprint 3
 
@@ -786,41 +768,41 @@ Una retrospectiva sin acciones no cambia nada. Cada acción tiene responsable y 
 
 # Anexos
 
-## A. Checklist de inicio (Sprint 0)
+## A. Checklist de inicio (Sprint 0-2)
 
-☐  Definido el equipo, los roles y las dedicaciones (sección 2).
+✓  Definido el equipo, los roles y las dedicaciones (sección 2).
 
-☐  Acordado y firmado el Working Agreement (sección 4).
+✓  Acordado y firmado el Working Agreement (sección 4).
 
-☐  Redactadas la visión, los objetivos y las épicas (sección 1).
+✓  Redactadas la visión, los objetivos y las épicas (sección 1).
 
-☐  Creado el Product Backlog inicial con historias priorizadas y estimadas (sección 6).
+✓  Creado el Product Backlog inicial con historias priorizadas y estimadas (sección 6).
 
-☐  Definidas la Definición de Preparado y la de Terminado (sección 5).
+✓  Definidas la Definición de Preparado y la de Terminado (sección 5).
 
-☐  Repositorio GitHub, tablero y plantillas de artefactos operativos.
+✓  Repositorio GitHub, tablero y plantillas de artefactos operativos.
 
-☐  Calendario de eventos convocado para todos los sprints (sección 8).
+✓  Calendario de eventos convocado para todos los sprints (sección 8).
 
-☐  Calculada la capacidad del Sprint 1 (sección 9).
+✓  Calculada la capacidad del Sprint 1 (sección 9).
 
 ## B. Checklist de cierre de sprint
 
-☐  Todos los elementos "Hecho" cumplen la Definición de Terminado.
+✓  Todos los elementos "Hecho" cumplen la Definición de Terminado.
 
-☐  Los archivos finales de cada tarea están subidos a GitHub y anunciados en el grupo.
+✓  Los archivos finales de cada tarea están subidos a GitHub y anunciados en el grupo.
 
 ☐  Sprint Review realizada y acta rellenada.
 
-☐  Retrospectiva realizada y acciones asignadas.
+✓  Retrospectiva realizada y acciones asignadas.
 
-☐  Velocidad y burndown actualizados (sección 11).
+✓  Velocidad y burndown actualizados (sección 11).
 
-☐  Backlog reordenado y estimado para el siguiente sprint.
+✓  Backlog reordenado y estimado para el siguiente sprint.
 
 ☐  Registro de riesgos e impedimentos revisado.
 
-☐  Sprint Planning del siguiente sprint convocado.
+✓  Sprint Planning del siguiente sprint convocado.
 
 ## C. Glosario
 
