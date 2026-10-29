@@ -147,7 +147,7 @@ Rotar tareas de facilitación reparte la carga y evita depender de una sola pers
 | Facilitador/a de la retrospectiva | Yousef | Yousef | *[Nombre]* | *[Nombre]* | *[Nombre]* | *[Nombre]* |
 | Encargado/a del acta (Review y Retro) | Yousef | Yousef | *[Nombre]* | *[Nombre]* | *[Nombre]* | *[Nombre]* |
 | Guardián/a del tablero | Yousef | Yousef | *[Nombre]* | *[Nombre]* | *[Nombre]* | *[Nombre]* |
-| Responsable de la exposición | Decidido por el profesor | Decidido por el profesor | *[Nombre]* | *[Nombre]* | *[Nombre]* | *[Nombre]* |
+| Responsable de la exposición | Decidido por el profesor | Decidido por el profesor | Yousef | Adrian | Javier | *[Nombre]* |
 
 # 3. Reparto de trabajo por miembro
 
@@ -408,7 +408,7 @@ El equipo mide la capacidad en **puntos de historia**, no en horas: cada miembro
 |---|---|---|---|---|---|
 | S1 | 9 (01/10 – 09/10) | 7 personas · 16 % · reunión total en fin de semana (10:00–12:00) | Sin ausencias registradas; tiempo perdido al plantear el proyecto como práctico | 26 pts | — (primer sprint) |
 | S2 | 10 (10/10 – 19/10) | 7 personas · 16 % · check-in, reunión de preparación y último repaso | Sin ausencias registradas; carga concentrada en el fin de semana del 17–18/10 | 23 pts | 12 pts (S1) |
-| S3 | 14 (21/10 – 03/11) | 7 personas · 16 % | *[Exámenes o entregas de otras asignaturas]* | *[Recomendado: 18–20 pts]* | 17,5 pts (media S1–S2) |
+| S3 | 14 (21/10 – 03/11) | 7 personas · 16 % | Sin ausencias registradas; carga repartida de manera mas homogenea durante el tiempor de trabajo  | 20 |  |
 
 # 10. Fichas de sprint (Sprint 1 a 6)
 
@@ -491,28 +491,35 @@ El equipo mide la capacidad en **puntos de historia**, no en horas: cada miembro
 
 | **Fechas** | 21/10/2026 – 03/11/2026 |
 |---|---|
-| **Objetivo del sprint (Sprint Goal)** | Modelar el dominio (diagrama de clases), documentar la arquitectura y presentar la demo ilustrativa. |
-| **Capacidad y compromiso** | *[Capacidad: ___ h · Puntos comprometidos: ___ · Velocidad de referencia: 17,5]* |
-| **Dependencias y riesgos** | *[Personas ausentes, dependencias externas, riesgos del sprint]* |
+| **Objetivo del sprint (Sprint Goal)** | Diagrama de clases, diagrama de secuencia, y el plantemientoo del diagrama de secuencia |
+| **Capacidad y compromiso** | 25 |
+| **Dependencias y riesgos** | Comprensión del concepto a representar o como representar los diagramas, entrega de archivos finales para el 02/11/2026, reunion para el plantemiento y sprint review el 02/11/2026. |
 
 ### Sprint Backlog
 
 | **ID** | **Historia / tarea** | **Responsable** | **Pts** | **Horas** | **Estado** |
 |---|---|---|---|---|---|
-|   |   |   |   |   |   |
-|   |   |   |   |   |   |
+| 1 | H-007 · Revisar el diagrama de clases actual frente a los 42 casos de uso y los requisitos: clases, atributos y operaciones que faltan o sobran | Yousef, Miguel, Irene | 2 |   | Pendiente |
+| 2 | H-007 · Diagrama UML de clases final, dividido por paquetes (usuarios y permisos, clientes y suscripciones, facturación y aprobaciones, cobros, seguimiento y control): clases, atributos, operaciones,etc. Versiones temporales (DiagramaClases_Nombre_vN) y archivo final con el PO | Miguel, Yousef, Javier, Gonzalo | 8 |   |Pendiente |
+| 3 | H-010 · Diccionario de clases y trazabilidad casos de uso ↔ clases | Miguel, Yousef, Javier, Gonzalo | 2 |   | Pendiente |
+| 4 | H-015 · Diagrama de secuencia, atributos con tipo de dato, claves primarias y foráneas, relaciones, cardinalidades, tablas intermedias N:M y restricciones. Incluye el paso de clases a tablas (herencia de roles, estados de factura, importes en DECIMAL y fechas en UTC). Versiones temporales (DiagramaSed_Nombre_vN) y archivo final con el PO | Irene, Javier | 5 || Pendiente |
+| 5 | Revisión cruzada clases ↔ tablas ↔ casos de uso antes de la fusión final | Nestor, Irene | 1 |   | Pendiente |
+| 6 | Informe y documentación de ambos diagramas a partir de los archivos finales | Nestor | 2 |   | Pendiente |
+| 7 | H-013 · Informe Scrum del Sprint 3 (Review, Retro y burndown cada 2–3 días) | Yousef | 2 |   | Pendiente |
+| 8 | Check-in con versión intermedia obligatoria (mitad de sprint) y reunión de fusión y cierre | Todos | — |   | Pendiente |
+
 
 ### Carga por miembro
 
-| **Miembro (rol)** | **Historias / tareas** | **Horas plan** | **Horas disp.** | **Observaciones** |
-|---|---|---|---|---|
-| Nestor · PO |   |   | *[__]* |   |
-| Yousef · SM |   |   | *[__]* |   |
-| Irene · Arquitectura |   |   | *[__]* |   |
-| Adrian · Modelo de dominio |   |   | *[__]* |   |
-| Javier · Usabilidad |   |   | *[__]* |   |
-| Miguel · Casos de uso y calidad |   |   | *[__]* |   |
-| Gonzalo · Repositorio y documentación |   |   | *[__]* |   |
+| **Miembro (rol)** | **Historias / tareas** | **Observaciones** |
+|---|---|---|
+| Nestor · PO |  Desarrollo del diagrama Entidad-Relación; Validar y fusionar las versiones finales; documentación de ambos diagramas |   |
+| Yousef · SM |  Desarrollo del diagrama de clases; Informe Scrum del S3; Burndown cada 2–3 días  |   |
+| Irene · Developer |  Desarrollo del diagrama Entidad-Relación; |   |
+| Adrian · Developer |  Desarrollo del diagrama Entidad-Relación;  |    |
+| Javier · Developer |   Desarrollo del diagrama de clases;    |  |
+| Miguel · Developer |   Desarrollo del diagrama de clases;    |   |
+| Gonzalo · Developer |   Desarrollo del diagrama de clases; |    |
 
 ### Resultado (se rellena en la Review)
 
@@ -540,7 +547,7 @@ El equipo mide la capacidad en **puntos de historia**, no en horas: cada miembro
 
 | **Miembro (rol)** | **Historias / tareas** | **Horas plan** | **Horas disp.** | **Observaciones** |
 |---|---|---|---|---|
-| Nestor · PO |   |   | *[__]* |   |
+| Nestor · PO |   |   | Diagrama Entidad-Relación |   |
 | Yousef · SM |   |   | *[__]* |   |
 | Irene · Arquitectura |   |   | *[__]* |   |
 | Adrian · Modelo de dominio |   |   | *[__]* |   |
