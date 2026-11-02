@@ -1,0 +1,236 @@
+@startuml DiagramaClases_Yousef_v1
+title Diagrama de clases (v1) · Gestor de facturas Turbine
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam packageStyle rectangle
+skinparam class {
+  BackgroundColor #F5F8FF
+  BorderColor #3B6FD8
+}
+hide empty members
+
+package "Usuarios y control" {
+  class Usuario {
+    - id : Long
+    - nombre : String
+    - email : String
+    - rol : Rol
+    - estado : EstadoCuenta
+    - intentosFallidos : Integer
+    + iniciarSesion(email, contrasena) : Boolean
+    + desactivar() : void
+    + cambiarRol(nuevoRol : Rol) : void
+  }
+  enum Rol {
+    ESTANDAR
+    ADMINISTRADOR
+    SUPERADMINISTRADOR
+  }
+  enum EstadoCuenta {
+    INVITADA
+    ACTIVA
+    BLOQUEADA
+    DESACTIVADA
+  }
+  class Notificacion {
+    - tipo : String
+    - mensaje : String
+    - fecha : DateTime
+    - leida : Boolean
+    - atendida : Boolean
+    + marcarAtendida() : void
+  }
+  class RegistroAuditoria {
+    - fecha : DateTime
+    - accion : String
+    - entidad : String
+    - valorAnterior : String
+    - valorNuevo : String
+  }
+}
+
+package "Clientes y suscripciones" {
+  class Cliente {
+    - id : Long
+    - nombreComercial : String
+    - razonSocial : String
+    - identificadorFiscal : String
+    - pais : String
+    - moneda : String
+    - estado : EstadoCliente
+    + calcularDeuda() : Decimal
+    + darDeBaja(motivo : String) : void
+    + reactivar() : void
+  }
+  enum EstadoCliente {
+    ACTIVO
+    INCOMPLETO
+    BAJA_PENDIENTE
+    DADO_DE_BAJA
+  }
+  class Contacto {
+    - nombre : String
+    - email : String
+    - telefono : String
+    - funcion : FuncionContacto
+    - activo : Boolean
+    + anonimizar() : void
+  }
+  enum FuncionContacto {
+    COMERCIAL
+    ADMINISTRACION
+    IMPAGOS
+  }
+  class Suscripcion {
+    - fechaInicio : Date
+    - estado : EstadoSuscripcion
+    - fechaReactivacion : Date
+    + pausar(hasta : Date) : void
+    + reactivar() : void
+    + cancelar() : void
+    + calcularProrrateo(fecha : Date) : Decimal
+  }
+  enum EstadoSuscripcion {
+    PROGRAMADA
+    ACTIVA
+    PAUSADA
+    CANCELADA
+  }
+  class NivelTarifa {
+    - nombre : String
+    - facturacionMinima : Decimal
+    - facturacionMaxima : Decimal
+    - cuotaMensual : Decimal
+  }
+  class ExcepcionComercial {
+    - tipo : String
+    - valor : Decimal
+    - vigenteDesde : Date
+    - vigenteHasta : Date
+    - motivo : String
+  }
+}
+
+package "Facturación, cobros y seguimiento" {
+  interface Aprobable {
+    + requiereAprobacion() : Boolean
+    + aplicarAprobacion() : void
+  }
+  class Factura {
+    - numero : String
+    - serie : String
+    - fechaEmision : Date
+    - fechaVencimiento : Date
+    - estado : EstadoFactura
+    - total : Decimal
+    + calcularTotales() : Decimal
+    + emitir() : void
+    + importePendiente() : Decimal
+  }
+  class FacturaRectificativa {
+    - motivo : String
+    - anulaTotalmente : Boolean
+  }
+  enum EstadoFactura {
+    BORRADOR
+    PENDIENTE_APROBACION
+    APROBADA
+    EMITIDA
+    ENVIADA
+    NO_NOTIFICADA
+    VENCIDA
+    PAGADA
+    RECTIFICADA
+    ANULADA
+  }
+  class LineaFactura {
+    - descripcion : String
+    - cantidad : Decimal
+    - precioUnitario : Decimal
+    - descuento : Decimal
+    - impuesto : Decimal
+    + calcularImporte() : Decimal
+  }
+  class Concepto {
+    - nombre : String
+    - precioBase : Decimal
+    - impuesto : Decimal
+  }
+  class SolicitudAprobacion {
+    - motivo : String
+    - estado : EstadoAprobacion
+    - fechaSolicitud : DateTime
+    - fechaResolucion : DateTime
+    + aprobar(aprobador : Usuario) : void
+    + rechazar(aprobador : Usuario, motivo : String) : void
+  }
+  enum EstadoAprobacion {
+    PENDIENTE
+    APROBADA
+    RECHAZADA
+  }
+  class Envio {
+    - fecha : DateTime
+    - tipo : TipoEnvio
+    - canal : String
+    - resultado : String
+  }
+  enum TipoEnvio {
+    FACTURA
+    RECORDATORIO
+  }
+  class Cobro {
+    - importe : Decimal
+    - fecha : Date
+    - origen : OrigenCobro
+    - referencia : String
+    + vincular(factura : Factura) : void
+    + revertir(motivo : String) : void
+  }
+  enum OrigenCobro {
+    PASARELA
+    TRANSFERENCIA
+    REVOLUT
+  }
+  class Incidencia {
+    - descripcion : String
+    - prioridad : String
+    - estado : String
+    - pausaRecordatoriosHasta : Date
+    + cerrar() : void
+  }
+}
+
+' --- Usuarios
+Usuario "1" -- "0..*" Cliente : responsable de >
+Usuario "1" -- "0..*" Notificacion : recibe >
+Usuario "0..1" -- "0..*" RegistroAuditoria : realiza >
+
+' --- Clientes
+Cliente "1" *-- "1..*" Contacto
+Cliente "1" -- "0..1" Suscripcion : tiene >
+Suscripcion "0..*" --> "1" NivelTarifa : aplica >
+Suscripcion "1" -- "0..*" ExcepcionComercial : ajustada por >
+
+' --- Facturación
+Cliente "1" -- "0..*" Factura : recibe >
+Suscripcion "0..1" -- "0..*" Factura : genera >
+Factura "1" *-- "1..*" LineaFactura
+LineaFactura "0..*" --> "0..1" Concepto : usa >
+FacturaRectificativa --|> Factura
+FacturaRectificativa "0..*" --> "1" Factura : rectifica >
+Factura ..|> Aprobable
+ExcepcionComercial ..|> Aprobable
+SolicitudAprobacion "0..*" --> "1" Aprobable : retiene >
+SolicitudAprobacion "0..*" --> "1" Usuario : creada por >
+SolicitudAprobacion "0..*" --> "0..1" Usuario : resuelta por >
+Factura "1" -- "0..*" Envio : se envía en >
+Envio "0..*" o-- "1..*" Contacto : destinatarios
+
+' --- Cobros y seguimiento
+Factura "0..1" -- "0..*" Cobro : pagada por >
+Incidencia "0..*" --> "1" Cliente : sobre >
+Incidencia "0..*" --> "0..1" Factura : afecta a >
+Incidencia "0..*" --> "1" Usuario : responsable >
+@enduml
