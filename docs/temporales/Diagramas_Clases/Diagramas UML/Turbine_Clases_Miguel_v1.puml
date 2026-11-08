@@ -1,0 +1,101 @@
+@startuml
+title Gestor de facturas Turbine - Diagrama de clases Miguel v1
+
+top to bottom direction
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+skinparam nodesep 45
+skinparam ranksep 55
+skinparam class {
+  BackgroundColor #F3F7FC
+  BorderColor #365575
+  ArrowColor #526579
+  FontColor #1F2937
+}
+hide empty methods
+
+class Usuario {
+  - id: Integer
+  - nombre: String
+  - email: String
+  - rol: String
+  - activo: Boolean
+}
+
+class Cliente {
+  - id: Integer
+  - razonSocial: String
+  - identificadorFiscal: String
+  - domicilioFiscal: String
+  - pais: String
+  - moneda: String
+  - estado: String
+}
+
+class Contacto {
+  - id: Integer
+  - nombre: String
+  - email: String
+  - telefono: String
+  - tipo: String
+  - activo: Boolean
+}
+
+class Suscripcion {
+  - id: Integer
+  - fechaInicio: Date
+  - fechaFin: Date [0..1]
+  - estado: String
+  + pausar(): void
+  + reactivar(): void
+}
+
+class Tarifa {
+  - id: Integer
+  - nombreNivel: String
+  - importeMensual: Decimal
+  - moneda: String
+}
+
+class Factura {
+  - id: Integer
+  - numero: String [0..1]
+  - fechaEmision: Date [0..1]
+  - fechaVencimiento: Date [0..1]
+  - estado: String
+  - moneda: String
+  - total: Decimal
+  + calcularTotal(): Decimal
+}
+
+class LineaFactura {
+  - concepto: String
+  - cantidad: Decimal
+  - precioUnitario: Decimal
+  - porcentajeDescuento: Decimal
+  - porcentajeImpuesto: Decimal
+  + calcularSubtotal(): Decimal
+}
+
+class Cobro {
+  - id: Integer
+  - fecha: DateTime
+  - importe: Decimal
+  - moneda: String
+  - origen: String
+  - referencia: String
+  - estado: String
+}
+
+Usuario "1" -- "0..*" Cliente : responsable de
+Cliente "1" -- "0..*" Contacto : tiene
+Cliente "1" -- "0..*" Suscripcion : contrata
+Tarifa "1" -- "0..*" Suscripcion : se aplica a
+Cliente "1" -- "0..*" Factura : recibe
+Suscripcion "0..1" -- "0..*" Factura : origina
+Factura "1" *-- "0..*" LineaFactura : contiene
+Factura "0..1" -- "0..*" Cobro : se vincula con
+
+@enduml
