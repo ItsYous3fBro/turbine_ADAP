@@ -1,0 +1,90 @@
+@startuml
+' ============================================================
+' Diagrama de componentes - Gestor de facturas TurbineH
+' Grupo Ramón Llull - 3º B - Versión 1 (Adrián) 
+'
+'
+' FR que cubre cada componente:
+'   Autenticación y permisos ... FR1-FR3
+'   Clientes y suscripciones ... FR4-FR11
+'   Facturación y aprobaciones . FR12-FR16, FR18
+'   Cobros y recordatorios ..... FR19-FR20
+'   Dashboard e informes ....... FR24-FR25
+'   Documentos y firma ......... FR17
+'   Notificaciones ............. FR21
+'   Auditoría .................. FR26
+'   (FR22 incidencias, FR23 búsqueda y FR27 configuración quedan
+'    dentro de los componentes de negocio; no se dibujan aparte)
+' ============================================================
+
+skinparam componentStyle uml2
+skinparam dpi 150
+skinparam nodesep 60
+skinparam ranksep 70
+skinparam padding 8
+
+package "Acceso" {
+  [Interfaz web] as web
+  [API REST] as api
+}
+
+package "Negocio" as pNeg {
+  [Autenticación\ny permisos] as auth
+  [Clientes y\nsuscripciones] as cli
+  [Facturación y\naprobaciones] as fact
+  [Cobros y\nrecordatorios] as cob
+  [Dashboard\ne informes] as dash
+}
+
+package "Servicios" {
+  [Documentos\ny firma] as doc
+  [Notificaciones] as notif
+}
+
+package "Infraestructura" {
+  [Base de datos] as db
+  [Planificador] as plan
+  [Auditoría] as aud
+}
+
+package "Externos" {
+  [Microsoft] as ident
+  [Stripe / banco] as pago
+  [Correo] as correo
+  [Sistema externo\n(Brain)] as ext
+}
+
+' --- Acceso -> negocio ---
+web -(0- auth  : IAuth
+api -(0- auth  : IAuth
+web -(0- cli   : IClientes
+api -(0- cli   : IClientes
+web -(0- fact  : IFacturacion
+web -(0- cob   : ICobros
+web -(0- dash  : IInformes
+
+' --- Entre componentes de negocio ---
+cli  -(0- fact : IFacturacion
+cob  -(0- fact : IFacturacion
+dash -(0- cob  : ICobros
+
+' --- Negocio -> servicios ---
+fact -(0- doc   : IDocumentos
+pNeg -(0- notif : IAlerta
+
+' --- Planificador ---
+plan -(0- fact : IFacturacion
+plan -(0- cob  : ICobros
+
+' --- Infraestructura ---
+pNeg  -(0- db  : IDatabase
+pNeg  -(0- aud : ILog
+aud   -(0- db  : IDatabase
+
+' --- Externos ---
+auth  -(0- ident  : IIdentidad
+cob   -(0- pago   : IPagos
+notif -(0- correo : IEnvio
+ext   -(0- api    : IConsultaDeuda
+
+@enduml

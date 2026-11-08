@@ -1,0 +1,56 @@
+@startuml
+package "Entrada" {
+[Aplicación Web] as app
+[Control de Acceso] as acceso
+}
+
+package "Fase 1: Emisión" {
+[Registro de Clientes] as cli
+[Emisión de Facturas] as emi
+[Facturas Recurrentes] as rec
+}
+
+package "Fase 2: Entrega" {
+[Generador de PDF] as pdf
+[Firma Electrónica] as firma
+[Envío de Correos] as mail
+}
+
+package "Fase 3: Cobro" {
+[Registro de Pagos] as pagos
+[Reclamación de Impagos] as recl
+}
+
+package "Automatización" {
+[Planificador de Tareas] as plan
+}
+
+package "Datos" {
+[Base de Datos] as bd
+[Archivo de Facturas] as arch
+}
+
+package "Externo" {
+[Servidor de Correo] as smtp
+}
+
+app -(0- acceso : IAcceso
+app -(0- cli : IClientes
+app -(0- emi : IEmision
+app -(0- pagos : IPagos
+emi -(0- cli : IClientes
+rec -(0- emi : IEmision
+emi -(0- pdf : IRenderizado
+pdf -(0- firma : IFirma
+emi -(0- mail : IEntrega
+recl -(0- pagos : IPagos
+recl -(0- mail : IEntrega
+plan -(0- rec : IRecurrencia
+plan -(0- recl : IReclamacion
+cli -(0- bd : IDatos
+emi -(0- bd : IDatos
+pagos -(0- bd : IDatos
+firma -(0- arch : IArchivo
+mail -(0- smtp : ISmtp
+
+@enduml
