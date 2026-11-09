@@ -1,0 +1,250 @@
+
+# Diagrama de clases (v3) - Sistema Definitivo
+
+Esta es la versión final corporativa orientada a producción. Representa un sistema robusto, escalable y preparado para integraciones externas, auditorías estrictas y flujos de trabajo burocráticos internos.
+
+## Ampliaciones y cambios respecto a la v2
+El salto de la v2 a la v3 consolida el sistema como una plataforma "Enterprise". Los principales cambios estructurales son:
+* **Patrón de Aprobaciones**: Se introduce la interfaz `Aprobable` implementada por `Factura`, `ExcepcionComercial` y la nueva clase `PropuestaCambioNivel`. Estas clases ahora pueden ser retenidas por una `SolicitudAprobacion`, creando un flujo de revisión (maker-checker) antes de hacerse efectivas.
+* **Seguridad y Acceso**: Se abstrae la seguridad creando `TokenTemporal` (del que heredan `EnlaceRecuperacion` e `Invitacion`) y se añade `CredencialAPI` para permitir que sistemas de terceros (M2M) interactúen de forma segura.
+* **Gestión en Masa y Operativa**: Se incorporan herramientas de backend como la `Importacion` masiva de datos y la `Exportacion` de informes.
+* **Configuración Dinámica**: Se agregan las clases `PlantillaMensaje` (para parametrizar los envíos de correo sin tocar código) y `ParametroConfiguracion` (para flags del sistema).
+* **Catálogo de Conceptos**: Las líneas de factura ahora se apoyan en un catálogo maestro (`Concepto`) en lugar de escribir los textos a mano.
+* **Delegaciones**: Aparece la clase `Delegacion` para que los usuarios puedan transferir temporalmente sus responsabilidades de cartera a otros compañeros durante vacaciones o bajas.
+
+```plantuml
+@startuml
+left to right direction
+title Diagrama de clases (v3) - Gestor de facturas Turbine
+
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam linetype ortho
+skinparam nodesep 70
+skinparam ranksep 90
+hide empty members
+
+skinparam package {
+  BackgroundColor white
+  BorderColor black
+}
+
+skinparam class {
+  BackgroundColor #F4F8FF
+  BorderColor #4A709C
+  HeaderBackgroundColor #D4E3F7
+}
+
+package "Usuarios y acceso" {
+  enum Rol {
+    ESTANDAR
+    ADMINISTRADOR
+    SUPERADMINISTRADOR
+  }
+
+  enum EstadoCuenta {
+    INVITADA
+    ACTIVA
+    BLOQUEADA
+  }
+
+  class Usuario {
+    -id : Long
+    -nombre : String
+    -email : String
+    -rol : Rol
+    -estado : EstadoCuenta
+    +autenticar(contrasena : String) : Boolean
+  }
+
+  abstract class TokenTemporal {
+    -token : String
+    -fechaCaducidad : DateTime
+    +estaVigente() : Boolean
+  }
+
+  class EnlaceRecuperacion extends TokenTemporal
+  class Invitacion extends TokenTemporal
+
+  class CredencialAPI {
+    -sistema : String
+    -activa : Boolean
+  }
+}
+
+package "Configuración y análisis" {
+  class PlantillaMensaje {
+    -tipo : String
+    -texto : String
+  }
+
+  class Exportacion {
+    -tipoInforme : String
+    -formato : String
+  }
+
+  class ParametroConfiguracion {
+    -clave : String
+    -valor : String
+  }
+}
+
+package "Clientes y suscripciones" {
+  class Importacion {
+    -filasValidas : Integer
+    -filasErroneas : Integer
+  }
+
+  class Delegacion {
+    -fechaInicio : Date
+    -fechaFin : Date
+  }
+
+  class Cliente {
+    -id : Long
+    -razonSocial : String
+    -facturacionAnual : Decimal
+    +calcularDeuda() : Decimal
+  }
+
+  class Suscripcion {
+    -fechaInicio : Date
+    -estado : String
+    +calcularCuotaMensual() : Decimal
+  }
+
+  class Contacto {
+    -nombre : String
+    -email : String
+  }
+
+  class ExcepcionComercial implements Aprobable {
+    -valor : Decimal
+    -motivo : String
+  }
+
+  class PropuestaCambioNivel implements Aprobable {
+    -facturacionAnual : Decimal
+  }
+
+  class NivelTarifa {
+    -nombre : String
+    -cuotaMensual : Decimal
+  }
+}
+
+package "Facturación y aprobaciones" {
+  class PeriodoFacturacion {
+    -fechaInicio : Date
+    -cerrado : Boolean
+    +cerrar() : void
+  }
+
+  class Factura implements Aprobable {
+    -numero : String
+    -fechaEmision : Date
+    -estado : String
+    -total : Decimal
+    +emitir(numero : String) : void
+  }
+
+  class FacturaRectificativa extends Factura {
+    -motivo : String
+  }
+
+  interface Aprobable {
+    +requiereAprobacion() : Boolean
+    +aplicarAprobacion() : void
+  }
+
+  class SolicitudAprobacion {
+    -motivo : String
+    -estado : String
+    +aprobar(aprobador : Usuario) : void
+  }
+
+  class LineaFactura {
+    -descripcion : String
+    -cantidad : Decimal
+    -precioUnitario : Decimal
+  }
+  
+  class Concepto {
+    -nombre : String
+    -precioBase : Decimal
+  }
+}
+
+package "Seguimiento e Incidencias" {
+  class Notificacion {
+    -mensaje : String
+    -leida : Boolean
+  }
+
+  class Incidencia {
+    -descripcion : String
+    -prioridad : String
+    -estado : String
+  }
+
+  class Comentario {
+    -texto : String
+    -fecha : DateTime
+  }
+
+  class RegistroAuditoria {
+    -accion : String
+    -entidad : String
+  }
+}
+
+package "Envíos y cobros" {
+  class Envio {
+    -fecha : DateTime
+    -resultado : String
+  }
+
+  class Cobro {
+    -importe : Decimal
+    -fecha : Date
+    -referencia : String
+  }
+}
+
+' --- Relaciones V3 ---
+Usuario "1" *-- "0..*" TokenTemporal
+Usuario "1" -- "0..*" CredencialAPI : autor >
+Usuario "1" -- "0..*" Cliente : responsable de >
+Usuario "1" -- "0..*" Delegacion : delegado >
+Usuario "1" -- "0..*" SolicitudAprobacion : responsable de >
+Usuario "1" -- "0..*" RegistroAuditoria : realiza >
+Usuario "1" -- "0..*" Notificacion : recibe >
+Usuario "1" -- "0..*" Exportacion : solicita >
+
+Cliente "1" *-- "1..*" Contacto
+Cliente "1" -- "0..*" Suscripcion
+Cliente "0..*" -- "1" Importacion : sobre <
+Delegacion "0..*" -- "1" Cliente : sobre >
+CredencialAPI "0..1" -- "1" Cliente : autentica >
+Cliente "1" -- "0..*" PropuestaCambioNivel : propone >
+
+Suscripcion "1" -- "0..*" ExcepcionComercial : ajustada por >
+NivelTarifa "1" -- "0..*" Suscripcion : aplica <
+NivelTarifa "1" -- "0..*" PropuestaCambioNivel : revisada por >
+
+PeriodoFacturacion "1" o-- "0..*" Factura : sobre >
+Cliente "1" -- "0..*" Factura : recibe >
+Suscripcion "0..1" -- "0..*" Factura : genera >
+Factura "1" *-- "1..*" LineaFactura
+LineaFactura "0..*" -- "0..1" Concepto : usa >
+
+Aprobable "1" -- "0..*" SolicitudAprobacion : retiene <
+FacturaRectificativa "0..*" -- "1" Factura : rectifica >
+
+Factura "1" -- "0..1" Cobro : pagada por >
+Factura "1" -- "0..*" Envio : se envía en >
+Factura "1" -- "0..*" Incidencia : afecta a >
+Incidencia "1" *-- "0..*" Comentario
+Envio "0..*" -- "0..1" PlantillaMensaje : usa >
+
+@endluml
