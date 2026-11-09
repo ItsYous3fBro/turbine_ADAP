@@ -1,0 +1,607 @@
+@startuml
+
+top to bottom direction
+
+title Turbine - Diagrama de clases FINAL
+
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam linetype ortho
+skinparam packageStyle rectangle
+skinparam nodesep 35
+skinparam ranksep 45
+hide empty members
+
+package "1. Acceso, usuarios y clientes" {
+
+class Usuario {
+  - id: UUID
+  - nombre: String
+  - correo: String
+  - hashContrasena: String
+  - rol: RolUsuario
+  - estado: String
+  - intentosFallidos: Integer
+  - bloqueadoHasta: DateTime
+  + activar()
+  + desactivar()
+  + cambiarRol(rol: RolUsuario)
+  + bloquearTemporalmente()
+}
+
+enum RolUsuario {
+  ESTANDAR
+  ADMINISTRADOR
+  SUPERADMINISTRADOR
+}
+
+class Sesion {
+  - id: UUID
+  - creadaEn: DateTime
+  - ultimaActividad: DateTime
+  - expiraEn: DateTime
+  - activa: Boolean
+  + renovar()
+  + invalidar()
+}
+
+class TokenRecuperacion {
+  - tokenHash: String
+  - creadoEn: DateTime
+  - caducaEn: DateTime
+  - usado: Boolean
+  + validar(): Boolean
+  + marcarUsado()
+}
+
+class Cliente {
+  - id: UUID
+  - nombreComercial: String
+  - razonSocial: String
+  - identificadorFiscal: String
+  - domicilio: String
+  - pais: String
+  - moneda: String
+  - representanteLegal: String
+  - facturacionAnual: Decimal
+  - estado: String
+  - fechaAlta: Date
+  + actualizarDatos()
+  + calcularDeuda(): Decimal
+  + solicitarBaja()
+  + completarBaja()
+  + reactivar()
+}
+
+class Contacto {
+  - id: UUID
+  - nombre: String
+  - correo: String
+  - telefono: String
+  - tipo: String
+  - idioma: String
+  - activo: Boolean
+  + actualizar()
+  + desactivar()
+  + anonimizar()
+}
+
+class Delegacion {
+  - id: UUID
+  - inicio: Date
+  - fin: Date
+  - estado: String
+  + activar()
+  + finalizar()
+}
+
+class SolicitudBaja {
+  - id: UUID
+  - origen: String
+  - fechaSolicitud: DateTime
+  - estado: String
+  - motivo: String
+  + revisar()
+  + aprobar()
+  + rechazar()
+}
+
+}
+
+package "2. Suscripciones, tarifas y aprobaciones" {
+
+class Suscripcion {
+  - id: UUID
+  - fechaInicio: Date
+  - fechaFin: Date
+  - estado: String
+  - motivoPausa: String
+  - fechaReactivacion: Date
+  - condicionesPago: String
+  + activar()
+  + pausar(motivo: String, hasta: Date)
+  + reactivar()
+  + solicitarCancelacion()
+  + calcularMensualidad(): Decimal
+  + calcularProrrateo(): Decimal
+}
+
+class Tarifa {
+  - id: UUID
+  - nivel: String
+  - volumenDesde: Decimal
+  - volumenHasta: Decimal
+  - precioMensual: Decimal
+  - moneda: String
+  - vigenteDesde: Date
+  - vigenteHasta: Date
+  + esAplicable(volumen: Decimal): Boolean
+}
+
+class SolicitudAprobacion {
+  - id: UUID
+  - tipo: String
+  - motivo: String
+  - estado: String
+  - creadaEn: DateTime
+  - resueltaEn: DateTime
+  - importePropuesto: Decimal
+  - porcentajePropuesto: Decimal
+  + aprobar()
+  + rechazar(motivo: String)
+  + reasignar()
+}
+
+}
+
+package "3. Facturación" {
+
+class Factura {
+  - id: UUID
+  - numero: String
+  - tipo: String
+  - fechaEmision: Date
+  - fechaVencimiento: Date
+  - periodoServicio: String
+  - estado: EstadoFactura
+  - moneda: String
+  - subtotal: Decimal
+  - impuestos: Decimal
+  - total: Decimal
+  - migrada: Boolean
+  + calcularTotal(): Decimal
+  + previsualizar()
+  + emitir()
+  + marcarVencida()
+  + calcularPendiente(): Decimal
+}
+
+class FacturaRectificativa {
+  - motivoRectificacion: String
+  + esAnulacionTotal(): Boolean
+}
+
+enum EstadoFactura {
+  BORRADOR
+  PENDIENTE_APROBACION
+  APROBADA
+  EMITIDA
+  ENVIADA
+  NO_NOTIFICADA
+  VENCIDA
+  PAGADA
+  ANULADA
+  RECTIFICADA
+}
+
+class LineaFactura {
+  - descripcion: String
+  - cantidad: Decimal
+  - precioUnitario: Decimal
+  - descuentoPorcentaje: Decimal
+  - impuestoPorcentaje: Decimal
+  + calcularSubtotal(): Decimal
+}
+
+class Concepto {
+  - id: UUID
+  - codigo: String
+  - descripcion: String
+  - precio: Decimal
+  - impuestoPorcentaje: Decimal
+  - activo: Boolean
+  + actualizar()
+}
+
+class SerieFacturacion {
+  - id: UUID
+  - codigo: String
+  - formato: String
+  - ultimoNumero: Integer
+  - activa: Boolean
+  + siguienteNumero(): String
+}
+
+class PeriodoFacturacion {
+  - id: UUID
+  - inicio: Date
+  - fin: Date
+  - cerrado: Boolean
+  + puedeCerrarse(): Boolean
+  + cerrar()
+}
+
+class DocumentoFactura {
+  - id: UUID
+  - rutaLocal: String
+  - rutaNube: String
+  - huella: String
+  - firmado: Boolean
+  - creadoEn: DateTime
+  + descargar()
+  + generarEnlaceTemporal(): String
+}
+
+class EjecucionFacturacion {
+  - id: UUID
+  - inicio: DateTime
+  - fin: DateTime
+  - estado: String
+  - facturasGeneradas: Integer
+  - errores: Integer
+  + iniciar()
+  + finalizar()
+  + reanudar()
+}
+
+}
+
+package "4. Cobros, envíos y seguimiento" {
+
+class Cobro {
+  - id: UUID
+  - origen: String
+  - referenciaExterna: String
+  - fecha: DateTime
+  - importe: Decimal
+  - moneda: String
+  - estado: String
+  - motivoDiscrepancia: String
+  + vincular()
+  + conciliar()
+  + revertirConciliacion(motivo: String)
+}
+
+class Envio {
+  - id: UUID
+  - tipo: String
+  - canal: String
+  - destinatarioHistorico: String
+  - contenidoEnviado: String
+  - fecha: DateTime
+  - resultado: String
+  - referenciaProveedor: String
+  + enviar()
+  + registrarRebote(motivo: String)
+  + reintentar()
+}
+
+class PausaRecordatorios {
+  - id: UUID
+  - motivo: String
+  - inicio: DateTime
+  - fechaRevision: Date
+  - activa: Boolean
+  + reanudar()
+}
+
+class ElementoTrabajo {
+  - id: UUID
+  - tipo: String
+  - mensaje: String
+  - prioridad: String
+  - fecha: DateTime
+  - leido: Boolean
+  - atendido: Boolean
+  + marcarLeido()
+  + marcarAtendido()
+}
+
+class Incidencia {
+  - id: UUID
+  - descripcion: String
+  - prioridad: String
+  - estado: String
+  - creadaEn: DateTime
+  + agregarComentario(texto: String)
+  + reasignar()
+  + cerrar()
+}
+
+class Comentario {
+  - id: UUID
+  - texto: String
+  - fecha: DateTime
+  - privado: Boolean
+}
+
+class Adjunto {
+  - id: UUID
+  - nombre: String
+  - formato: String
+  - tamano: Long
+  - ruta: String
+  + validar(): Boolean
+}
+
+}
+
+package "5. Información, configuración e integración" {
+
+class VistaGuardada {
+  - id: UUID
+  - nombre: String
+  - filtros: String
+  - predeterminada: Boolean
+  + aplicar()
+}
+
+class ObjetivoFinanciero {
+  - id: UUID
+  - tipoPeriodo: String
+  - importe: Decimal
+  - moneda: String
+  - vigenteDesde: Date
+  - vigenteHasta: Date
+  + calcularCumplimiento(): Decimal
+}
+
+class Informe {
+  - id: UUID
+  - tipo: String
+  - formato: String
+  - filtros: String
+  - generadoEn: DateTime
+  - caducaEn: DateTime
+  - ruta: String
+  + generar()
+  + descargar()
+}
+
+class ProgramacionInforme {
+  - id: UUID
+  - periodicidad: String
+  - proximaEjecucion: DateTime
+  - destinatarios: String
+  - activa: Boolean
+  + ejecutar()
+  + desactivar()
+}
+
+class Importacion {
+  - id: UUID
+  - tipo: String
+  - archivo: String
+  - fecha: DateTime
+  - estado: String
+  - registrosCorrectos: Integer
+  - registrosFallidos: Integer
+  - informeErrores: String
+  + previsualizar()
+  + procesar()
+}
+
+class Configuracion {
+  - plazoPagoDias: Integer
+  - cadenciaRecordatorios: String
+  - fechaRevisionAnual: Date
+  - umbralDescuento: Decimal
+  - umbralImporteAtipico: Decimal
+  - retencionExportacionesDias: Integer
+  - monedasPermitidas: String
+  - impuestosPermitidos: String
+  + validar(): Boolean
+  + actualizar()
+}
+
+class PlantillaMensaje {
+  - id: UUID
+  - tipo: String
+  - idioma: String
+  - asunto: String
+  - cuerpo: String
+  - activa: Boolean
+  + validarVariables(): Boolean
+  + previsualizar(): String
+}
+
+class RegistroAuditoria {
+  - id: UUID
+  - fecha: DateTime
+  - procesoOrigen: String
+  - accion: String
+  - entidad: String
+  - identificadorEntidad: UUID
+  - valorAnterior: String
+  - valorNuevo: String
+}
+
+class CopiaSeguridad {
+  - id: UUID
+  - fecha: DateTime
+  - estado: String
+  - ubicacion: String
+  - tamano: Long
+  + verificar()
+  + restaurar()
+}
+
+class CredencialAPI {
+  - id: UUID
+  - sistema: String
+  - nombre: String
+  - activa: Boolean
+  - creadaEn: DateTime
+  - ultimoUso: DateTime
+  + revocar()
+}
+
+}
+
+' ==========================
+' ACCESO Y CLIENTES
+' ==========================
+
+Usuario "1" *-- "0..*" Sesion
+Usuario "1" *-- "0..*" TokenRecuperacion
+
+Usuario "1" -- "0..*" Cliente : responsable
+Cliente "1" *-- "1..*" Contacto
+
+Cliente "1" -- "0..*" Delegacion
+Usuario "1" -- "0..*" Delegacion : titular
+Usuario "1" -- "0..*" Delegacion : delegado
+
+Cliente "1" -- "0..*" SolicitudBaja
+Usuario "0..1" -- "0..*" SolicitudBaja : solicita/revisa
+
+' ==========================
+' SUSCRIPCIONES
+' ==========================
+
+Cliente "1" -- "0..*" Suscripcion
+Tarifa "1" -- "0..*" Suscripcion : tarifa vigente
+
+Suscripcion "0..1" -- "0..*" SolicitudAprobacion : objeto comercial
+Factura "0..1" -- "0..*" SolicitudAprobacion : objeto facturación
+
+Usuario "0..1" -- "0..*" SolicitudAprobacion : proponente
+Usuario "0..1" -- "0..*" SolicitudAprobacion : revisor
+
+' ==========================
+' FACTURACIÓN
+' ==========================
+
+Cliente "1" -- "0..*" Factura
+Suscripcion "0..1" -- "0..*" Factura : genera
+
+Factura <|-- FacturaRectificativa
+FacturaRectificativa "0..*" --> "1" Factura : original
+
+Factura "1" *-- "0..*" LineaFactura
+Concepto "0..1" -- "0..*" LineaFactura : origen
+
+SerieFacturacion "0..1" -- "0..*" Factura
+PeriodoFacturacion "1" -- "0..*" Factura
+Factura "1" *-- "0..1" DocumentoFactura
+
+EjecucionFacturacion "0..1" -- "0..*" Factura : genera
+
+' ==========================
+' COBROS Y SEGUIMIENTO
+' ==========================
+
+Factura "0..1" -- "0..*" Cobro : conciliación
+
+Factura "1" -- "0..*" Envio
+Contacto "0..1" -- "0..*" Envio : destinatario actual
+PlantillaMensaje "0..1" -- "0..*" Envio : plantilla
+
+Factura "1" *-- "0..*" PausaRecordatorios
+Incidencia "0..1" -- "0..*" PausaRecordatorios : causa
+
+Usuario "1" -- "0..*" ElementoTrabajo : destinatario
+Cliente "0..1" -- "0..*" ElementoTrabajo : contexto
+Factura "0..1" -- "0..*" ElementoTrabajo : contexto
+SolicitudBaja "0..1" -- "0..*" ElementoTrabajo : contexto
+
+Cliente "1" -- "0..*" Incidencia
+Factura "0..1" -- "0..*" Incidencia
+Usuario "1" -- "0..*" Incidencia : responsable
+
+Incidencia "1" *-- "0..*" Comentario
+Incidencia "1" -- "0..*" Adjunto
+Suscripcion "1" -- "0..*" Adjunto : documentos
+
+Usuario "1" -- "0..*" Comentario : autor
+
+' ==========================
+' INFORMACIÓN Y CONTROL
+' ==========================
+
+Usuario "1" *-- "0..*" VistaGuardada
+Usuario "1" -- "0..*" ObjetivoFinanciero : define
+Usuario "1" -- "0..*" Informe : solicita
+ProgramacionInforme "0..1" -- "0..*" Informe : genera
+Usuario "1" -- "0..*" ProgramacionInforme : crea
+Usuario "1" -- "0..*" Importacion : ejecuta
+Usuario "0..1" -- "0..*" RegistroAuditoria : autor
+
+Configuracion "1" -- "0..*" Tarifa : define
+Configuracion "1" -- "0..*" SerieFacturacion : define
+Configuracion "1" -- "0..*" PlantillaMensaje : define
+Configuracion "1" -- "0..*" CopiaSeguridad : supervisa
+Configuracion "1" -- "0..*" CredencialAPI : gestiona
+
+note bottom of Usuario
+  El rol determina el nivel de acceso:
+  ESTANDAR, ADMINISTRADOR o SUPERADMINISTRADOR.
+  Los permisos reales también dependen de
+  los clientes asignados.
+end note
+
+note bottom of Cliente
+  El borrado es lógico.
+  Si existe deuda pendiente, la baja no se completa.
+  Una solicitud externa de baja crea una tarea de revisión.
+end note
+
+note bottom of Suscripcion
+  Puede comenzar en una fecha futura o quedar pausada.
+  Cancelarla o cambiar su tarifa requiere aprobación.
+end note
+
+note bottom of SolicitudAprobacion
+  Se usa para cambios de tarifa, descuentos,
+  facturas sensibles, rectificaciones y cancelaciones.
+  El creador no puede aprobar su propia solicitud.
+end note
+
+note bottom of Factura
+  Una factura emitida no se modifica ni se borra.
+  Las correcciones se realizan mediante
+  FacturaRectificativa.
+end note
+
+note bottom of DocumentoFactura
+  El PDF emitido queda firmado e inalterable.
+  Se conserva en almacenamiento local y en la nube.
+end note
+
+note bottom of Cobro
+  La referencia externa debe ser idempotente.
+  Los cobros dudosos o con importe distinto
+  requieren conciliación manual.
+end note
+
+note bottom of Envio
+  Conserva el destinatario histórico aunque
+  el contacto cambie o se anonimice.
+  Un reintento crea otro envío, no otra factura.
+end note
+
+note bottom of RegistroAuditoria
+  Registro inmutable.
+  Ningún rol puede editarlo ni borrarlo.
+end note
+
+legend bottom
+  Diagrama final del dominio Turbine.
+  - privado | + público
+  *-- composición
+  <|-- generalización
+  Decimal se usa para importes monetarios.
+  DateTime representa instantes almacenados en UTC.
+endlegend
+
+@enduml
