@@ -1,0 +1,177 @@
+
+# Diagrama de clases (v2) - Crecimiento Operativo
+
+Esta segunda versión evoluciona el modelo para dar soporte a la operativa real del día a día, donde las cosas no siempre salen perfectas y se requiere un mayor nivel de seguimiento y control comercial.
+
+## Ampliaciones y cambios respecto a la v1
+Para pasar del MVP a un modelo operativo, se han introducido las siguientes mejoras:
+* **Control Temporal**: Se añade la entidad `PeriodoFacturacion` para agrupar facturas y permitir el cierre mensual de la contabilidad.
+* **Corrección Legal**: Se incorpora la `FacturaRectificativa` (heredando de Factura) para gestionar abonos o errores en facturas ya emitidas, un requisito legal indispensable.
+* **Seguimiento e Incidencias**: Nacen las clases `Incidencia` y `Comentario` para gestionar impagos o problemas con las facturas, así como la clase `Envio` para registrar la trazabilidad de los correos electrónicos automatizados.
+* **Flexibilidad Comercial**: Se añade la clase `ExcepcionComercial` vinculada a la suscripción, permitiendo aplicar descuentos manuales o ajustes de precio específicos para un cliente sin tener que crear niveles de tarifa nuevos.
+* **Auditoría Básica**: Aparece el `RegistroAuditoria` vinculado al Usuario para empezar a trazar quién hace qué en el sistema.
+
+```plantuml
+@startuml
+left to right direction
+title Diagrama de clases (v2) - Gestor de facturas Turbine
+
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam linetype ortho
+skinparam nodesep 60
+skinparam ranksep 80
+hide empty members
+
+skinparam package {
+  BackgroundColor white
+  BorderColor black
+}
+
+skinparam class {
+  BackgroundColor #F4F8FF
+  BorderColor #4A709C
+  HeaderBackgroundColor #D4E3F7
+}
+
+package "1. Usuarios y Control" {
+  enum Rol {
+    ESTANDAR
+    ADMINISTRADOR
+  }
+
+  class Usuario {
+    -id : Long
+    -nombre : String
+    -email : String
+    -rol : Rol
+    +autenticar(contrasena : String) : Boolean
+  }
+
+  class RegistroAuditoria {
+    -fecha : DateTime
+    -accion : String
+    -entidad : String
+  }
+}
+
+package "2. Clientes y Suscripciones" {
+  enum EstadoSuscripcion {
+    ACTIVA
+    PAUSADA
+    CANCELADA
+  }
+
+  class Cliente {
+    -id : Long
+    -razonSocial : String
+    -identificadorFiscal : String
+    -facturacionAnual : Decimal
+    +calcularDeuda() : Decimal
+  }
+
+  class Contacto {
+    -nombre : String
+    -email : String
+    -telefono : String
+  }
+
+  class Suscripcion {
+    -fechaInicio : Date
+    -estado : EstadoSuscripcion
+    +pausar(hasta : Date) : void
+  }
+
+  class NivelTarifa {
+    -nombre : String
+    -cuotaMensual : Decimal
+  }
+
+  class ExcepcionComercial {
+    -valor : Decimal
+    -motivo : String
+  }
+}
+
+package "3. Facturación" {
+  enum EstadoFactura {
+    BORRADOR
+    EMITIDA
+    VENCIDA
+    PAGADA
+    RECTIFICADA
+  }
+
+  class PeriodoFacturacion {
+    -fechaInicio : Date
+    -fechaFin : Date
+    -cerrado : Boolean
+    +cerrar() : void
+  }
+
+  class Factura {
+    -numero : String
+    -fechaEmision : Date
+    -estado : EstadoFactura
+    -total : Decimal
+    +calcularTotales() : Decimal
+    +emitir() : void
+  }
+
+  class FacturaRectificativa extends Factura {
+    -motivo : String
+  }
+
+  class LineaFactura {
+    -descripcion : String
+    -cantidad : Decimal
+    -precioUnitario : Decimal
+  }
+}
+
+package "4. Envíos, Cobros e Incidencias" {
+  class Envio {
+    -fecha : DateTime
+    -canal : String
+    -resultado : String
+  }
+
+  class Cobro {
+    -importe : Decimal
+    -fecha : Date
+    -estado : String
+  }
+
+  class Incidencia {
+    -descripcion : String
+    -estado : String
+    +cerrar() : void
+  }
+
+  class Comentario {
+    -texto : String
+    -fecha : DateTime
+  }
+}
+
+' Relaciones V2
+Usuario "1" -- "0..*" Cliente : responsable de >
+Usuario "1" -- "0..*" RegistroAuditoria : realiza >
+
+Cliente "1" *-- "1..*" Contacto
+Cliente "1" -- "0..1" Suscripcion
+NivelTarifa "1" -- "0..*" Suscripcion : aplica <
+Suscripcion "1" -- "0..*" ExcepcionComercial : ajustada por >
+
+PeriodoFacturacion "1" o-- "0..*" Factura : sobre >
+Cliente "1" -- "0..*" Factura : recibe >
+Suscripcion "0..1" -- "0..*" Factura : genera >
+
+Factura "1" *-- "1..*" LineaFactura
+Factura "1" -- "0..1" Cobro
+Factura "1" -- "0..*" Envio : se envía en >
+Factura "1" -- "0..*" Incidencia : afecta a >
+Incidencia "1" *-- "0..*" Comentario
+FacturaRectificativa "0..*" -- "1" Factura : rectifica >
+
+@endluml
