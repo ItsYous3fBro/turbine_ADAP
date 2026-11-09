@@ -1,0 +1,141 @@
+@startuml DiagramaClases_2_Clientes
+title Diagrama de clases · 2 · Clientes y suscripciones
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam nodesep 40
+skinparam ranksep 50
+skinparam class {
+  BackgroundColor #F5F8FF
+  BorderColor #3B6FD8
+  BackgroundColor<<ref>> #EDEDED
+  BorderColor<<ref>> #9A9A9A
+  FontColor<<ref>> #555555
+}
+hide empty members
+hide <<ref>> members
+hide <<ref>> stereotype
+hide <<ref>> circle
+
+package "Clientes y suscripciones" {
+class Cliente {
+  - id : Long
+  - nombreComercial : String
+  - razonSocial : String
+  - identificadorFiscal : String
+  - domicilio : String
+  - pais : String
+  - moneda : String
+  - representanteLegal : String
+  - facturacionAnual : Decimal
+  - fechaAlta : Date
+  - estado : EstadoCliente
+  + datosFiscalesCompletos() : Boolean
+  + calcularDeuda() : Decimal
+  + asignarResponsable(u : Usuario) : void
+  + darDeBaja(motivo : String) : void
+  + reactivar() : void
+  }
+class Contacto {
+  - nombre : String
+  - email : String
+  - telefono : String
+  - funcion : FuncionContacto
+  - idioma : String
+  - activo : Boolean
+  + desactivar() : void
+  + anonimizar() : void
+  }
+class Delegacion {
+  - fechaInicio : Date
+  - fechaFin : Date
+  + estaVigente(fecha : Date) : Boolean
+  }
+class Suscripcion {
+  - fechaInicio : Date
+  - fechaFin : Date
+  - estado : EstadoSuscripcion
+  - motivoPausa : String
+  - fechaReactivacion : Date
+  + calcularCuotaMensual() : Decimal
+  + calcularProrrateo(fecha : Date) : Decimal
+  + activar() : void
+  + pausar(hasta : Date, motivo : String) : void
+  + reactivar() : void
+  + cancelar() : void
+  }
+class NivelTarifa {
+  - nombre : String
+  - facturacionMinima : Decimal
+  - facturacionMaxima : Decimal
+  - cuotaMensual : Decimal
+  - vigenteDesde : Date
+  - vigenteHasta : Date
+  + incluye(facturacion : Decimal) : Boolean
+  }
+class ExcepcionComercial {
+  - tipo : String
+  - valor : Decimal
+  - vigenteDesde : Date
+  - vigenteHasta : Date
+  - motivo : String
+  }
+class PropuestaCambioNivel {
+  - fecha : Date
+  - facturacionAnual : Decimal
+  }
+class SolicitudBaja {
+  - origen : String
+  - fechaSolicitud : DateTime
+  - motivo : String
+  - estado : EstadoAprobacion
+  + aprobar(revisor : Usuario) : void
+  + descartar(motivo : String) : void
+  }
+class Importacion {
+  - tipo : String
+  - fecha : DateTime
+  - filasValidas : Integer
+  - filasErroneas : Integer
+  - informeErrores : String
+  }
+}
+interface Aprobable <<ref>>
+class CredencialAPI <<ref>>
+class Factura <<ref>>
+class Incidencia <<ref>>
+class Usuario <<ref>>
+note bottom of Suscripcion
+  Como máximo una suscripción
+no cancelada por cliente.
+end note
+note bottom of SolicitudBaja
+  Si el cliente tiene deuda, la baja
+queda pendiente (FR11, regla R6).
+end note
+Usuario "1" -- "0..*" Cliente : responsable de >
+Delegacion "0..*" --> "1" Cliente : sobre >
+Delegacion "0..*" --> "1" Usuario : delegado >
+Cliente "1" *-- "1..*" Contacto
+Cliente "1" -- "0..*" Suscripcion : tiene >
+Suscripcion "0..*" --> "1" NivelTarifa : aplica >
+Suscripcion "1" -- "0..*" ExcepcionComercial : ajustada por >
+Suscripcion "1" -- "0..*" PropuestaCambioNivel : revisada por >
+PropuestaCambioNivel "0..*" --> "1" NivelTarifa : propone >
+Usuario "1" -- "0..*" Importacion : realiza >
+SolicitudBaja "0..*" --> "1" Cliente : sobre >
+SolicitudBaja "0..*" --> "0..1" Usuario : revisada por >
+SolicitudBaja "0..*" --> "0..1" CredencialAPI : recibida de >
+Cliente "1" -- "0..*" Factura : recibe >
+Suscripcion "0..1" -- "0..*" Factura : genera >
+ExcepcionComercial ..|> Aprobable
+PropuestaCambioNivel ..|> Aprobable
+Incidencia "0..*" --> "1" Cliente : sobre >
+legend right
+  <b>Leyenda</b>
+  Clase gris = definida en otro diagrama (solo referencia)
+  ◆ composición · ◇ agregación · ▷ generalización
+  ⇢▷ realización de interfaz · → asociación navegable
+  Tipos de los atributos con valores fijos: ver «Enumerados»
+endlegend
+@enduml

@@ -1,0 +1,129 @@
+@startuml DiagramaClases_0_VistaGeneral
+title Diagrama de clases · Vista general (39 clases y 1 interfaz, sin atributos ni operaciones)
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam nodesep 40
+skinparam ranksep 50
+skinparam class {
+  BackgroundColor #F5F8FF
+  BorderColor #3B6FD8
+  BackgroundColor<<ref>> #EDEDED
+  BorderColor<<ref>> #9A9A9A
+  FontColor<<ref>> #555555
+}
+hide empty members
+hide <<ref>> members
+hide <<ref>> stereotype
+hide <<ref>> circle
+
+hide members
+package "Usuarios y acceso" {
+  class Usuario
+  class Sesion
+  abstract class TokenTemporal
+  class Invitacion
+  class EnlaceRecuperacion
+  class CredencialAPI
+}
+package "Clientes y suscripciones" {
+  class Cliente
+  class Contacto
+  class Delegacion
+  class Suscripcion
+  class NivelTarifa
+  class ExcepcionComercial
+  class PropuestaCambioNivel
+  class SolicitudBaja
+  class Importacion
+}
+package "Facturación y aprobaciones" {
+  interface Aprobable
+  class Factura
+  class FacturaRectificativa
+  class LineaFactura
+  class Concepto
+  class SerieFacturacion
+  class DocumentoFactura
+  class PeriodoFacturacion
+  class SolicitudAprobacion
+}
+package "Envíos y cobros" {
+  class Envio
+  class Cobro
+  class PausaRecordatorios
+}
+package "Seguimiento y control" {
+  class Notificacion
+  class Incidencia
+  class Comentario
+  class Adjunto
+  class VistaGuardada
+  class RegistroAuditoria
+  class EjecucionProceso
+  class CopiaSeguridad
+}
+package "Configuración y análisis" {
+  class Configuracion
+  class PlantillaMensaje
+  class ObjetivoFinanciero
+  class Exportacion
+  class ProgramacionInforme
+}
+TokenTemporal <|-- Invitacion
+TokenTemporal <|-- EnlaceRecuperacion
+Usuario *-- TokenTemporal
+Usuario *-- Sesion
+Usuario -- Cliente
+Delegacion --> Cliente
+Delegacion --> Usuario
+Cliente *-- Contacto
+Cliente -- Suscripcion
+Suscripcion --> NivelTarifa
+Suscripcion -- ExcepcionComercial
+Suscripcion -- PropuestaCambioNivel
+PropuestaCambioNivel --> NivelTarifa
+Usuario -- Importacion
+SolicitudBaja --> Cliente
+SolicitudBaja --> Usuario
+SolicitudBaja --> CredencialAPI
+Cliente -- Factura
+Suscripcion -- Factura
+Factura *-- LineaFactura
+LineaFactura --> Concepto
+FacturaRectificativa --|> Factura
+FacturaRectificativa --> Factura
+PeriodoFacturacion o-- Factura
+Factura --> SerieFacturacion
+Factura *-- DocumentoFactura
+EjecucionProceso -- Factura
+Factura ..|> Aprobable
+ExcepcionComercial ..|> Aprobable
+PropuestaCambioNivel ..|> Aprobable
+SolicitudAprobacion --> Aprobable
+SolicitudAprobacion --> Usuario
+SolicitudAprobacion --> Usuario
+Factura -- Envio
+Envio --> PlantillaMensaje
+Factura -- Cobro
+Factura *-- PausaRecordatorios
+PausaRecordatorios --> Incidencia
+Usuario -- Notificacion
+Incidencia --> Cliente
+Incidencia --> Factura
+Incidencia --> Usuario
+Incidencia *-- Comentario
+Incidencia *-- Adjunto
+Comentario --> Usuario
+Usuario *-- VistaGuardada
+Usuario -- RegistroAuditoria
+Usuario -- Exportacion
+Usuario -- ProgramacionInforme
+ProgramacionInforme -- Exportacion
+Usuario -- ObjetivoFinanciero
+legend right
+  <b>Vista general</b>: todas las clases y relaciones del modelo.
+  Multiplicidades, nombres de las relaciones y el detalle de cada clase:
+  diagramas 1, 2 y 3.
+endlegend
+@enduml

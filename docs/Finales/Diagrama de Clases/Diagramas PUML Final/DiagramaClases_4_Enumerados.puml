@@ -1,0 +1,104 @@
+@startuml DiagramaClases_4_Enumerados
+title Diagrama de clases · Enumerados (valores permitidos de los atributos)
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam nodesep 40
+skinparam ranksep 50
+skinparam class {
+  BackgroundColor #F5F8FF
+  BorderColor #3B6FD8
+  BackgroundColor<<ref>> #EDEDED
+  BorderColor<<ref>> #9A9A9A
+  FontColor<<ref>> #555555
+}
+hide empty members
+hide <<ref>> members
+hide <<ref>> stereotype
+hide <<ref>> circle
+
+package "Usuarios y acceso" {
+enum Rol {
+  ESTANDAR
+  ADMINISTRADOR
+  SUPERADMINISTRADOR
+  }
+enum EstadoCuenta {
+  INVITADA
+  ACTIVA
+  BLOQUEADA
+  DESACTIVADA
+  }
+}
+package "Clientes y suscripciones" {
+enum EstadoCliente {
+  ACTIVO
+  INCOMPLETO
+  BAJA_PENDIENTE
+  DADO_DE_BAJA
+  }
+enum FuncionContacto {
+  COMERCIAL
+  ADMINISTRACION
+  IMPAGOS
+  }
+enum EstadoSuscripcion {
+  PROGRAMADA
+  ACTIVA
+  PAUSADA
+  CANCELADA
+  }
+}
+package "Facturación y aprobaciones" {
+enum TipoFactura {
+  PUNTUAL
+  RECURRENTE
+  PRORRATEO
+  }
+enum EstadoFactura {
+  BORRADOR
+  PENDIENTE_APROBACION
+  APROBADA
+  EMITIDA
+  ENVIADA
+  NO_NOTIFICADA
+  VENCIDA
+  PAGADA
+  RECTIFICADA
+  ANULADA
+  }
+enum EstadoAprobacion {
+  PENDIENTE
+  APROBADA
+  RECHAZADA
+  }
+}
+package "Envíos y cobros" {
+enum TipoEnvio {
+  FACTURA
+  RECORDATORIO
+  INFORME
+  }
+enum OrigenCobro {
+  PASARELA
+  TRANSFERENCIA
+  REVOLUT
+  }
+enum EstadoCobro {
+  VINCULADO
+  EN_REVISION
+  NO_IDENTIFICADO
+  }
+}
+package "Seguimiento y control" {
+enum PrioridadIncidencia {
+  BAJA
+  MEDIA
+  ALTA
+  }
+enum EstadoIncidencia {
+  ABIERTA
+  CERRADA
+  }
+}
+@enduml

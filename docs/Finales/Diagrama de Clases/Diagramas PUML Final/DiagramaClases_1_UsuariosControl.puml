@@ -1,0 +1,200 @@
+@startuml DiagramaClases_1_UsuariosControl
+title Diagrama de clases · 1 · Usuarios, acceso y control
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam nodesep 40
+skinparam ranksep 50
+skinparam class {
+  BackgroundColor #F5F8FF
+  BorderColor #3B6FD8
+  BackgroundColor<<ref>> #EDEDED
+  BorderColor<<ref>> #9A9A9A
+  FontColor<<ref>> #555555
+}
+hide empty members
+hide <<ref>> members
+hide <<ref>> stereotype
+hide <<ref>> circle
+
+package "Usuarios y acceso" {
+class Usuario {
+  - id : Long
+  - nombre : String
+  - email : String
+  - hashContrasena : String
+  - cuentaMicrosoft : String
+  - rol : Rol
+  - estado : EstadoCuenta
+  - intentosFallidos : Integer
+  - bloqueadoHasta : DateTime
+  + autenticar(contrasena : String) : Boolean
+  + registrarIntentoFallido() : void
+  + cambiarContrasena(nueva : String) : void
+  + activar() : void
+  + desactivar() : void
+  + cambiarRol(nuevoRol : Rol) : void
+  + invalidarSesiones() : void
+  }
+class Sesion {
+  - creadaEn : DateTime
+  - ultimaActividad : DateTime
+  - expiraEn : DateTime
+  - activa : Boolean
+  + renovar() : void
+  + invalidar() : void
+  }
+abstract class TokenTemporal {
+  - tokenHash : String
+  - fechaCaducidad : DateTime
+  - usado : Boolean
+  + estaVigente() : Boolean
+  + invalidar() : void
+  }
+class Invitacion
+class EnlaceRecuperacion
+class CredencialAPI {
+  - sistema : String
+  - hashClave : String
+  - activa : Boolean
+  - ultimoUso : DateTime
+  + autenticar(clave : String) : Boolean
+  + revocar() : void
+  }
+}
+package "Seguimiento y control" {
+class Notificacion {
+  - tipo : String
+  - mensaje : String
+  - prioridad : String
+  - fecha : DateTime
+  - leida : Boolean
+  - atendida : Boolean
+  + marcarLeida() : void
+  + marcarAtendida() : void
+  }
+class VistaGuardada {
+  - nombre : String
+  - filtros : String
+  - predeterminada : Boolean
+  }
+class RegistroAuditoria {
+  - fecha : DateTime
+  - accion : String
+  - entidad : String
+  - valorAnterior : String
+  - valorNuevo : String
+  }
+class EjecucionProceso {
+  - proceso : String
+  - inicio : DateTime
+  - fin : DateTime
+  - completa : Boolean
+  - resultado : String
+  }
+class CopiaSeguridad {
+  - fecha : DateTime
+  - estado : String
+  - ubicacion : String
+  - tamano : Long
+  + verificar() : Boolean
+  }
+}
+package "Configuración y análisis" {
+class Configuracion {
+  - vigenteDesde : DateTime
+  - plazoPagoDias : Integer
+  - cadenciaRecordatorios : String
+  - fechaRevisionAnual : Date
+  - umbralDescuento : Decimal
+  - umbralImporteAtipico : Decimal
+  - umbralRectificacion : Decimal
+  - minutosBloqueoAcceso : Integer
+  - retencionExportacionesDias : Integer
+  - monedasPermitidas : String
+  - impuestosPermitidos : String
+  - correoGestoria : String
+  + validar() : Boolean
+  }
+class PlantillaMensaje {
+  - tipo : String
+  - idioma : String
+  - asunto : String
+  - cuerpo : String
+  - activa : Boolean
+  + validarVariables() : Boolean
+  + renderizar(datos) : String
+  }
+class ObjetivoFinanciero {
+  - tipo : String
+  - importe : Decimal
+  - moneda : String
+  - vigenteDesde : Date
+  }
+class Exportacion {
+  - tipoInforme : String
+  - formato : String
+  - filtros : String
+  - fechaGeneracion : DateTime
+  - caducaEl : Date
+  - ruta : String
+  + generar() : void
+  + descargar() : void
+  }
+class ProgramacionInforme {
+  - tipoInforme : String
+  - periodicidad : String
+  - destinatarios : String
+  - proximaEjecucion : DateTime
+  - activa : Boolean
+  + ejecutar() : void
+  + desactivar() : void
+  }
+}
+class Cliente <<ref>>
+class Comentario <<ref>>
+class Delegacion <<ref>>
+class Envio <<ref>>
+class Factura <<ref>>
+class Importacion <<ref>>
+class Incidencia <<ref>>
+class SolicitudAprobacion <<ref>>
+class SolicitudBaja <<ref>>
+note bottom of Sesion
+  Caduca tras 30 min de inactividad;
+se invalida en < 1 min al desactivar la cuenta (NFR5).
+end note
+note bottom of RegistroAuditoria
+  Registro inmutable: ningún rol
+puede editarlo ni borrarlo (FR26).
+end note
+TokenTemporal <|-- Invitacion
+TokenTemporal <|-- EnlaceRecuperacion
+Usuario "1" *-- "0..*" TokenTemporal
+Usuario "1" *-- "0..*" Sesion
+Usuario "1" -- "0..*" Cliente : responsable de >
+Delegacion "0..*" --> "1" Usuario : delegado >
+Usuario "1" -- "0..*" Importacion : realiza >
+SolicitudBaja "0..*" --> "0..1" Usuario : revisada por >
+SolicitudBaja "0..*" --> "0..1" CredencialAPI : recibida de >
+EjecucionProceso "0..1" -- "0..*" Factura : genera >
+SolicitudAprobacion "0..*" --> "1" Usuario : creada por >
+SolicitudAprobacion "0..*" --> "0..1" Usuario : resuelta por >
+Envio "0..*" --> "0..1" PlantillaMensaje : usa >
+Usuario "1" -- "0..*" Notificacion : recibe >
+Incidencia "0..*" --> "1" Usuario : responsable >
+Comentario "0..*" --> "1" Usuario : autor >
+Usuario "1" *-- "0..*" VistaGuardada
+Usuario "0..1" -- "0..*" RegistroAuditoria : realiza >
+Usuario "1" -- "0..*" Exportacion : solicita >
+Usuario "1" -- "0..*" ProgramacionInforme : programa >
+ProgramacionInforme "0..1" -- "0..*" Exportacion : genera >
+Usuario "1" -- "0..*" ObjetivoFinanciero : define >
+legend right
+  <b>Leyenda</b>
+  Clase gris = definida en otro diagrama (solo referencia)
+  ◆ composición · ◇ agregación · ▷ generalización
+  ⇢▷ realización de interfaz · → asociación navegable
+  Tipos de los atributos con valores fijos: ver «Enumerados»
+endlegend
+@enduml

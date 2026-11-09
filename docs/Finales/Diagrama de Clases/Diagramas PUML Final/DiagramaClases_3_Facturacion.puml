@@ -1,0 +1,217 @@
+@startuml DiagramaClases_3_Facturacion
+title Diagrama de clases · 3 · Facturación y cobros
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam nodesep 40
+skinparam ranksep 50
+skinparam class {
+  BackgroundColor #F5F8FF
+  BorderColor #3B6FD8
+  BackgroundColor<<ref>> #EDEDED
+  BorderColor<<ref>> #9A9A9A
+  FontColor<<ref>> #555555
+}
+hide empty members
+hide <<ref>> members
+hide <<ref>> stereotype
+hide <<ref>> circle
+
+package "Facturación y aprobaciones" {
+interface Aprobable {
+  + requiereAprobacion() : Boolean
+  + aplicarAprobacion() : void
+  + rechazar() : void
+  }
+class Factura {
+  - numero : String
+  - fechaEmision : Date
+  - fechaVencimiento : Date
+  - tipo : TipoFactura
+  - estado : EstadoFactura
+  - periodoServicio : String
+  - moneda : String
+  - subtotal : Decimal
+  - impuestos : Decimal
+  - total : Decimal
+  - migrada : Boolean
+  - incobrable : Boolean
+  + calcularTotales() : Decimal
+  + esImporteAtipico() : Boolean
+  + emitir(numero : String) : void
+  + marcarEnviada() : void
+  + marcarNoNotificada() : void
+  + marcarVencida() : void
+  + registrarPago(importe : Decimal) : void
+  + importePendiente() : Decimal
+  + pausarRecordatorios(hasta : Date, motivo : String) : void
+  + correspondeRecordatorio(hoy : Date) : Boolean
+  + declararIncobrable(motivo : String) : void
+  }
+class FacturaRectificativa {
+  - motivo : String
+  - anulaTotalmente : Boolean
+  }
+class LineaFactura {
+  - descripcion : String
+  - cantidad : Decimal
+  - precioUnitario : Decimal
+  - descuento : Decimal
+  - impuesto : Decimal
+  + calcularImporte() : Decimal
+  }
+class Concepto {
+  - nombre : String
+  - precioBase : Decimal
+  - impuesto : Decimal
+  }
+class SerieFacturacion {
+  - codigo : String
+  - formato : String
+  - ultimoNumero : Integer
+  - activa : Boolean
+  + siguienteNumero() : String
+  }
+class DocumentoFactura {
+  - rutaLocal : String
+  - rutaNube : String
+  - huella : String
+  - firmado : Boolean
+  - creadoEn : DateTime
+  + descargar() : void
+  + generarEnlaceTemporal() : String
+  }
+class PeriodoFacturacion {
+  - fechaInicio : Date
+  - fechaFin : Date
+  - cerrado : Boolean
+  + admiteFecha(fecha : Date) : Boolean
+  + cerrar() : void
+  }
+class SolicitudAprobacion {
+  - motivo : String
+  - estado : EstadoAprobacion
+  - fechaSolicitud : DateTime
+  - fechaResolucion : DateTime
+  + aprobar(aprobador : Usuario) : void
+  + rechazar(aprobador : Usuario, motivo : String) : void
+  + reasignar(aprobador : Usuario) : void
+  }
+}
+package "Envíos y cobros" {
+class Envio {
+  - fecha : DateTime
+  - tipo : TipoEnvio
+  - canal : String
+  - destinatarios : String
+  - contenidoEnviado : String
+  - idProveedor : String
+  - reintentos : Integer
+  - resultado : String
+  + registrarRebote(motivo : String) : void
+  + reintentar() : void
+  }
+class Cobro {
+  - importe : Decimal
+  - moneda : String
+  - fecha : Date
+  - origen : OrigenCobro
+  - referencia : String
+  - estado : EstadoCobro
+  - motivoDiscrepancia : String
+  + vincular(factura : Factura) : void
+  + marcarNoIdentificado() : void
+  + revertir(motivo : String) : void
+  }
+class PausaRecordatorios {
+  - motivo : String
+  - inicio : DateTime
+  - fechaRevision : Date
+  - activa : Boolean
+  + reanudar() : void
+  }
+}
+package "Seguimiento y control" {
+class Incidencia {
+  - descripcion : String
+  - prioridad : PrioridadIncidencia
+  - estado : EstadoIncidencia
+  + anadirComentario(c : Comentario) : void
+  + reasignar(responsable : Usuario) : void
+  + cerrar() : void
+  }
+class Comentario {
+  - texto : String
+  - fecha : DateTime
+  - privado : Boolean
+  }
+class Adjunto {
+  - nombre : String
+  - formato : String
+  - tamano : Long
+  - ruta : String
+  + validar() : Boolean
+  }
+}
+class Cliente <<ref>>
+class EjecucionProceso <<ref>>
+class ExcepcionComercial <<ref>>
+class PlantillaMensaje <<ref>>
+class PropuestaCambioNivel <<ref>>
+class Suscripcion <<ref>>
+class Usuario <<ref>>
+note bottom of Factura
+  Una factura emitida no se modifica ni se borra:
+se corrige con una FacturaRectificativa (FR15).
+end note
+note bottom of DocumentoFactura
+  PDF firmado e inalterable, guardado en
+local y en la nube (FR17).
+end note
+note bottom of SolicitudAprobacion
+  Quien crea la operación nunca puede aprobarla
+(principio de los cuatro ojos, FR16).
+end note
+note bottom of Envio
+  Guarda una copia de los destinatarios:
+se conserva aunque el contacto se anonimice (FR6, NFR6).
+end note
+note bottom of Cobro
+  La referencia externa es única:
+un aviso repetido no crea otro cobro (NFR7).
+end note
+Cliente "1" -- "0..*" Factura : recibe >
+Suscripcion "0..1" -- "0..*" Factura : genera >
+Factura "1" *-- "1..*" LineaFactura
+LineaFactura "0..*" --> "0..1" Concepto : usa >
+FacturaRectificativa --|> Factura
+FacturaRectificativa "0..*" --> "1" Factura : rectifica >
+PeriodoFacturacion "1" o-- "0..*" Factura
+Factura "0..*" --> "0..1" SerieFacturacion : numerada en >
+Factura "1" *-- "0..1" DocumentoFactura
+EjecucionProceso "0..1" -- "0..*" Factura : genera >
+Factura ..|> Aprobable
+ExcepcionComercial ..|> Aprobable
+PropuestaCambioNivel ..|> Aprobable
+SolicitudAprobacion "0..*" --> "1" Aprobable : retiene >
+SolicitudAprobacion "0..*" --> "1" Usuario : creada por >
+SolicitudAprobacion "0..*" --> "0..1" Usuario : resuelta por >
+Factura "1" -- "0..*" Envio : se envía en >
+Envio "0..*" --> "0..1" PlantillaMensaje : usa >
+Factura "0..1" -- "0..*" Cobro : pagada por >
+Factura "1" *-- "0..*" PausaRecordatorios
+PausaRecordatorios "0..*" --> "0..1" Incidencia : motivada por >
+Incidencia "0..*" --> "1" Cliente : sobre >
+Incidencia "0..*" --> "0..1" Factura : afecta a >
+Incidencia "0..*" --> "1" Usuario : responsable >
+Incidencia "1" *-- "0..*" Comentario
+Incidencia "1" *-- "0..*" Adjunto
+Comentario "0..*" --> "1" Usuario : autor >
+legend right
+  <b>Leyenda</b>
+  Clase gris = definida en otro diagrama (solo referencia)
+  ◆ composición · ◇ agregación · ▷ generalización
+  ⇢▷ realización de interfaz · → asociación navegable
+  Tipos de los atributos con valores fijos: ver «Enumerados»
+endlegend
+@enduml
