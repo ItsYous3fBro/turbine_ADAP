@@ -1,0 +1,128 @@
+# Diagrama de clases (v1) 
+
+Esta primera versión representa el **Producto Mínimo Viable (MVP)**. Su objetivo es modelar exclusivamente el núcleo de negocio de la aplicación, es decir, el "camino feliz" (happy path) de la facturación. 
+
+## Explicación del modelo
+El sistema se estructura en tres bloques principales:
+1. **Usuarios**: Un `Usuario` (con un rol básico de Estándar o Administrador) es el responsable de gestionar una cartera de clientes.
+2. **Clientes y Suscripciones**: El `Cliente` tiene una `Suscripcion` base asociada a un `NivelTarifa` que define su coste mensual. También puede tener múltiples contactos asociados.
+3. **Facturación y Cobros**: La suscripción del cliente genera una `Factura` (con sus respectivas `LineaFactura`). Finalmente, esta factura se salda mediante la recepción de un `Cobro`. 
+
+Es un modelo sólido pero deliberadamente sencillo, ideal para arrancar las operaciones del sistema sin sobrecargar la base de datos con flujos secundarios.
+
+```plantuml
+@startuml
+left to right direction
+title Diagrama de clases (v1) - Gestor de facturas Turbine
+
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam linetype ortho
+skinparam nodesep 60
+skinparam ranksep 80
+hide empty members
+
+skinparam package {
+  BackgroundColor white
+  BorderColor black
+}
+
+skinparam class {
+  BackgroundColor #F4F8FF
+  BorderColor #4A709C
+  HeaderBackgroundColor #D4E3F7
+}
+
+package "1. Usuarios" {
+  enum Rol {
+    ESTANDAR
+    ADMINISTRADOR
+  }
+
+  class Usuario {
+    -id : Long
+    -nombre : String
+    -email : String
+    -rol : Rol
+    -activo : Boolean
+    +autenticar(contrasena : String) : Boolean
+  }
+}
+
+package "2. Clientes y Suscripciones" {
+  enum EstadoCliente {
+    ACTIVO
+    DADO_DE_BAJA
+  }
+
+  class Cliente {
+    -id : Long
+    -razonSocial : String
+    -identificadorFiscal : String
+    -facturacionAnual : Decimal
+    -estado : EstadoCliente
+    +calcularDeuda() : Decimal
+  }
+
+  class Contacto {
+    -nombre : String
+    -email : String
+    -funcion : String
+  }
+
+  class Suscripcion {
+    -fechaInicio : Date
+    -activa : Boolean
+    +calcularCuotaMensual() : Decimal
+  }
+
+  class NivelTarifa {
+    -nombre : String
+    -cuotaMensual : Decimal
+  }
+}
+
+package "3. Facturación y Cobros" {
+  enum EstadoFactura {
+    BORRADOR
+    EMITIDA
+    PAGADA
+    VENCIDA
+  }
+
+  class Factura {
+    -numero : String
+    -fechaEmision : Date
+    -estado : EstadoFactura
+    -total : Decimal
+    +calcularTotales() : Decimal
+    +emitir(numero : String) : void
+  }
+
+  class LineaFactura {
+    -descripcion : String
+    -cantidad : Decimal
+    -precioUnitario : Decimal
+    -impuesto : Decimal
+  }
+
+  class Cobro {
+    -importe : Decimal
+    -fecha : Date
+    -referencia : String
+    +vincular(factura : Factura) : void
+  }
+}
+
+' Relaciones V1
+Usuario "1" -- "0..*" Cliente : responsable de >
+Cliente "1" *-- "1..*" Contacto : tiene >
+Cliente "1" -- "0..1" Suscripcion : tiene >
+NivelTarifa "1" -- "0..*" Suscripcion : aplica <
+
+Cliente "1" -- "0..*" Factura : recibe >
+Suscripcion "0..1" -- "0..*" Factura : genera >
+Factura "1" *-- "1..*" LineaFactura
+Factura "1" -- "0..1" Cobro : pagada por >
+
+@endluml
