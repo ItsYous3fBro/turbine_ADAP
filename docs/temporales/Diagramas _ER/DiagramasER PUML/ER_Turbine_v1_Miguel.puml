@@ -1,0 +1,89 @@
+@startuml
+title Turbine - Modelo entidad-relacion V1 (basico)
+hide circle
+skinparam shadowing false
+skinparam linetype polyline
+
+entity Usuario {
+  * id_usuario : bigint <<PK>>
+  --
+  * nombre : varchar
+  * correo : varchar <<UQ>>
+  * rol : varchar
+  * estado : varchar
+}
+
+entity Cliente {
+  * id_cliente : bigint <<PK>>
+  --
+  * id_responsable : bigint <<FK>>
+  * razon_social : varchar
+  * identificador_fiscal : varchar <<UQ>>
+  * pais : char(2)
+  * moneda : char(3)
+  * estado : varchar
+}
+
+entity Suscripcion {
+  * id_suscripcion : bigint <<PK>>
+  --
+  * id_cliente : bigint <<FK>>
+  * fecha_inicio : date
+  * cuota_mensual : decimal
+  * estado : varchar
+}
+
+entity Factura {
+  * id_factura : bigint <<PK>>
+  --
+  * id_cliente : bigint <<FK>>
+  id_suscripcion : bigint <<FK>>
+  numero : varchar <<UQ>>
+  * tipo : varchar
+  fecha_emision : date
+  fecha_vencimiento : date
+  * importe_total : decimal
+  * moneda : char(3)
+  * estado : varchar
+}
+
+entity LineaFactura {
+  * id_linea : bigint <<PK>>
+  --
+  * id_factura : bigint <<FK>>
+  * concepto : varchar
+  * cantidad : decimal
+  * precio_unitario : decimal
+  * descuento_pct : decimal
+  * impuesto_pct : decimal
+}
+
+entity Cobro {
+  * id_cobro : bigint <<PK>>
+  --
+  id_factura : bigint <<FK>>
+  * fecha : timestamp
+  * importe : decimal
+  * moneda : char(3)
+  * origen : varchar
+  * estado : varchar
+}
+
+Usuario ||--o{ Cliente : responsable
+Cliente ||--o{ Suscripcion : contrata
+Cliente ||--o{ Factura : recibe
+Suscripcion |o--o{ Factura : origina
+Factura ||--o{ LineaFactura : contiene
+Factura |o--o{ Cobro : recibe
+
+note right of Factura
+  Puntual, recurrente o prorrateo.
+  Un borrador aun no tiene numero;
+  al emitir requiere al menos una linea.
+end note
+
+note bottom of Cobro
+  Puede quedar sin factura
+  hasta que se concilie.
+end note
+@enduml
