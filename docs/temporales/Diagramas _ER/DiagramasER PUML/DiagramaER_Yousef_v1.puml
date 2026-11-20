@@ -1,0 +1,232 @@
+@startuml DiagramaER_Yousef_v1
+title Diagrama Entidad-Relación (v1) · Gestor de facturas Turbine\nNúcleo del modelo: 16 tablas · notación pata de gallo
+hide circle
+skinparam linetype ortho
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam class {
+  BackgroundColor #F5F8FF
+  BorderColor #3B6FD8
+}
+legend right
+  * = NOT NULL · <<PK>> clave primaria · <<FK>> clave foránea · <<UK>> único
+  ||  exactamente uno · |o  cero o uno · |{  uno o más · o{  cero o más
+  Enumerados: VARCHAR + CHECK con los valores del diagrama de clases
+  Importes: NUMERIC(12,2) · Fechas con hora: TIMESTAMPTZ (UTC)
+endlegend
+
+package "Usuarios y clientes" {
+  entity "usuario" as usuario {
+    *id : BIGINT <<PK>>
+    --
+    *nombre : VARCHAR(100)
+    *email : VARCHAR(150) <<UK>>
+    hash_contrasena : VARCHAR(255)
+    cuenta_microsoft : VARCHAR(150) <<UK>>
+    *rol : VARCHAR(20)
+    *estado : VARCHAR(20)
+    *intentos_fallidos : INTEGER
+    bloqueado_hasta : TIMESTAMPTZ
+  }
+  entity "cliente" as cliente {
+    *id : BIGINT <<PK>>
+    --
+    *responsable_id : BIGINT <<FK>>
+    *nombre_comercial : VARCHAR(150)
+    razon_social : VARCHAR(150)
+    identificador_fiscal : VARCHAR(20) <<UK>>
+    domicilio : VARCHAR(255)
+    pais : CHAR(2)
+    *moneda : CHAR(3)
+    representante_legal : VARCHAR(150)
+    facturacion_anual : NUMERIC(12,2)
+    *fecha_alta : DATE
+    *estado : VARCHAR(20)
+  }
+  entity "contacto" as contacto {
+    *id : BIGINT <<PK>>
+    --
+    *cliente_id : BIGINT <<FK>>
+    *nombre : VARCHAR(100)
+    *email : VARCHAR(150)
+    telefono : VARCHAR(20)
+    *funcion : VARCHAR(20)
+    *idioma : CHAR(2)
+    *activo : BOOLEAN
+  }
+  entity "delegacion" as delegacion {
+    *id : BIGINT <<PK>>
+    --
+    *usuario_id : BIGINT <<FK>>
+    *cliente_id : BIGINT <<FK>>
+    *fecha_inicio : DATE
+    *fecha_fin : DATE
+  }
+}
+
+package "Suscripciones" {
+  entity "nivel_tarifa" as nivel_tarifa {
+    *id : BIGINT <<PK>>
+    --
+    *nombre : VARCHAR(50)
+    *facturacion_minima : NUMERIC(12,2)
+    facturacion_maxima : NUMERIC(12,2)
+    *cuota_mensual : NUMERIC(12,2)
+    *vigente_desde : DATE
+    vigente_hasta : DATE
+  }
+  entity "suscripcion" as suscripcion {
+    *id : BIGINT <<PK>>
+    --
+    *cliente_id : BIGINT <<FK>>
+    *nivel_tarifa_id : BIGINT <<FK>>
+    *fecha_inicio : DATE
+    fecha_fin : DATE
+    *estado : VARCHAR(20)
+    motivo_pausa : VARCHAR(255)
+    fecha_reactivacion : DATE
+  }
+}
+
+package "Facturación" {
+  entity "serie_facturacion" as serie {
+    *id : BIGINT <<PK>>
+    --
+    *codigo : VARCHAR(10) <<UK>>
+    *formato : VARCHAR(30)
+    *ultimo_numero : INTEGER
+    *activa : BOOLEAN
+  }
+  entity "periodo_facturacion" as periodo {
+    *id : BIGINT <<PK>>
+    --
+    *fecha_inicio : DATE <<UK>>
+    *fecha_fin : DATE
+    *cerrado : BOOLEAN
+  }
+  entity "factura" as factura {
+    *id : BIGINT <<PK>>
+    --
+    *cliente_id : BIGINT <<FK>>
+    suscripcion_id : BIGINT <<FK>>
+    serie_id : BIGINT <<FK>>
+    periodo_id : BIGINT <<FK>>
+    numero : VARCHAR(20)
+    fecha_emision : DATE
+    fecha_vencimiento : DATE
+    *tipo : VARCHAR(20)
+    *estado : VARCHAR(25)
+    periodo_servicio : VARCHAR(50)
+    *moneda : CHAR(3)
+    *subtotal : NUMERIC(12,2)
+    *impuestos : NUMERIC(12,2)
+    *total : NUMERIC(12,2)
+    *migrada : BOOLEAN
+    *incobrable : BOOLEAN
+  }
+  entity "factura_rectificativa" as rectificativa {
+    *factura_id : BIGINT <<PK, FK>>
+    --
+    *factura_original_id : BIGINT <<FK>>
+    *motivo : VARCHAR(255)
+    *anula_totalmente : BOOLEAN
+  }
+  entity "linea_factura" as linea {
+    *id : BIGINT <<PK>>
+    --
+    *factura_id : BIGINT <<FK>>
+    concepto_id : BIGINT <<FK>>
+    *descripcion : VARCHAR(255)
+    *cantidad : NUMERIC(10,2)
+    *precio_unitario : NUMERIC(12,2)
+    *descuento : NUMERIC(5,2)
+    *impuesto : NUMERIC(5,2)
+  }
+  entity "concepto" as concepto {
+    *id : BIGINT <<PK>>
+    --
+    *nombre : VARCHAR(100) <<UK>>
+    *precio_base : NUMERIC(12,2)
+    *impuesto : NUMERIC(5,2)
+  }
+  entity "solicitud_aprobacion" as solicitud {
+    *id : BIGINT <<PK>>
+    --
+    *factura_id : BIGINT <<FK>>
+    *creada_por_id : BIGINT <<FK>>
+    resuelta_por_id : BIGINT <<FK>>
+    *motivo : VARCHAR(255)
+    *estado : VARCHAR(20)
+    *fecha_solicitud : TIMESTAMPTZ
+    fecha_resolucion : TIMESTAMPTZ
+  }
+}
+
+package "Envíos, cobros e incidencias" {
+  entity "envio" as envio {
+    *id : BIGINT <<PK>>
+    --
+    factura_id : BIGINT <<FK>>
+    *fecha : TIMESTAMPTZ
+    *tipo : VARCHAR(20)
+    *canal : VARCHAR(20)
+    *destinatarios : TEXT
+    *contenido_enviado : TEXT
+    id_proveedor : VARCHAR(100)
+    *reintentos : INTEGER
+    resultado : VARCHAR(50)
+  }
+  entity "cobro" as cobro {
+    *id : BIGINT <<PK>>
+    --
+    factura_id : BIGINT <<FK>>
+    *importe : NUMERIC(12,2)
+    *moneda : CHAR(3)
+    *fecha : DATE
+    *origen : VARCHAR(20)
+    *referencia : VARCHAR(100)
+    *estado : VARCHAR(20)
+    motivo_discrepancia : VARCHAR(255)
+  }
+  entity "incidencia" as incidencia {
+    *id : BIGINT <<PK>>
+    --
+    *cliente_id : BIGINT <<FK>>
+    factura_id : BIGINT <<FK>>
+    *responsable_id : BIGINT <<FK>>
+    *descripcion : TEXT
+    *prioridad : VARCHAR(10)
+    *estado : VARCHAR(10)
+  }
+}
+
+' ===== Usuarios y clientes
+usuario ||--o{ cliente : "responsable de"
+cliente ||--|{ contacto : "tiene"
+usuario ||--o{ delegacion : "delegado"
+cliente ||--o{ delegacion : "sobre"
+
+' ===== Suscripciones
+cliente ||--o{ suscripcion : "tiene"
+nivel_tarifa ||--o{ suscripcion : "aplica"
+
+' ===== Facturación
+cliente ||--o{ factura : "recibe"
+suscripcion |o--o{ factura : "genera"
+serie |o--o{ factura : "numera"
+periodo |o--o{ factura : "agrupa"
+factura ||--|{ linea : "contiene"
+concepto |o--o{ linea : "usado en"
+factura ||--o| rectificativa : "es (herencia)"
+factura ||--o{ rectificativa : "rectificada por"
+factura ||--o{ solicitud : "retenida en"
+usuario ||--o{ solicitud : "crea"
+usuario |o--o{ solicitud : "resuelve"
+
+' ===== Envíos, cobros e incidencias
+factura |o--o{ envio : "se envía en"
+factura |o--o{ cobro : "pagada por"
+cliente ||--o{ incidencia : "sobre"
+factura |o--o{ incidencia : "afecta a"
+usuario ||--o{ incidencia : "responsable"
+@enduml
