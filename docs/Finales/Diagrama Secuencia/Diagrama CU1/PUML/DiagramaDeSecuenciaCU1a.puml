@@ -1,0 +1,107 @@
+@startuml
+title CU-01a · Iniciar sesión — Correo corporativo y contraseña
+
+actor "Usuario estándar" as emp
+participant "Interfaz web" as ui
+participant "Autenticación\ny permisos" as auth
+participant "u : Usuario" as user
+participant "s : Sesion" as sesion
+participant "Auditoría" as aud
+database "Base de datos" as db
+
+emp -> ui : 1: iniciarSesion(email, contrasena)
+activate ui
+ui -> auth : 2: login(email, contrasena) [IAuth]
+activate auth
+auth -> auth : 3: comprobarDominio(email)
+
+alt Dominio no pertenece a Turbine (Excepción 2a)
+    auth -> aud : 4: registrarIntento(email, "Dominio no autorizado") [ILog]
+    activate aud
+    aud -> db : 5: guardarRegistroAuditoria() [IDatabase]
+    activate db
+    db --> aud : registrado
+    deactivate db
+    deactivate aud
+    auth --> ui : Error: Acceso denegado
+    ui --> emp : Mensaje genérico de rechazo
+
+else Dominio corporativo válido
+    auth -> db : 4: obtenerUsuarioPorEmail(email) [IDatabase]
+    activate db
+    db --> auth : u : Usuario
+    deactivate db
+
+    auth -> user : 5: autenticar(contrasena : String)
+    activate user
+    user --> auth : credencialesValidas (Boolean)
+    deactivate user
+
+    alt credencialesValidas == false (Excepción 3a)
+        auth -> user : 6: registrarIntentoFallido()
+        activate user
+        note right of user
+          Al 5º intento fallido consecutivo,
+          el estado pasa a BLOQUEADA
+          (FR1, NFR5)
+        end note
+        user --> auth : actualizado
+        deactivate user
+
+        auth -> db : 7: actualizarUsuario(u) [IDatabase]
+        activate db
+        db --> auth : actualizado
+        deactivate db
+        auth -> aud : 8: registrarIntento(u, "Credenciales incorrectas") [ILog]
+        activate aud
+        aud -> db : 9: guardarRegistroAuditoria() [IDatabase]
+        activate db
+        db --> aud : registrado
+        deactivate db
+        deactivate aud
+        auth --> ui : Error: Credenciales incorrectas
+        ui --> emp : Mensaje genérico de error
+
+    else credencialesValidas == true
+        auth -> auth : 6: comprobarEstado(u)
+
+        alt u.estado != ACTIVA (Excepción 4a)
+            auth -> aud : 7: registrarIntento(u, "Cuenta no disponible") [ILog]
+            activate aud
+            aud -> db : 8: guardarRegistroAuditoria() [IDatabase]
+            activate db
+            db --> aud : registrado
+            deactivate db
+            deactivate aud
+            auth --> ui : Error: Cuenta no disponible
+            ui --> emp : Deniega acceso e informa
+
+        else u.estado == ACTIVA
+            auth -> sesion ** : 7: crear(u)
+            activate sesion
+            note right of sesion
+              Sesión con permisos del rol
+              (expira tras 30 min de inactividad - NFR5)
+            end note
+            auth -> db : 8: guardarSesion(s) [IDatabase]
+            activate db
+            db --> auth : guardada
+            deactivate db
+            deactivate sesion
+            auth -> aud : 9: registrarIntento(u, "Acceso correcto") [ILog]
+            activate aud
+            aud -> db : 10: guardarRegistroAuditoria() [IDatabase]
+            activate db
+            db --> aud : registrado
+            deactivate db
+            deactivate aud
+
+            auth --> ui : True (Sesión activa: s)
+            ui --> emp : Presenta trabajo diario
+        end
+    end
+end
+
+deactivate auth
+deactivate ui
+@enduml

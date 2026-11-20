@@ -1,0 +1,62 @@
+@startuml
+title CU-39a · Exportar informes y datos — Exportación principal
+
+actor "Usuario estándar" as emp
+participant "Interfaz web" as ui
+participant "Dashboard\ne informes" as infComp
+participant "exp : Exportacion" as exp
+participant "Auditoría" as aud
+database "Base de datos" as db
+
+emp -> ui : 1: seleccionarInformeYFiltros(tipoInforme, filtros)
+activate ui
+emp -> ui : 2: seleccionarFormato(formato)
+note right of ui
+  Formatos admitidos:
+  CSV (UTF-8) o PDF (FR25)
+end note
+ui -> infComp : 3: exportarInforme(tipoInforme, filtros, formato) [IInformes]
+activate infComp
+
+infComp -> db : 3.1: consultarDatosPermitidos(tipoInforme, filtros, permisosUsuario) [IDatabase]
+activate db
+db --> infComp : datosFiltrados
+deactivate db
+
+alt Excepción 3a: La exportación no contiene datos
+    infComp --> ui : Aviso: La exportación no contiene datos
+    ui --> emp : Informa y no genera archivo
+
+else Existen datos permitidos (FR2, FR25, NFR12)
+    infComp -> exp ** : 3.2: crear(tipoInforme, formato, filtros)
+    activate exp
+    infComp -> exp : 3.3: generar()
+    exp --> infComp : archivoListo
+    infComp -> db : 3.4: guardarExportacion(exp) [IDatabase]
+    activate db
+    db --> infComp : guardada
+    deactivate db
+    infComp -> aud : 3.5: registrarAuditoria("EXPORTAR_INFORME", exp) [ILog]
+    activate aud
+    aud -> db : 3.6: guardarRegistroAuditoria() [IDatabase]
+    activate db
+    db --> aud : registrado
+    deactivate db
+    deactivate aud
+    infComp --> ui : 4: disponibilidadExportacion(exp)
+    deactivate exp
+    ui --> emp : Pone el archivo disponible para descarga (NFR4, NFR6)
+
+    opt Descargar exportación
+        emp -> ui : descargarExportacion(idExportacion)
+        ui -> exp : descargar()
+        activate exp
+        exp --> ui : archivo
+        deactivate exp
+        ui --> emp : Entrega CSV o PDF
+    end
+end
+
+deactivate infComp
+deactivate ui
+@enduml

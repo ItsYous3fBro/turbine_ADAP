@@ -1,0 +1,285 @@
+@startuml
+title CU-07 · Gestionar cliente (versión completa)
+
+actor "Usuario estándar" as emp
+participant "Interfaz web" as ui
+participant "Clientes y\nsuscripciones" as cliComp
+participant "Facturación y\naprobaciones" as factComp
+participant "c : Cliente" as cli
+participant "ct : Contacto" as cont
+participant "s : Suscripcion" as susc
+participant "Auditoría" as aud
+database "Base de datos" as db
+
+alt Escenario principal: Alta de cliente (pasos 1 a 6)
+    emp -> ui : 1: solicitarAltaCliente()
+    activate ui
+    ui -> cliComp : 2: iniciarAltaCliente() [IClientes]
+    activate cliComp
+    cliComp --> ui : Solicita datos empresa (nombreComercial, razonSocial, identificadorFiscal, domicilio, pais, moneda, representanteLegal)
+    ui --> emp : Muestra formulario de alta de cliente
+
+    emp -> ui : 3: introducirDatosCliente(datosEmpresa)
+    ui -> cliComp : 4: validarIdentificadorFiscal(identificadorFiscal) [IClientes]
+    cliComp -> db : 4.1: consultarClientePorNIF(identificadorFiscal) [IDatabase]
+    activate db
+    db --> cliComp : clienteExistente
+    deactivate db
+
+    alt Excepción 4a: Identificador fiscal duplicado
+        cliComp --> ui : Error: Identificador fiscal ya registrado
+        ui --> emp : Alerta, impide alta y ofrece abrir ficha existente o reactivar (1b)
+    else Identificador fiscal no duplicado (FR5, FR7)
+        cliComp --> ui : Identificador fiscal válido
+        ui --> emp : Solicita añadir contactos (función: COMERCIAL, ADMINISTRACION, IMPAGOS)
+
+        emp -> ui : 5: anadirContactos(contactos)
+        ui -> cliComp : 6: registrarCliente(datosEmpresa, contactos, responsable?) [IClientes]
+        cliComp -> cli ** : 6.1: crear(datosEmpresa)
+        activate cli
+        cliComp -> cont ** : 6.2: crear(contactos)
+        activate cont
+
+        alt Flujo alternativo 6a: Alta por administrador con selección de responsable
+            cliComp -> cli : 6.3: asignarResponsable(responsableElegido)
+        else Responsable por defecto (empleado creador)
+            cliComp -> cli : 6.3: asignarResponsable(empleadoCreador)
+        end
+
+        cliComp -> cli : 6.4: datosFiscalesCompletos()
+        cli --> cliComp : completos (Boolean)
+
+        alt Flujo alternativo 6b: completos == false (datos fiscales incompletos)
+            note right of cli
+              Queda en estado INCOMPLETO (FR12);
+              no se podrán emitir facturas
+              hasta completar los datos fiscales
+            end note
+        else completos == true
+            note right of cli
+              Queda en estado ACTIVO
+              con fechaAlta registrada
+            end note
+        end
+
+        cliComp -> db : 6.5: guardarClienteYContactos(c, ct) [IDatabase]
+        activate db
+        db --> cliComp : guardado
+        deactivate db
+        deactivate cont
+        deactivate cli
+
+        cliComp -> aud : 6.6: registrarAuditoria("ALTA_CLIENTE", c) [ILog]
+        activate aud
+        aud -> db : 6.7: guardarRegistroAuditoria() [IDatabase]
+        activate db
+        db --> aud : registrado
+        deactivate db
+        deactivate aud
+
+        alt Flujo alternativo 6c: Alta encadenada de suscripción
+            cliComp --> ui : Cliente registrado; continuar con CU-09
+            ui --> emp : Abre alta de suscripción (CU-09)
+        else Alta finalizada sin encadenar
+            cliComp --> ui : Cliente registrado correctamente
+            ui --> emp : Muestra ficha del cliente creado
+        end
+    end
+
+    deactivate cliComp
+    deactivate ui
+
+else Flujo alternativo 1a: Consultar y actualizar ficha
+    emp -> ui : 1a.1: seleccionarCliente(idCliente)
+    activate ui
+    ui -> cliComp : 1a.2: consultarFichaCliente(idCliente) [IClientes]
+    activate cliComp
+    cliComp -> db : 1a.2.1: obtenerFichaCompleta(idCliente) [IDatabase]
+    activate db
+    db --> cliComp : c : Cliente, contactos, suscripciones, facturas, historial
+    deactivate db
+    cliComp --> ui : Ficha completa y línea de tiempo (FR26)
+    ui --> emp : Presenta datos fiscales, contactos, suscripción, facturas e historial
+
+    emp -> ui : 1a.3: modificarFichaOContacto(cambios, accionContacto?)
+    ui -> cliComp : 1a.4: validarYActualizarFicha(idCliente, cambios, accionContacto?) [IClientes]
+    cliComp -> db : 1a.4.1: comprobarIdentificadorFiscalDisponible(identificadorFiscal, idCliente) [IDatabase]
+    activate db
+    db --> cliComp : identificadorDisponible
+    deactivate db
+    cliComp -> cli : 1a.4.2: datosFiscalesCompletos()
+    activate cli
+    cli --> cliComp : datosCompletos
+    deactivate cli
+
+    alt Excepción 1a.4a: Datos no válidos o identificador fiscal duplicado
+        cliComp --> ui : Error: Datos inválidos o NIF ya usado por otro cliente
+        ui --> emp : Indica motivo y vuelve al paso 1a.3
+    else Datos y cambios válidos
+        opt Acción sobre contacto existente
+            alt Desactivar contacto (FR6)
+                cliComp -> cont : 1a.4.3: desactivar()
+                activate cont
+                note right of cont
+                  Pasa a inactivo; se conserva el
+                  historial de destinatarios de
+                  facturas ya enviadas
+                end note
+                cont --> cliComp : actualizado
+                deactivate cont
+            else Anonimizar contacto (NFR6)
+                cliComp -> cont : 1a.4.3: anonimizar()
+                activate cont
+                note right of cont
+                  Sustituye datos personales sin
+                  alterar facturas en las que
+                  aparece
+                end note
+                cont --> cliComp : anonimizado
+                deactivate cont
+            end
+        end
+
+        cliComp -> db : 1a.4.4: guardarCambiosCliente(c, cambios) [IDatabase]
+        activate db
+        db --> cliComp : guardado
+        deactivate db
+        cliComp -> aud : 1a.4.5: registrarAuditoria("MODIFICACION_CLIENTE", c) [ILog]
+        activate aud
+        aud -> db : 1a.4.6: guardarRegistroAuditoria() [IDatabase]
+        activate db
+        db --> aud : registrado
+        deactivate db
+        deactivate aud
+        cliComp --> ui : Ficha actualizada
+        ui --> emp : Muestra ficha actualizada y línea de tiempo
+    end
+
+    deactivate cliComp
+    deactivate ui
+
+else Flujo alternativo 1b: Reactivar cliente dado de baja
+    emp -> ui : 1b: solicitarReactivacionCliente(idCliente)
+    activate ui
+    ui -> cliComp : 1b.1: reactivarCliente(idCliente) [IClientes]
+    activate cliComp
+    cliComp -> db : 1b.2: obtenerCliente(idCliente) [IDatabase]
+    activate db
+    db --> cliComp : c : Cliente
+    deactivate db
+    cliComp -> db : 1b.3: comprobarConservacionLegal(idCliente) [IDatabase]
+    activate db
+    db --> cliComp : conservacionPermitida
+    deactivate db
+
+    alt Excepción 1b1: La ley no permite conservar los datos del cliente
+        cliComp --> ui : Error: No procede reactivar por normativa de conservación
+        ui --> emp : Informa de que debe darse de alta como cliente nuevo
+    else Conservación legal permitida (FR5, FR11)
+        cliComp -> cli : 1b.4: reactivar()
+        activate cli
+        note right of cli
+          Recupera ficha e historial y
+          pasa a estado ACTIVO
+        end note
+        cli --> cliComp : reactivado
+        deactivate cli
+        cliComp -> db : 1b.5: actualizarCliente(c) [IDatabase]
+        activate db
+        db --> cliComp : actualizado
+        deactivate db
+        cliComp -> aud : 1b.6: registrarAuditoria("REACTIVACION_CLIENTE", c) [ILog]
+        activate aud
+        aud -> db : 1b.7: guardarRegistroAuditoria() [IDatabase]
+        activate db
+        db --> aud : registrado
+        deactivate db
+        deactivate aud
+        cliComp --> ui : Cliente reactivado
+        ui --> emp : Presenta ficha activa con su historial
+    end
+
+    deactivate cliComp
+    deactivate ui
+
+else Flujo alternativo 1c: Dar de baja cliente
+    emp -> ui : 1c.1: solicitarBajaCliente(idCliente, motivo)
+    activate ui
+    ui -> cliComp : 1c.2: prepararBajaCliente(idCliente, motivo) [IClientes]
+    activate cliComp
+    cliComp -> factComp : 1c.2.1: consultarFacturasPendientes(idCliente) [IFacturacion]
+    activate factComp
+    factComp -> cli : 1c.2.2: calcularDeuda()
+    activate cli
+    cli --> factComp : deudaPendiente
+    deactivate cli
+    factComp --> cliComp : deudaPendiente, facturasPendientes
+    deactivate factComp
+
+    alt Excepción 1c.2a: El cliente tiene deuda pendiente (FR11)
+        cliComp --> ui : Aviso: Existe deuda pendiente; ofrece BAJA_PENDIENTE
+        ui --> emp : Informa y pide confirmación de baja pendiente (1c.3)
+
+        emp -> ui : 1c.3: confirmarBajaPendiente(idCliente, motivo)
+        ui -> cliComp : 1c.4: registrarBajaPendiente(idCliente, motivo) [IClientes]
+        cliComp -> susc : 1c.4.1: cancelar()
+        activate susc
+        note right of susc
+          Cancela suscripción para evitar nuevas
+          mensualidades; se mantienen recordatorios
+          de deuda y el cliente queda en
+          BAJA_PENDIENTE (R6)
+        end note
+        susc --> cliComp : cancelada
+        deactivate susc
+        cliComp -> db : 1c.4.2: guardarEstadoBajaPendiente(c, s) [IDatabase]
+        activate db
+        db --> cliComp : guardado
+        deactivate db
+        cliComp -> aud : 1c.4.3: registrarAuditoria("BAJA_PENDIENTE_CLIENTE", c) [ILog]
+        activate aud
+        aud -> db : 1c.4.4: guardarRegistroAuditoria() [IDatabase]
+        activate db
+        db --> aud : registrado
+        deactivate db
+        deactivate aud
+        cliComp --> ui : Cliente en BAJA_PENDIENTE
+        ui --> emp : Confirma baja pendiente y mantenimiento de cobro
+    else Sin deuda pendiente
+        cliComp --> ui : Resumen de baja sin deuda
+        ui --> emp : Pide confirmación de baja definitiva (1c.3)
+
+        emp -> ui : 1c.3: confirmarBajaDefinitiva(idCliente, motivo)
+        ui -> cliComp : 1c.4: ejecutarBajaCliente(idCliente, motivo) [IClientes]
+        cliComp -> susc : 1c.4.1: cancelar()
+        activate susc
+        susc --> cliComp : cancelada
+        deactivate susc
+        cliComp -> cli : 1c.4.2: darDeBaja(motivo)
+        activate cli
+        note right of cli
+          Borrado lógico: pasa a DADO_DE_BAJA
+          sin borrar físicamente datos
+          ni facturas
+        end note
+        cli --> cliComp : dadoDeBaja
+        deactivate cli
+        cliComp -> db : 1c.4.3: guardarBajaCliente(c, s) [IDatabase]
+        activate db
+        db --> cliComp : guardado
+        deactivate db
+        cliComp -> aud : 1c.4.4: registrarAuditoria("BAJA_CLIENTE", c) [ILog]
+        activate aud
+        aud -> db : 1c.4.5: guardarRegistroAuditoria() [IDatabase]
+        activate db
+        db --> aud : registrado
+        deactivate db
+        deactivate aud
+        cliComp --> ui : Cliente dado de baja
+        ui --> emp : Confirma baja y suscripción cancelada
+    end
+
+    deactivate cliComp
+    deactivate ui
+end
+@enduml

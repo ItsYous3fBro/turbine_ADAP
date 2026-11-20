@@ -1,0 +1,77 @@
+@startuml
+title CU-39b · Exportar informes y datos — Programar y regenerar
+
+actor "Usuario estándar" as emp
+participant "Interfaz web" as ui
+participant "Dashboard\ne informes" as infComp
+participant "prog : ProgramacionInforme" as prog
+participant "exp : Exportacion" as exp
+participant "Auditoría" as aud
+database "Base de datos" as db
+
+alt Flujo alternativo 1a: Programar el envío periódico (CU-40)
+    emp -> ui : 1a.1: programarExportacion(tipoInforme, filtros, formato, destinatarios, periodicidad)
+    activate ui
+    ui -> infComp : 1a.2: programarInforme(tipoInforme, filtros, formato, destinatarios, periodicidad) [IInformes]
+    activate infComp
+    infComp -> prog ** : 1a.3: crear(tipoInforme, periodicidad, destinatarios)
+    activate prog
+    infComp -> db : 1a.4: guardarProgramacionInforme(prog) [IDatabase]
+    activate db
+    db --> infComp : guardada
+    deactivate db
+    deactivate prog
+    infComp -> aud : 1a.5: registrarAuditoria("PROGRAMAR_INFORME", prog) [ILog]
+    activate aud
+    aud -> db : 1a.6: guardarRegistroAuditoria() [IDatabase]
+    activate db
+    db --> aud : registrado
+    deactivate db
+    deactivate aud
+    infComp --> ui : Programación guardada (se ejecutará en CU-40)
+    ui --> emp : Confirma programación del envío periódico
+    deactivate infComp
+    deactivate ui
+
+else Flujo alternativo 1b: Regenerar una exportación caducada
+    emp -> ui : 1b.1: solicitarRegenerarExportacion(idExportacion)
+    activate ui
+    ui -> infComp : 1b.2: regenerarExportacion(idExportacion) [IInformes]
+    activate infComp
+    infComp -> db : 1b.3: comprobarExportacionYPermisos(idExportacion, usuario) [IDatabase]
+    activate db
+    db --> infComp : exportacionCaducada, datosYPermisosPermitidos
+    deactivate db
+
+    alt Datos y permisos actuales lo permiten (FR2, FR25)
+        infComp -> db : 1b.4: consultarDatosPermitidos(tipoInforme, filtros, permisosUsuario) [IDatabase]
+        activate db
+        db --> infComp : datosFiltrados
+        deactivate db
+        infComp -> exp ** : 1b.5: crear(tipoInforme, formato, filtros)
+        activate exp
+        infComp -> exp : 1b.6: generar()
+        exp --> infComp : archivoGenerado
+        infComp -> db : 1b.7: guardarExportacion(exp) [IDatabase]
+        activate db
+        db --> infComp : guardada
+        deactivate db
+        infComp -> aud : 1b.8: registrarAuditoria("REGENERAR_EXPORTACION", exp) [ILog]
+        activate aud
+        aud -> db : 1b.9: guardarRegistroAuditoria() [IDatabase]
+        activate db
+        db --> aud : registrado
+        deactivate db
+        deactivate aud
+        infComp --> ui : Exportación regenerada y disponible
+        deactivate exp
+        ui --> emp : Permite descargar el informe regenerado
+    else Datos o permisos no lo permiten
+        infComp --> ui : No es posible regenerar con los datos o permisos actuales
+        ui --> emp : Informa del motivo
+    end
+
+    deactivate infComp
+    deactivate ui
+end
+@enduml

@@ -1,0 +1,84 @@
+@startuml
+title CU-07a · Gestionar cliente — Alta de cliente
+
+actor "Usuario estándar" as emp
+participant "Interfaz web" as ui
+participant "Clientes y\nsuscripciones" as cliComp
+participant "c : Cliente" as cli
+participant "ct : Contacto" as cont
+participant "Auditoría" as aud
+database "Base de datos" as db
+
+emp -> ui : 1: solicitarAltaCliente()
+activate ui
+ui -> cliComp : 2: iniciarAltaCliente() [IClientes]
+activate cliComp
+cliComp --> ui : Solicita datos empresa (nombreComercial, razonSocial, identificadorFiscal, domicilio, pais, moneda, representanteLegal)
+ui --> emp : Muestra formulario de alta de cliente
+
+emp -> ui : 3: introducirDatosCliente(datosEmpresa)
+ui -> cliComp : 4: validarIdentificadorFiscal(identificadorFiscal) [IClientes]
+cliComp -> db : consultarClientePorNIF(identificadorFiscal) [IDatabase]
+activate db
+db --> cliComp : clienteExistente
+deactivate db
+
+alt Excepción 4a: Identificador fiscal duplicado
+    cliComp --> ui : Error: Identificador fiscal ya registrado
+    ui --> emp : Alerta, impide alta y ofrece abrir ficha existente o reactivar (1b)
+
+else Identificador fiscal no duplicado (FR5, FR7)
+    cliComp --> ui : Identificador fiscal válido
+    ui --> emp : Solicita añadir contactos (función: COMERCIAL, ADMINISTRACION, IMPAGOS)
+
+    emp -> ui : 5: anadirContactos(contactos)
+    ui -> cliComp : 6: registrarCliente(datosEmpresa, contactos, responsable?) [IClientes]
+
+    cliComp -> cli ** : crear(datosEmpresa)
+    activate cli
+    cliComp -> cont ** : crear(contactos)
+    activate cont
+
+    alt Flujo alternativo 6a: Alta por administrador con selección de responsable
+        cliComp -> cli : asignarResponsable(responsableElegido)
+    else Responsable por defecto (empleado creador)
+        cliComp -> cli : asignarResponsable(empleadoCreador)
+    end
+
+    cliComp -> cli : datosFiscalesCompletos()
+    cli --> cliComp : completos (Boolean)
+
+    alt Flujo alternativo 6b: completos == false (datos fiscales incompletos)
+        note right of cli
+          Queda en estado INCOMPLETO (FR12);
+          no se podrán emitir facturas
+          hasta completar los datos fiscales
+        end note
+    else completos == true
+        note right of cli
+          Queda en estado ACTIVO
+          con fechaAlta registrada
+        end note
+    end
+
+    cliComp -> db : guardarClienteYContactos(c, ct) [IDatabase]
+    deactivate cont
+    deactivate cli
+
+    cliComp -> aud : registrarAuditoria("ALTA_CLIENTE", c) [ILog]
+    activate aud
+    aud -> db : guardarRegistroAuditoria() [IDatabase]
+    deactivate aud
+
+    alt Flujo alternativo 6c: Alta encadenada de suscripción
+        cliComp --> ui : Cliente registrado; continuar con CU-09
+        ui --> emp : Abre alta de suscripción (CU-09)
+    else Alta finalizada sin encadenar
+        cliComp --> ui : Cliente registrado correctamente
+        ui --> emp : Muestra ficha del cliente creado
+    end
+end
+
+deactivate cliComp
+deactivate ui
+@enduml

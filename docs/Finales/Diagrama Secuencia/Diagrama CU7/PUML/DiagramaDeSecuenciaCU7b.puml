@@ -1,0 +1,79 @@
+@startuml
+title CU-07b · Gestionar cliente — Consultar y actualizar ficha
+
+actor "Usuario estándar" as emp
+participant "Interfaz web" as ui
+participant "Clientes y\nsuscripciones" as cliComp
+participant "c : Cliente" as cli
+participant "ct : Contacto" as cont
+participant "Auditoría" as aud
+database "Base de datos" as db
+
+emp -> ui : 1a.1: seleccionarCliente(idCliente)
+activate ui
+ui -> cliComp : 1a.2: consultarFichaCliente(idCliente) [IClientes]
+activate cliComp
+cliComp -> db : obtenerFichaCompleta(idCliente) [IDatabase]
+activate db
+db --> cliComp : c : Cliente, contactos, suscripciones, facturas, historial
+deactivate db
+cliComp --> ui : Ficha completa y línea de tiempo (FR26)
+ui --> emp : Presenta datos fiscales, contactos, suscripción, facturas e historial
+
+emp -> ui : 1a.3: modificarFichaOContacto(cambios, accionContacto?)
+ui -> cliComp : 1a.4: validarYActualizarFicha(idCliente, cambios, accionContacto?) [IClientes]
+cliComp -> db : comprobarIdentificadorFiscalDisponible(identificadorFiscal, idCliente) [IDatabase]
+activate db
+db --> cliComp : identificadorDisponible
+deactivate db
+cliComp -> cli : datosFiscalesCompletos()
+activate cli
+cli --> cliComp : datosCompletos
+deactivate cli
+
+alt Excepción 1a.4a: Datos no válidos o identificador fiscal duplicado
+    cliComp --> ui : Error: Datos inválidos o NIF ya usado por otro cliente
+    ui --> emp : Indica motivo y vuelve al paso 1a.3
+
+else Datos y cambios válidos
+    opt Acción sobre contacto existente
+        alt Desactivar contacto (FR6)
+            cliComp -> cont : desactivar()
+            activate cont
+            note right of cont
+              Pasa a inactivo; se conserva el
+              historial de destinatarios de
+              facturas ya enviadas
+            end note
+            cont --> cliComp : actualizado
+            deactivate cont
+        else Anonimizar contacto (NFR6)
+            cliComp -> cont : anonimizar()
+            activate cont
+            note right of cont
+              Sustituye datos personales sin
+              alterar facturas en las que
+              aparece
+            end note
+            cont --> cliComp : anonimizado
+            deactivate cont
+        end
+    end
+
+    cliComp -> db : guardarCambiosCliente(c, cambios) [IDatabase]
+    activate db
+    db --> cliComp : guardado
+    deactivate db
+
+    cliComp -> aud : registrarAuditoria("MODIFICACION_CLIENTE", c) [ILog]
+    activate aud
+    aud -> db : guardarRegistroAuditoria() [IDatabase]
+    deactivate aud
+
+    cliComp --> ui : Ficha actualizada
+    ui --> emp : Muestra ficha actualizada y línea de tiempo
+end
+
+deactivate cliComp
+deactivate ui
+@enduml

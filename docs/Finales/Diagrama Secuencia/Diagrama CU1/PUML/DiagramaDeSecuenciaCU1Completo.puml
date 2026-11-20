@@ -1,0 +1,148 @@
+@startuml
+title CU-01 · Iniciar sesión
+
+actor "Usuario estándar" as emp
+participant "Interfaz web" as ui
+participant "Autenticación\ny permisos" as auth
+participant "Microsoft" as ms
+participant "u : Usuario" as user
+participant "s : Sesion" as sesion
+participant "Auditoría" as aud
+database "Base de datos" as db
+
+alt Escenario principal: Correo corporativo y contraseña
+    emp -> ui : 1: iniciarSesion(email, contrasena)
+    activate ui
+    ui -> auth : 2: login(email, contrasena) [IAuth]
+    activate auth
+    auth -> auth : 3: comprobarDominio(email)
+
+    alt Dominio no pertenece a Turbine (Excepción 2a)
+        auth -> aud : 4: registrarIntento(email, "Dominio no autorizado") [ILog]
+        activate aud
+        aud -> db : 5: guardarRegistroAuditoria() [IDatabase]
+        deactivate aud
+        auth --> ui : Error: Acceso denegado
+        ui --> emp : Mensaje genérico de rechazo
+    else Dominio corporativo válido
+        auth -> db : 4: obtenerUsuarioPorEmail(email) [IDatabase]
+        activate db
+        db --> auth : u : Usuario
+        deactivate db
+
+        auth -> user : 5: autenticar(contrasena : String)
+        activate user
+        user --> auth : credencialesValidas (Boolean)
+        deactivate user
+
+        alt credencialesValidas == false (Excepción 3a)
+            auth -> user : 6: registrarIntentoFallido()
+            activate user
+            note right of user
+              Al 5º intento fallido consecutivo,
+              el estado pasa a BLOQUEADA
+              (FR1, NFR5)
+            end note
+            user --> auth : actualizado
+            deactivate user
+
+            auth -> db : 7: actualizarUsuario(u) [IDatabase]
+            auth -> aud : 8: registrarIntento(u, "Credenciales incorrectas") [ILog]
+            activate aud
+            aud -> db : 9: guardarRegistroAuditoria() [IDatabase]
+            deactivate aud
+            auth --> ui : Error: Credenciales incorrectas
+            ui --> emp : Mensaje genérico de error
+
+        else credencialesValidas == true
+            auth -> auth : 6: comprobarEstado(u)
+
+            alt u.estado != ACTIVA (Excepción 4a)
+                auth -> aud : 7: registrarIntento(u, "Cuenta no disponible") [ILog]
+                activate aud
+                aud -> db : 8: guardarRegistroAuditoria() [IDatabase]
+                deactivate aud
+                auth --> ui : Error: Cuenta no disponible
+                ui --> emp : Deniega acceso e informa
+            else u.estado == ACTIVA
+                auth -> sesion ** : 7: crear(u)
+                note right of sesion
+                  Sesión con permisos del rol
+                  (expira tras 30 min de inactividad - NFR5)
+                end note
+                auth -> db : 8: guardarSesion(s) [IDatabase]
+                auth -> aud : 9: registrarIntento(u, "Acceso correcto") [ILog]
+                activate aud
+                aud -> db : 10: guardarRegistroAuditoria() [IDatabase]
+                deactivate aud
+
+                auth --> ui : True (Sesión activa: s)
+                ui --> emp : Presenta trabajo diario
+            end
+        end
+    end
+
+    deactivate auth
+    deactivate ui
+
+else Flujo alternativo 1a: Cuenta Microsoft corporativa
+    emp -> ui : 1a.1: iniciarSesionConMicrosoft()
+    activate ui
+    ui -> auth : 1a.2: loginMicrosoft() [IAuth]
+    activate auth
+    auth -> ms : 1a.3: delegarAutenticacion() [IIdentidad]
+    activate ms
+
+    alt Microsoft rechaza o no responde (Excepción 1a1)
+        ms --> auth : Error / Sin respuesta
+        deactivate ms
+        auth -> aud : 1a.4: registrarIntento("Microsoft", "Fallo proveedor") [ILog]
+        activate aud
+        aud -> db : 1a.5: guardarRegistroAuditoria() [IDatabase]
+        deactivate aud
+        auth --> ui : Error: No se pudo validar cuenta Microsoft
+        ui --> emp : Informa fallo de validación
+    else Identidad verificada
+        ms --> auth : identidadVerificada (cuentaMicrosoft)
+        deactivate ms
+        auth -> auth : 1a.4: comprobarOrganizacion(cuentaMicrosoft)
+
+        alt No pertenece a la organización de Turbine
+            auth -> aud : 1a.5: registrarIntento("Microsoft", "Organización no autorizada") [ILog]
+            activate aud
+            aud -> db : 1a.6: guardarRegistroAuditoria() [IDatabase]
+            deactivate aud
+            auth --> ui : Error: Acceso denegado
+            ui --> emp : Mensaje genérico de rechazo
+        else Pertenece a la organización
+            auth -> db : 1a.5: obtenerUsuarioPorMicrosoft(cuentaMicrosoft) [IDatabase]
+            activate db
+            db --> auth : u : Usuario
+            deactivate db
+            auth -> auth : 1a.6: comprobarEstado(u)
+
+            alt u.estado != ACTIVA (Excepción 4a)
+                auth -> aud : 1a.7: registrarIntento(u, "Cuenta no disponible") [ILog]
+                activate aud
+                aud -> db : 1a.8: guardarRegistroAuditoria() [IDatabase]
+                deactivate aud
+                auth --> ui : Error: Cuenta no disponible
+                ui --> emp : Deniega acceso e informa
+            else u.estado == ACTIVA
+                auth -> sesion ** : 1a.7: crear(u)
+                auth -> db : 1a.8: guardarSesion(s) [IDatabase]
+                auth -> aud : 1a.9: registrarIntento(u, "Acceso correcto") [ILog]
+                activate aud
+                aud -> db : 1a.10: guardarRegistroAuditoria() [IDatabase]
+                deactivate aud
+
+                auth --> ui : True (Sesión activa: s)
+                ui --> emp : Presenta trabajo diario
+            end
+        end
+    end
+
+    deactivate auth
+    deactivate ui
+end
+@enduml

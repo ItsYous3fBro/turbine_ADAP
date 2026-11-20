@@ -1,0 +1,91 @@
+@startuml
+title CU-07d · Gestionar cliente — Dar de baja o baja pendiente
+
+actor "Usuario estándar" as emp
+participant "Interfaz web" as ui
+participant "Clientes y\nsuscripciones" as cliComp
+participant "Facturación y\naprobaciones" as factComp
+participant "c : Cliente" as cli
+participant "s : Suscripcion" as susc
+participant "Auditoría" as aud
+database "Base de datos" as db
+
+emp -> ui : 1c.1: solicitarBajaCliente(idCliente, motivo)
+activate ui
+ui -> cliComp : 1c.2: prepararBajaCliente(idCliente, motivo) [IClientes]
+activate cliComp
+
+cliComp -> factComp : 1c.2.1: consultarFacturasPendientes(idCliente) [IFacturacion]
+activate factComp
+factComp -> cli : 1c.2.2: calcularDeuda()
+activate cli
+cli --> factComp : deudaPendiente
+deactivate cli
+factComp --> cliComp : deudaPendiente, facturasPendientes
+deactivate factComp
+
+alt Excepción 1c.2a: El cliente tiene deuda pendiente (FR11)
+    cliComp --> ui : Aviso: Existe deuda pendiente; ofrece BAJA_PENDIENTE
+    ui --> emp : Informa y pide confirmación de baja pendiente (1c.3)
+
+    emp -> ui : 1c.3: confirmarBajaPendiente(idCliente, motivo)
+    ui -> cliComp : 1c.4: registrarBajaPendiente(idCliente, motivo) [IClientes]
+    cliComp -> susc : 1c.4.1: cancelar()
+    activate susc
+    note right of susc
+      Cancela suscripción para evitar nuevas
+      mensualidades; se mantienen recordatorios
+      de deuda y el cliente queda en
+      BAJA_PENDIENTE (R6)
+    end note
+    susc --> cliComp : cancelada
+    deactivate susc
+
+    cliComp -> db : 1c.4.2: guardarEstadoBajaPendiente(c, s) [IDatabase]
+    activate db
+    db --> cliComp : guardado
+    deactivate db
+    cliComp -> aud : 1c.4.3: registrarAuditoria("BAJA_PENDIENTE_CLIENTE", c) [ILog]
+    activate aud
+    aud -> db : guardarRegistroAuditoria() [IDatabase]
+    deactivate aud
+
+    cliComp --> ui : Cliente en BAJA_PENDIENTE
+    ui --> emp : Confirma baja pendiente y mantenimiento de cobro
+
+else Sin deuda pendiente
+    cliComp --> ui : Resumen de baja sin deuda
+    ui --> emp : Pide confirmación de baja definitiva (1c.3)
+
+    emp -> ui : 1c.3: confirmarBajaDefinitiva(idCliente, motivo)
+    ui -> cliComp : 1c.4: ejecutarBajaCliente(idCliente, motivo) [IClientes]
+    cliComp -> susc : 1c.4.1: cancelar()
+    activate susc
+    susc --> cliComp : cancelada
+    deactivate susc
+    cliComp -> cli : 1c.4.2: darDeBaja(motivo)
+    activate cli
+    note right of cli
+      Borrado lógico: pasa a DADO_DE_BAJA
+      sin borrar físicamente datos
+      ni facturas
+    end note
+    cli --> cliComp : dadoDeBaja
+    deactivate cli
+
+    cliComp -> db : 1c.4.3: guardarBajaCliente(c, s) [IDatabase]
+    activate db
+    db --> cliComp : guardado
+    deactivate db
+    cliComp -> aud : 1c.4.4: registrarAuditoria("BAJA_CLIENTE", c) [ILog]
+    activate aud
+    aud -> db : guardarRegistroAuditoria() [IDatabase]
+    deactivate aud
+
+    cliComp --> ui : Cliente dado de baja
+    ui --> emp : Confirma baja y suscripción cancelada
+end
+
+deactivate cliComp
+deactivate ui
+@enduml

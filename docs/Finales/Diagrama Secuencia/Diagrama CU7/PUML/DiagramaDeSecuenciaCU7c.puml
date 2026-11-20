@@ -1,0 +1,51 @@
+@startuml
+title CU-07c · Gestionar cliente — Reactivar cliente
+
+actor "Usuario estándar" as emp
+participant "Interfaz web" as ui
+participant "Clientes y\nsuscripciones" as cliComp
+participant "c : Cliente" as cli
+participant "Auditoría" as aud
+database "Base de datos" as db
+
+emp -> ui : 1b: solicitarReactivacionCliente(idCliente)
+activate ui
+ui -> cliComp : 1b.1: reactivarCliente(idCliente) [IClientes]
+activate cliComp
+cliComp -> db : 1b.2: obtenerCliente(idCliente) [IDatabase]
+activate db
+db --> cliComp : c : Cliente
+deactivate db
+
+cliComp -> db : 1b.3: comprobarConservacionLegal(idCliente) [IDatabase]
+activate db
+db --> cliComp : conservacionPermitida
+deactivate db
+
+alt Excepción 1b1: La ley no permite conservar los datos del cliente
+    cliComp --> ui : Error: No procede reactivar por normativa de conservación
+    ui --> emp : Informa de que debe darse de alta como cliente nuevo
+
+else Conservación legal permitida (FR5, FR11)
+    cliComp -> cli : 1b.4: reactivar()
+    activate cli
+    note right of cli
+      Recupera ficha e historial y
+      pasa a estado ACTIVO
+    end note
+    cli --> cliComp : reactivado
+    deactivate cli
+
+    cliComp -> db : 1b.5: actualizarCliente(c) [IDatabase]
+    cliComp -> aud : 1b.6: registrarAuditoria("REACTIVACION_CLIENTE", c) [ILog]
+    activate aud
+    aud -> db : guardarRegistroAuditoria() [IDatabase]
+    deactivate aud
+
+    cliComp --> ui : Cliente reactivado
+    ui --> emp : Presenta ficha activa con su historial
+end
+
+deactivate cliComp
+deactivate ui
+@enduml
