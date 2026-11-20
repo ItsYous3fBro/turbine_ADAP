@@ -87,15 +87,3 @@ La v1 recoge el **núcleo del modelo de datos**: las 16 tablas que soportan el f
 5. **Nada se borra físicamente.** Clientes y facturas se dan de baja o se anulan cambiando su estado, porque hay que conservar el histórico (FR6, NFR6). Los `ON DELETE CASCADE` de las composiciones solo documentan la dependencia de vida.
 6. **Destinatarios y contenido como texto en `envio`.** Así se conserva el historial aunque un contacto se anonimice (FR6, NFR6). Es la misma decisión que en el diagrama de clases.
 
-## 6. Hoja de ruta
-
-| Versión | Qué se añade |
-|---|---|
-| **v2** | Las 21 tablas restantes: sesion, token_temporal (tabla única con discriminador), credencial_api, solicitud_baja, importacion, excepcion_comercial, propuesta_cambio_nivel, documento_factura, pausa_recordatorios, comentario, adjunto, notificacion, vista_guardada, registro_auditoria, ejecucion_proceso, copia_seguridad, configuracion, plantilla_mensaje, objetivo_financiero, exportacion y programacion_informe. Arco exclusivo de `solicitud_aprobacion`. |
-| **v3** | Revisión cruzada tablas ↔ clases ↔ casos de uso, diccionario de datos completo (columna a columna) e índices para las búsquedas de CU-34. |
-| **Final** | Vistas por paquete, como el diagrama de clases, y script SQL (`CREATE TABLE`) opcional para comprobar que el modelo es válido. |
-
-## 7. Puntos que debe decidir el equipo
-
-- **Notación.** La v1 usa pata de gallo (modelo lógico, con tablas y tipos). Si el profesorado pide la notación de Chen (entidades, rombos y atributos en óvalos), se puede añadir un diagrama conceptual aparte.
-- **Herencia de TokenTemporal (v2).** La propuesta es una tabla única con discriminador `tipo` (INVITACION, RECUPERACION), porque las dos subclases no añaden columnas. Es la estrategia contraria a la de las facturas, y así el modelo muestra las dos.
