@@ -16,7 +16,7 @@ Este documento explica los diagramas de secuencia de los casos de uso del gestor
 
 Cada caso de uso se ha dividido en partes para que cada diagrama se lea con facilidad. Además, hay una versión completa que reúne todos los fragmentos divididos unificados.
 
-## **2. Criterios comuness**
+## **2. Criterios comunes**
 
 * **Se mezclan componentes y clases.** Los participantes son componentes del diagrama de componentes (Interfaz web, Autenticación y permisos, Clientes y suscripciones, Dashboard e informes, Auditoría, Base de datos...) y objetos de clases del diagrama de clases (`u : Usuario`, `c : Cliente`, `exp : Exportacion`...). Los componentes muestran qué parte del sistema hace cada cosa y por qué interfaz. Las clases permiten que los métodos sean los del diagrama de clases, como pide el profesor.
 * **Las interfaces se indican entre corchetes.** Cada mensaje entre componentes lleva su interfaz (`[IAuth]`, `[IClientes]`, `[IInformes]`, `[IFacturacion]`, `[IIdentidad]`, `[ILog]`, `[IDatabase]`), igual que en el diagrama de componentes.
@@ -28,8 +28,6 @@ Cada caso de uso se ha dividido en partes para que cada diagrama se lea con faci
 * **Los componentes de negocio llaman directamente a Auditoría y a la Base de datos.** Es coherente con el diagrama de componentes, donde el paquete Negocio se conecta como conjunto a `IDatabase` e `ILog`.
 
 ## **3. CU-01 · Iniciar sesión**
-
-![CU-01 completo](DiagramaDeSecuenciaCU1Completo.png)
 
 **Actores:** Usuario estándar y, como secundario, Microsoft (proveedor de identidad). **Componentes:** Interfaz web, Autenticación y permisos, Microsoft, Auditoría y Base de datos. **Clases:** `u : Usuario` y `s : Sesion`.
 
@@ -46,8 +44,6 @@ Cada caso de uso se ha dividido en partes para que cada diagrama se lea con faci
 * **En el acceso con Microsoft también se comprueba la organización.** Si la cuenta no pertenece a Turbine, se deniega con un mensaje genérico, igual que en el dominio no autorizado.
 
 ## **4. CU-07 · Gestionar cliente**
-
-![CU-07 completo](DiagramaDeSecuenciaCU7Completo.png)
 
 **Actor:** Usuario estándar (en el alta, un administrador puede elegir el responsable). **Componentes:** Interfaz web, Clientes y suscripciones, Facturación y aprobaciones (solo en la baja), Auditoría y Base de datos. **Clases:** `c : Cliente`, `ct : Contacto` y `s : Suscripcion`.
 
@@ -67,8 +63,6 @@ Cada caso de uso se ha dividido en partes para que cada diagrama se lea con faci
 * **Dos confirmaciones en la baja (1c.3).** La baja pendiente y la baja definitiva piden confirmación al empleado, como dice el caso de uso.
 
 ## **5. CU-39 · Exportar informes y datos**
-
-![CU-39 completo](DiagramaDeSecuenciaCU39Completo.png)
 
 **Actor:** Usuario estándar. **Componentes:** Interfaz web, Dashboard e informes, Auditoría y Base de datos. **Clases:** `exp : Exportacion` y `prog : ProgramacionInforme`.
 
