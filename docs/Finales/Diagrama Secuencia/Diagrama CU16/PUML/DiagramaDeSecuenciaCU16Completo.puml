@@ -1,0 +1,92 @@
+@startuml
+title CU-16 · Generar facturas recurrentes (versión completa)
+
+actor "Temporizador" as tmp
+participant "Planificador" as plan
+participant "Facturación y\naprobaciones" as fact
+participant "e : EjecucionProceso" as ej
+participant "s : Suscripcion" as s
+participant "f : Factura" as f
+participant "Auditoría" as aud
+database "Base de datos" as db
+
+alt Escenario principal: día 1 del mes (pasos 1 a 5)
+
+    tmp -> plan : 1: dia1DelMes()
+    activate plan
+    plan -> fact : 1.1: generarFacturasRecurrentes(periodo) [IFacturacion]
+    activate fact
+
+    fact -> ej ** : 2: crear(proceso = "FACTURACION_RECURRENTE", inicio = ahora)
+    fact -> db : 2.1: guardarEjecucion(e) [IDatabase]
+
+    fact -> db : 3: obtenerSuscripcionesSinFactura(periodo) [IDatabase]
+    activate db
+    db --> fact : suscripciones (ACTIVA, sin factura emitida en el periodo)
+    deactivate db
+    note right of fact
+      Nunca dos facturas para la misma
+      suscripción y periodo (NFR11)
+    end note
+    fact -> db : 3.1: obtenerConfiguracion() [IDatabase]
+    activate db
+    db --> fact : cfg : Configuracion
+    deactivate db
+
+    loop por cada suscripción s
+        fact -> s : 4: calcularCuotaMensual()
+        activate s
+        s --> fact : importe
+        deactivate s
+        note right of s : NivelTarifa + ExcepcionComercial aprobadas (FR10)
+        fact -> f ** : 4.1: crear(s, tipo = RECURRENTE, periodo, importe)
+        fact -> f : 4.2: calcularTotales()
+        activate f
+        f --> fact : total
+        deactivate f
+        fact -> fact : 4.3: calcularVencimiento(f, cfg.plazoPagoDias)
+        fact -> db : 4.4: guardarFactura(f) [IDatabase]
+        fact -> aud : 4.5: registrarAuditoria("CREAR_FACTURA_RECURRENTE", f) [ILog]
+        activate aud
+        aud -> db : guardarRegistroAuditoria() [IDatabase]
+        deactivate aud
+        ref over fact, f, aud, db : CU-17 · Emitir factura
+
+        opt Excepción 4a: CU-17 devuelve error (fallo técnico o datos fiscales incompletos)
+            fact -> db : 4a.1: borrarFactura(f) [IDatabase]
+            fact -> aud : 4a.2: registrarAuditoria("DESCARTAR_BORRADOR", f) [ILog]
+            activate aud
+            aud -> db : guardarRegistroAuditoria() [IDatabase]
+            deactivate aud
+            fact -> fact : 4a.3: marcarPeriodoIncompleto(e)
+            note right of fact : Sigue con la siguiente suscripción (E2)
+        end
+    end
+
+    fact -> db : 5: actualizarEjecucion(e, fin = ahora, completa, resultado = "n emitidas") [IDatabase]
+    note right of fact : completa = false si hubo alguna excepción 4a
+    fact --> plan : ejecución terminada (n facturas emitidas)
+    deactivate fact
+    deactivate plan
+
+else Flujo alternativo 1a: revisión diaria de periodos incompletos
+
+    tmp -> plan : 1a: revisionDiaria()
+    activate plan
+    plan -> fact : 1a.1: recuperarPeriodosIncompletos() [IFacturacion]
+    activate fact
+    fact -> db : 1a.2: obtenerEjecucionesIncompletas("FACTURACION_RECURRENTE") [IDatabase]
+    activate db
+    db --> fact : ejecuciones con completa = false
+    deactivate db
+    loop por cada ejecución incompleta e
+        ref over fact, ej, s, f, aud, db
+          Pasos 3 a 5 del escenario principal con el periodo de e
+          (sin nuevo inicio; las suscripciones ya facturadas no se repiten)
+        end ref
+    end
+    fact --> plan : recuperación terminada
+    deactivate fact
+    deactivate plan
+end
+@enduml

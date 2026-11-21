@@ -1,0 +1,106 @@
+@startuml
+title CU-15b · Crear factura puntual — Flujos alternativos y de excepción
+
+actor "Usuario estándar" as emp
+participant "Interfaz web" as ui
+participant "Facturación y\naprobaciones" as fact
+participant "f : Factura" as f
+participant "Auditoría" as aud
+database "Base de datos" as db
+
+== Flujo alternativo 1a · Retomar una factura aprobada pendiente de emisión ==
+
+emp -> ui : 1a: seleccionarFacturaAprobada(idFactura)
+activate ui
+ui -> fact : 1a.1: retomarEmision(idFactura) [IFacturacion]
+activate fact
+fact -> db : 1a.2: obtenerFactura(idFactura) [IDatabase]
+activate db
+db --> fact : f : Factura (estado APROBADA)
+deactivate db
+note right of fact
+  Viene de CU-19 (excepción 4c).
+  Continúa en el paso 7 sin nueva
+  aprobación: no se llama a requiereAprobacion()
+end note
+ref over fact, f, aud, db : CU-17 · Emitir factura
+fact --> ui : factura emitida y enviada
+deactivate fact
+ui --> emp : Confirma la emisión con el número de factura
+deactivate ui
+
+== Flujo alternativo 4a · Importe fuera del patrón habitual del cliente (tras el paso 4) ==
+
+activate fact
+fact -> f : 4a: esImporteAtipico()
+activate f
+f --> fact : true
+deactivate f
+fact --> ui : aviso de importe atípico
+deactivate fact
+activate ui
+ui --> emp : Muestra el aviso antes de la vista previa (FR12)
+deactivate ui
+note over emp, fact
+  Es solo un aviso: el caso continúa en el paso 5.
+  Si además supera umbralImporteAtipico, se retendrá en 7a.
+end note
+
+== Flujo alternativo 6a · Guardar como borrador ==
+
+emp -> ui : 6a: guardarBorrador()
+activate ui
+ui -> fact : 6a.1: guardarBorrador(f) [IFacturacion]
+activate fact
+fact -> db : 6a.2: actualizarFactura(f) [IDatabase]
+note right of db
+  La factura sigue en BORRADOR.
+  Solo los borradores pueden
+  borrarse más tarde (FR14)
+end note
+fact --> ui : borrador guardado
+deactivate fact
+ui --> emp : Informa de que puede retomarlo o borrarlo más tarde
+deactivate ui
+
+== Flujo alternativo 7a · La factura cumple la condición de retención (CU-18 extiende CU-15) ==
+
+emp -> ui : 6: confirmarEmision()
+activate ui
+ui -> fact : 6.1: emitirFacturaPuntual(f) [IFacturacion]
+activate fact
+fact -> f : 7: requiereAprobacion()
+activate f
+f --> fact : true
+deactivate f
+note right of f
+  Supera umbralDescuento o umbralImporteAtipico,
+  o tiene vencimiento o importe modificados a mano
+end note
+ref over fact, f, aud, db
+  CU-18 · Retener para aprobación
+  La factura queda PENDIENTE_APROBACION en la bandeja de validación
+  y se avisa a los administradores (excepto al creador)
+end ref
+fact --> ui : factura retenida (motivo)
+deactivate fact
+ui --> emp : Informa de que está pendiente de aprobación (se emitirá desde CU-19)
+deactivate ui
+
+== Excepción 7b · CU-17 no puede emitir la factura ==
+
+activate fact
+ref over fact, f, aud, db
+  CU-17 · Emitir factura
+  Resultado: error (datos fiscales incompletos o periodo cerrado)
+end ref
+note right of f
+  No recibe número y se conserva
+  en BORRADOR (o APROBADA si venía de 1a)
+end note
+fact --> ui : no se puede emitir (motivo)
+deactivate fact
+activate ui
+ui --> emp : Indica qué debe corregir (datos fiscales del cliente o fecha de la factura)
+deactivate ui
+@enduml

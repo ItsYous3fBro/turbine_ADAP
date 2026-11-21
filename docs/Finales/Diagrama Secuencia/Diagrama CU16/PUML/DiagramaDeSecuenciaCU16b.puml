@@ -1,0 +1,79 @@
+@startuml
+title CU-16b · Generar facturas recurrentes — Flujos alternativos y de excepción
+
+actor "Temporizador" as tmp
+participant "Planificador" as plan
+participant "Facturación y\naprobaciones" as fact
+participant "e : EjecucionProceso" as ej
+participant "s : Suscripcion" as s
+participant "f : Factura" as f
+participant "Auditoría" as aud
+database "Base de datos" as db
+
+== Flujo alternativo 1a · Periodo incompleto (recuperación diaria) ==
+
+tmp -> plan : 1a: revisionDiaria()
+activate plan
+plan -> fact : 1a.1: recuperarPeriodosIncompletos() [IFacturacion]
+activate fact
+fact -> db : 1a.2: obtenerEjecucionesIncompletas("FACTURACION_RECURRENTE") [IDatabase]
+activate db
+db --> fact : ejecuciones con completa = false
+deactivate db
+note right of fact
+  Incluye las ejecuciones que no terminaron
+  (caída del sistema) y las que acabaron
+  con facturas sin emitir (excepción 4a)
+end note
+
+loop por cada ejecución incompleta e
+    note over fact, ej
+      No se registra un nuevo inicio (paso 2):
+      se sigue con la misma ejecución e
+    end note
+    ref over fact, ej, s, f, aud, db
+      Pasos 3 a 5 de CU-16a con el periodo de e
+      Solo se toman las suscripciones sin factura emitida,
+      así que las ya facturadas no se repiten (FR13, NFR11)
+    end ref
+end
+
+fact --> plan : recuperación terminada
+deactivate fact
+deactivate plan
+
+== Excepción 4a · CU-17 no emite la factura de una suscripción ==
+
+activate plan
+activate fact
+loop por cada suscripción s
+    ref over fact, f, aud, db : CU-17 · Emitir factura
+
+    opt Excepción 4a: CU-17 devuelve error (fallo técnico o datos fiscales incompletos)
+        note right of f
+          CU-17 ya avisa al responsable
+          del cliente (su excepción 1a, R2)
+        end note
+        fact -> db : 4a.1: borrarFactura(f) [IDatabase]
+        destroy f
+        note right of db
+          Solo un borrador puede borrarse (FR14).
+          Se rehará en 1a con los datos corregidos
+        end note
+        fact -> aud : 4a.2: registrarAuditoria("DESCARTAR_BORRADOR", f) [ILog]
+        activate aud
+        aud -> db : guardarRegistroAuditoria() [IDatabase]
+        deactivate aud
+        fact -> fact : 4a.3: marcarPeriodoIncompleto(e)
+        note over fact
+          Sigue con la siguiente suscripción:
+          un fallo no detiene a las demás (E2)
+        end note
+    end
+end
+
+fact -> db : 5: actualizarEjecucion(e, fin = ahora, completa = false, resultado = "n emitidas, m pendientes") [IDatabase]
+fact --> plan : ejecución incompleta (se recuperará en 1a)
+deactivate fact
+deactivate plan
+@enduml

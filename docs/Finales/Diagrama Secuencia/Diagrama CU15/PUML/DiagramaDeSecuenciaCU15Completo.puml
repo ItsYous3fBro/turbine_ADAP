@@ -1,0 +1,134 @@
+@startuml
+title CU-15 · Crear factura puntual (versión completa)
+
+actor "Usuario estándar" as emp
+participant "Interfaz web" as ui
+participant "Facturación y\naprobaciones" as fact
+participant "f : Factura" as f
+participant "l : LineaFactura" as lin
+participant "Auditoría" as aud
+database "Base de datos" as db
+
+alt Escenario principal: nueva factura puntual (pasos 1 a 7)
+
+    emp -> ui : 1: solicitarFacturaPuntual(idCliente)
+    activate ui
+    ui -> fact : 1.1: crearFacturaPuntual(idCliente) [IFacturacion]
+    activate fact
+    fact -> db : 2: obtenerCliente(idCliente) [IDatabase]
+    activate db
+    db --> fact : c : Cliente (datos fiscales)
+    deactivate db
+    fact -> f ** : 2.1: crear(c, tipo = PUNTUAL)
+    note right of f : Estado BORRADOR
+    fact -> db : 2.2: guardarFactura(f) [IDatabase]
+    fact -> aud : 2.3: registrarAuditoria("CREAR_BORRADOR", f) [ILog]
+    activate aud
+    aud -> db : guardarRegistroAuditoria() [IDatabase]
+    deactivate aud
+    fact --> ui : borrador creado
+    ui --> emp : Muestra el borrador y pide las líneas
+
+    emp -> ui : 3: anadirLineas(lineas)
+    ui -> fact : 3.1: anadirLineas(f, lineas) [IFacturacion]
+    loop por cada línea
+        alt Concepto elegido del catálogo
+            fact -> db : 3.2: obtenerConcepto(idConcepto) [IDatabase]
+            activate db
+            db --> fact : co : Concepto
+            deactivate db
+        else Concepto redactado por el empleado
+            note over fact : Datos indicados por el empleado
+        end
+        fact -> lin ** : 3.3: crear(descripcion, cantidad, precioUnitario, descuento, impuesto)
+        fact -> lin : 3.4: calcularImporte()
+        lin --> fact : importe
+    end
+
+    fact -> f : 4: calcularTotales()
+    f --> fact : total
+    fact -> db : 4.1: obtenerConfiguracion() [IDatabase]
+    activate db
+    db --> fact : cfg : Configuracion
+    deactivate db
+    fact -> fact : 4.2: calcularVencimiento(f, cfg.plazoPagoDias)
+    fact -> db : 4.3: actualizarFactura(f, lineas) [IDatabase]
+    fact -> aud : 4.4: registrarAuditoria("MODIFICAR_BORRADOR", f) [ILog]
+    activate aud
+    aud -> db : guardarRegistroAuditoria() [IDatabase]
+    deactivate aud
+
+    fact -> f : 4.5: esImporteAtipico()
+    f --> fact : atipico
+    opt Flujo alternativo 4a: atipico == true (importe fuera del patrón habitual)
+        fact --> ui : aviso de importe atípico
+        ui --> emp : Muestra el aviso antes de la vista previa (FR12)
+    end
+
+    fact -> fact : 5: generarVistaPrevia(f)
+    fact --> ui : vista previa (líneas, totales, vencimiento)
+    ui --> emp : Muestra la factura tal como se emitirá (FR12)
+
+    alt Flujo alternativo 6a: guardar como borrador
+        emp -> ui : 6a: guardarBorrador()
+        ui -> fact : 6a.1: guardarBorrador(f) [IFacturacion]
+        fact -> db : 6a.2: actualizarFactura(f) [IDatabase]
+        fact --> ui : borrador guardado
+        ui --> emp : Puede retomarlo o borrarlo más tarde (FR14)
+
+    else Paso 6: el empleado confirma la emisión
+        emp -> ui : 6: confirmarEmision()
+        ui -> fact : 6.1: emitirFacturaPuntual(f) [IFacturacion]
+        fact -> f : 7: requiereAprobacion()
+        f --> fact : requiere
+
+        alt Flujo alternativo 7a: requiere == true (condición de retención)
+            ref over fact, f, aud, db
+              CU-18 · Retener para aprobación
+              (PENDIENTE_APROBACION y aviso a los administradores)
+            end ref
+            fact --> ui : factura retenida (motivo)
+            ui --> emp : Pendiente de aprobación (se emitirá desde CU-19)
+
+        else requiere == false
+            ref over fact, f, aud, db : CU-17 · Emitir factura
+            alt Excepción 7b: CU-17 no puede emitir (datos fiscales incompletos o periodo cerrado)
+                note right of f : Sin número; sigue en BORRADOR
+                fact --> ui : no se puede emitir (motivo)
+                ui --> emp : Indica qué debe corregir
+            else Factura emitida
+                fact --> ui : factura emitida y enviada
+                ui --> emp : Confirma la emisión con el número de factura
+            end
+        end
+    end
+    deactivate fact
+    deactivate ui
+
+else Flujo alternativo 1a: retomar una factura aprobada pendiente de emisión
+
+    emp -> ui : 1a: seleccionarFacturaAprobada(idFactura)
+    activate ui
+    ui -> fact : 1a.1: retomarEmision(idFactura) [IFacturacion]
+    activate fact
+    fact -> db : 1a.2: obtenerFactura(idFactura) [IDatabase]
+    activate db
+    db --> fact : f : Factura (estado APROBADA)
+    deactivate db
+    note right of fact
+      Viene de CU-19 (4c). Pasa al paso 7
+      sin nueva aprobación
+    end note
+    ref over fact, f, aud, db : CU-17 · Emitir factura
+    alt Excepción 7b: CU-17 no puede emitir
+        note right of f : Sin número; sigue APROBADA
+        fact --> ui : no se puede emitir (motivo)
+        ui --> emp : Indica qué debe corregir
+    else Factura emitida
+        fact --> ui : factura emitida y enviada
+        ui --> emp : Confirma la emisión con el número de factura
+    end
+    deactivate fact
+    deactivate ui
+end
+@enduml

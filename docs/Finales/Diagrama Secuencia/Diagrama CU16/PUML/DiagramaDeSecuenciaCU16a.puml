@@ -1,0 +1,67 @@
+@startuml
+title CU-16a · Generar facturas recurrentes — Escenario principal
+
+actor "Temporizador" as tmp
+participant "Planificador" as plan
+participant "Facturación y\naprobaciones" as fact
+participant "e : EjecucionProceso" as ej
+participant "s : Suscripcion" as s
+participant "f : Factura" as f
+participant "Auditoría" as aud
+database "Base de datos" as db
+
+tmp -> plan : 1: dia1DelMes()
+activate plan
+plan -> fact : 1.1: generarFacturasRecurrentes(periodo) [IFacturacion]
+activate fact
+
+fact -> ej ** : 2: crear(proceso = "FACTURACION_RECURRENTE", inicio = ahora)
+fact -> db : 2.1: guardarEjecucion(e) [IDatabase]
+
+fact -> db : 3: obtenerSuscripcionesSinFactura(periodo) [IDatabase]
+activate db
+db --> fact : suscripciones (ACTIVA, sin factura emitida en el periodo)
+deactivate db
+note right of fact
+  El filtro garantiza que nunca se emiten
+  dos facturas para la misma suscripción
+  y periodo, aunque se repita la ejecución
+  (garantía mínima, NFR11)
+end note
+fact -> db : 3.1: obtenerConfiguracion() [IDatabase]
+activate db
+db --> fact : cfg : Configuracion
+deactivate db
+
+loop por cada suscripción s
+    fact -> s : 4: calcularCuotaMensual()
+    activate s
+    s --> fact : importe
+    deactivate s
+    note right of s
+      Tarifa vigente (NivelTarifa) más las
+      ExcepcionComercial aprobadas (FR10)
+    end note
+    fact -> f ** : 4.1: crear(s, tipo = RECURRENTE, periodo, importe)
+    note right of f
+      BORRADOR con los datos fiscales del
+      cliente y una línea con la cuota
+    end note
+    fact -> f : 4.2: calcularTotales()
+    activate f
+    f --> fact : total
+    deactivate f
+    fact -> fact : 4.3: calcularVencimiento(f, cfg.plazoPagoDias)
+    fact -> db : 4.4: guardarFactura(f) [IDatabase]
+    fact -> aud : 4.5: registrarAuditoria("CREAR_FACTURA_RECURRENTE", f) [ILog]
+    activate aud
+    aud -> db : guardarRegistroAuditoria() [IDatabase]
+    deactivate aud
+    ref over fact, f, aud, db : CU-17 · Emitir factura (numerar, firmar, guardar y enviar con CU-20)
+end
+
+fact -> db : 5: actualizarEjecucion(e, fin = ahora, completa = true, resultado = "n facturas emitidas") [IDatabase]
+fact --> plan : ejecución completa (n facturas emitidas)
+deactivate fact
+deactivate plan
+@enduml

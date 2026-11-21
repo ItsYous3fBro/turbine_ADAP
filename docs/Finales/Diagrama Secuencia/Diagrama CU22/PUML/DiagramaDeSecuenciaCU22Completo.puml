@@ -1,0 +1,112 @@
+@startuml
+title CU-22 · Rectificar o anular factura (versión completa)
+
+actor "Administrador" as adm
+participant "Interfaz web" as ui
+participant "Facturación y\naprobaciones" as fact
+participant "o : Factura" as o
+participant "r : FacturaRectificativa" as r
+participant "Auditoría" as aud
+database "Base de datos" as db
+
+alt Escenario principal (rectificar) y flujo alternativo 1a (anular)
+
+    adm -> ui : 1: solicitarRectificacion(idFactura, motivo, anular)
+    activate ui
+    note left of ui : anular = true en el flujo 1a
+    ui -> fact : 1.1: rectificarFactura(idFactura, motivo, anular) [IFacturacion]
+    activate fact
+    fact -> db : 1.2: obtenerFactura(idFactura) [IDatabase]
+    activate db
+    db --> fact : o : Factura
+    deactivate db
+    fact -> fact : 1.3: comprobarEmitida(o)
+
+    alt Excepción 1b: la factura no está emitida (o ya está RECTIFICADA o ANULADA)
+        fact --> ui : Error: la factura no está emitida
+        ui --> adm : Un borrador se corrige directamente o se borra (CU-15)
+
+    else EMITIDA, ENVIADA, NO_NOTIFICADA, VENCIDA o PAGADA
+        fact -> db : 2: obtenerPeriodoAbierto() [IDatabase]
+        activate db
+        db --> fact : p : PeriodoFacturacion
+        deactivate db
+        fact -> r ** : 2.1: crear(o, motivo, anulaTotalmente = anular, fecha en p)
+        note right of r : BORRADOR vinculada a la original
+        fact -> db : 2.2: guardarFactura(r) [IDatabase]
+        fact -> aud : 2.3: registrarAuditoria("CREAR_RECTIFICATIVA", r) [ILog]
+        activate aud
+        aud -> db : guardarRegistroAuditoria() [IDatabase]
+        deactivate aud
+
+        alt Escenario principal: rectificar (anular = false)
+            fact --> ui : rectificativa en borrador
+            ui --> adm : Pide las correcciones
+            adm -> ui : 3: indicarCorrecciones(correcciones)
+            ui -> fact : 3.1: aplicarCorrecciones(r, correcciones) [IFacturacion]
+            fact -> r : 3.2: calcularTotales()
+            r --> fact : total
+            fact -> db : 3.3: actualizarFactura(r) [IDatabase]
+            fact -> aud : 3.4: registrarAuditoria("MODIFICAR_RECTIFICATIVA", r) [ILog]
+            activate aud
+            aud -> db : guardarRegistroAuditoria() [IDatabase]
+            deactivate aud
+        else Flujo alternativo 1a: anular (anular = true)
+            fact -> r : 1a.8: calcularTotales()
+            r --> fact : total (igual al de o, en negativo)
+            fact -> db : 1a.9: actualizarFactura(r) [IDatabase]
+            note right of fact : No hay paso 3: se pasa al paso 4
+        end
+
+        fact -> fact : 4: calcularDiferencia(o, r)
+        fact -> fact : 4.1: generarVistaPrevia(r, diferencia)
+        fact --> ui : vista previa con la diferencia respecto a la original
+        ui --> adm : Muestra la vista previa
+        adm -> ui : 5: confirmarRectificacion()
+        ui -> fact : 5.1: emitirRectificativa(r) [IFacturacion]
+        fact -> r : 6: requiereAprobacion()
+        r --> fact : requiere
+
+        alt Flujo alternativo 6a: requiere == true (supera umbralRectificacion)
+            ref over fact, o, r, aud, db
+              CU-18 · Retener para aprobación
+              (PENDIENTE_APROBACION y aviso a los administradores)
+            end ref
+            fact --> ui : rectificativa retenida (motivo)
+            ui --> adm : Pendiente de aprobación por otro administrador (CU-19)
+        else requiere == false
+            ref over fact, o, r, aud, db
+              CU-17 · Emitir factura
+              En su paso 4a la original o pasa a RECTIFICADA, o a ANULADA si anular = true
+            end ref
+            fact --> ui : rectificativa emitida y enviada
+            ui --> adm : Confirma con el número de la rectificativa
+        end
+    end
+    deactivate fact
+    deactivate ui
+
+else Flujo alternativo 1c: retomar una rectificativa aprobada pendiente de emisión
+
+    adm -> ui : 1c: seleccionarRectificativaAprobada(idRectificativa)
+    activate ui
+    ui -> fact : 1c.1: retomarEmision(idRectificativa) [IFacturacion]
+    activate fact
+    fact -> db : 1c.2: obtenerFactura(idRectificativa) [IDatabase]
+    activate db
+    db --> fact : r : FacturaRectificativa (APROBADA) y su original o
+    deactivate db
+    note right of fact
+      Viene de CU-19 (4c). Pasa al
+      paso 6 sin nueva aprobación
+    end note
+    ref over fact, o, r, aud, db
+      CU-17 · Emitir factura
+      En su paso 4a la original o pasa a RECTIFICADA, o a ANULADA si r.anulaTotalmente
+    end ref
+    fact --> ui : rectificativa emitida y enviada
+    ui --> adm : Confirma con el número de la rectificativa
+    deactivate fact
+    deactivate ui
+end
+@enduml

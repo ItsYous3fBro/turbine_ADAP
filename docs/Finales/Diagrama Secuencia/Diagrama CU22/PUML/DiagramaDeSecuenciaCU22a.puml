@@ -1,0 +1,87 @@
+@startuml
+title CU-22a · Rectificar o anular factura — Escenario principal (rectificar)
+
+actor "Administrador" as adm
+participant "Interfaz web" as ui
+participant "Facturación y\naprobaciones" as fact
+participant "o : Factura" as o
+participant "r : FacturaRectificativa" as r
+participant "Auditoría" as aud
+database "Base de datos" as db
+
+adm -> ui : 1: solicitarRectificacion(idFactura, motivo, anular = false)
+activate ui
+ui -> fact : 1.1: rectificarFactura(idFactura, motivo, anular) [IFacturacion]
+activate fact
+fact -> db : 1.2: obtenerFactura(idFactura) [IDatabase]
+activate db
+db --> fact : o : Factura
+deactivate db
+fact -> fact : 1.3: comprobarEmitida(o)
+note right of fact
+  Estado EMITIDA, ENVIADA, NO_NOTIFICADA,
+  VENCIDA o PAGADA (ver 1b en CU-22b)
+end note
+
+fact -> db : 2: obtenerPeriodoAbierto() [IDatabase]
+activate db
+db --> fact : p : PeriodoFacturacion
+deactivate db
+fact -> r ** : 2.1: crear(o, motivo, anulaTotalmente = false, fecha en p)
+note right of r
+  BORRADOR vinculada a la original
+  (FacturaRectificativa rectifica Factura)
+end note
+fact -> db : 2.2: guardarFactura(r) [IDatabase]
+fact -> aud : 2.3: registrarAuditoria("CREAR_RECTIFICATIVA", r) [ILog]
+activate aud
+aud -> db : guardarRegistroAuditoria() [IDatabase]
+deactivate aud
+fact --> ui : rectificativa en borrador
+ui --> adm : Muestra la rectificativa y pide las correcciones
+
+adm -> ui : 3: indicarCorrecciones(correcciones)
+ui -> fact : 3.1: aplicarCorrecciones(r, correcciones) [IFacturacion]
+note right of fact : Importes, conceptos o datos
+fact -> r : 3.2: calcularTotales()
+activate r
+r --> fact : total
+deactivate r
+fact -> db : 3.3: actualizarFactura(r) [IDatabase]
+fact -> aud : 3.4: registrarAuditoria("MODIFICAR_RECTIFICATIVA", r) [ILog]
+activate aud
+aud -> db : guardarRegistroAuditoria() [IDatabase]
+deactivate aud
+
+fact -> fact : 4: calcularDiferencia(o, r)
+fact -> fact : 4.1: generarVistaPrevia(r, diferencia)
+fact --> ui : vista previa con la diferencia respecto a la original
+ui --> adm : Muestra la vista previa
+
+adm -> ui : 5: confirmarRectificacion()
+ui -> fact : 5.1: emitirRectificativa(r) [IFacturacion]
+
+fact -> r : 6: requiereAprobacion()
+activate r
+r --> fact : false
+deactivate r
+note right of r
+  Punto de extensión «aprobación»:
+  no supera umbralRectificacion,
+  así que no se retiene (ver 6a en CU-22b)
+end note
+
+ref over fact, o, r, aud, db
+  CU-17 · Emitir factura
+  En su paso 4a la original o pasa a RECTIFICADA
+end ref
+note right of o
+  o nunca se edita ni se borra:
+  solo cambia su estado (R3, FR15)
+end note
+
+fact --> ui : rectificativa emitida y enviada
+deactivate fact
+ui --> adm : Confirma la rectificación con el número de la rectificativa
+deactivate ui
+@enduml

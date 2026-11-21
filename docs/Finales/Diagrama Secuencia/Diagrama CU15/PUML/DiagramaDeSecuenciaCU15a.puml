@@ -1,0 +1,101 @@
+@startuml
+title CU-15a · Crear factura puntual — Escenario principal
+
+actor "Usuario estándar" as emp
+participant "Interfaz web" as ui
+participant "Facturación y\naprobaciones" as fact
+participant "f : Factura" as f
+participant "l : LineaFactura" as lin
+participant "Auditoría" as aud
+database "Base de datos" as db
+
+emp -> ui : 1: solicitarFacturaPuntual(idCliente)
+activate ui
+ui -> fact : 1.1: crearFacturaPuntual(idCliente) [IFacturacion]
+activate fact
+
+fact -> db : 2: obtenerCliente(idCliente) [IDatabase]
+activate db
+db --> fact : c : Cliente (datos fiscales)
+deactivate db
+
+fact -> f ** : 2.1: crear(c, tipo = PUNTUAL)
+activate f
+note right of f
+  Estado BORRADOR, con los
+  datos fiscales del cliente
+end note
+
+fact -> db : 2.2: guardarFactura(f) [IDatabase]
+note right of db
+  Se guarda desde el primer momento:
+  si el proceso se interrumpe,
+  el borrador se conserva (garantía mínima)
+end note
+fact -> aud : 2.3: registrarAuditoria("CREAR_BORRADOR", f) [ILog]
+activate aud
+aud -> db : guardarRegistroAuditoria() [IDatabase]
+deactivate aud
+
+fact --> ui : borrador creado
+ui --> emp : Muestra el borrador y pide las líneas
+
+emp -> ui : 3: anadirLineas(lineas)
+ui -> fact : 3.1: anadirLineas(f, lineas) [IFacturacion]
+
+loop por cada línea
+    alt Concepto elegido del catálogo
+        fact -> db : 3.2: obtenerConcepto(idConcepto) [IDatabase]
+        activate db
+        db --> fact : co : Concepto (nombre, precioBase, impuesto)
+        deactivate db
+    else Concepto redactado por el empleado
+        note over fact
+          Descripción, precio e impuesto
+          los indica el empleado
+        end note
+    end
+    fact -> lin ** : 3.3: crear(descripcion, cantidad, precioUnitario, descuento, impuesto)
+    fact -> lin : 3.4: calcularImporte()
+    activate lin
+    lin --> fact : importe
+    deactivate lin
+end
+
+fact -> f : 4: calcularTotales()
+f --> fact : total
+fact -> db : 4.1: obtenerConfiguracion() [IDatabase]
+activate db
+db --> fact : cfg : Configuracion
+deactivate db
+fact -> fact : 4.2: calcularVencimiento(f, cfg.plazoPagoDias)
+fact -> db : 4.3: actualizarFactura(f, lineas) [IDatabase]
+fact -> aud : 4.4: registrarAuditoria("MODIFICAR_BORRADOR", f) [ILog]
+activate aud
+aud -> db : guardarRegistroAuditoria() [IDatabase]
+deactivate aud
+
+fact -> fact : 5: generarVistaPrevia(f)
+fact --> ui : vista previa (líneas, totales, vencimiento)
+ui --> emp : Muestra la factura tal como se emitirá (FR12)
+
+emp -> ui : 6: confirmarEmision()
+ui -> fact : 6.1: emitirFacturaPuntual(f) [IFacturacion]
+
+fact -> f : 7: requiereAprobacion()
+f --> fact : false
+note right of f
+  Punto de extensión «aprobación»:
+  no supera umbralDescuento ni
+  umbralImporteAtipico (Configuracion),
+  así que no se retiene (ver 7a en CU-15b)
+end note
+
+ref over fact, f, aud, db : CU-17 · Emitir factura (numerar, firmar, guardar y enviar con CU-20)
+
+fact --> ui : factura emitida y enviada
+deactivate f
+deactivate fact
+ui --> emp : Confirma la emisión con el número de factura
+deactivate ui
+@enduml
