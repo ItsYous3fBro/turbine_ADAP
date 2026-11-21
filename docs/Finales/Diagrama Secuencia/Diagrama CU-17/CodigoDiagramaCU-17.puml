@@ -1,0 +1,35 @@
+@startuml CU17_Emitir_factura
+title CU-17 · Emitir factura
+
+participant "Servicio de\nFacturación" as Invocador
+participant "Gestor de facturas\n(Turbine)" as Sistema
+database "Base de datos" as BD
+participant "Módulo de\nEnvío" as Envio
+
+Invocador -> Sistema : emitirFactura(idFactura)
+activate Sistema
+
+Sistema -> BD : obtenerFactura(idFactura)
+BD --> Sistema : factura
+
+Sistema -> Sistema : validarDatos(factura)
+
+alt datos válidos
+    Sistema -> BD : obtenerSiguienteNumero(serie)
+    BD --> Sistema : numero
+    Sistema -> Sistema : asignarNumero(factura, numero)
+    Sistema -> BD : guardar(factura, estado = EMITIDA)
+    BD --> Sistema : ok
+
+    Sistema -> Envio : enviarFactura(idFactura)
+    activate Envio
+    Envio --> Sistema : resultadoEnvio
+    deactivate Envio
+
+    Sistema --> Invocador : factura emitida
+else datos inválidos
+    Sistema --> Invocador : error de validación
+end
+
+deactivate Sistema
+@enduml
