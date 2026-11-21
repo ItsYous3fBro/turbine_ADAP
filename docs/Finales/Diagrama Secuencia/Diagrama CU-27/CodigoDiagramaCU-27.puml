@@ -1,0 +1,30 @@
+@startuml CU27_Enviar_recordatorios_de_cobro
+title CU-27 · Enviar recordatorios de cobro
+
+actor "Temporizador" as Timer
+participant "Gestor de facturas\n(Turbine)" as Sistema
+database "Base de datos" as BD
+actor "Proveedor de correo" as Proveedor
+actor "Cliente" as Cliente
+
+Timer -> Sistema : ejecutarRecordatorios()
+activate Sistema
+
+Sistema -> BD : buscarFacturasPendientesDeCobro()
+BD --> Sistema : listaFacturas
+
+loop por cada factura pendiente
+    Sistema -> Sistema : componerRecordatorio(factura)
+    Sistema -> Proveedor : enviarCorreo(destinatario, asunto, cuerpo)
+    activate Proveedor
+    Proveedor --> Sistema : aceptado (idMensaje)
+    Proveedor -> Cliente : entrega recordatorio de cobro
+    deactivate Proveedor
+
+    Sistema -> BD : registrarRecordatorio(idFactura, idMensaje, fecha)
+    BD --> Sistema : ok
+end
+
+Sistema --> Timer : fin de ejecución
+deactivate Sistema
+@enduml
