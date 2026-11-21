@@ -1,8 +1,7 @@
 # Gestor de facturas Turbine — Diagramas de secuencia (CU-32, CU-34, CU-37)
 
-Documentación conjunta de los diagramas de secuencia de los casos de uso **CU-32**, **CU-34** y **CU-37**, derivados de los diagramas de casos de uso **D5 · Seguimiento y trabajo diario** y **D6 · Información y configuración**.
+Documentación conjunta de los diagramas de secuencia de los casos de uso **CU-32**, **CU-34** y **CU-37**.
 
-Los diagramas siguen el mismo estilo que el de **CU-20 · Enviar factura**: el sistema se representa como una única línea de vida (**Gestor de facturas (Turbine)**), la persistencia como **Base de datos**, los mensajes son llamadas a operaciones, las llamadas a otros casos de uso se prefijan con su identificador (por ejemplo `CU-33 pausarRecordatorios(...)`) y los comportamientos condicionales se muestran con fragmentos `alt` / `opt`.
 
 Archivos incluidos:
 
@@ -17,7 +16,6 @@ Archivos incluidos:
 1. [CU-32 Gestionar incidencia](#1-cu-32-gestionar-incidencia)
 2. [CU-34 Buscar clientes y facturas](#2-cu-34-buscar-clientes-y-facturas)
 3. [CU-37 Consultar dashboard financiero](#3-cu-37-consultar-dashboard-financiero)
-4. [Supuestos de diseño](#4-supuestos-de-diseño)
 
 ---
 
@@ -45,7 +43,7 @@ Archivos incluidos:
 
 ### 1.3 Diagrama de secuencia
 
-![CU-32 · Gestionar incidencia](diagramas/CU-32.png)
+**CU-32. Se encuentra en Archivos finales/Diagramas de Secuencia**
 
 ### 1.4 Descripción de los mensajes
 
@@ -89,7 +87,7 @@ Archivos incluidos:
 
 ### 2.3 Diagrama de secuencia
 
-![CU-34 · Buscar clientes y facturas](diagramas/CU-34.png)
+**CU-34. Se encuentra en Archivos finales/Diagramas de Secuencia**
 
 ### 2.4 Descripción de los mensajes
 
@@ -133,7 +131,7 @@ Archivos incluidos:
 
 ### 3.3 Diagrama de secuencia
 
-![CU-37 · Consultar dashboard financiero](diagramas/CU-37.png)
+**CU-37. Se encuentra en Archivos finales/Diagramas de Secuencia**
 
 ### 3.4 Descripción de los mensajes
 
@@ -151,13 +149,3 @@ Archivos incluidos:
 | Periodo sin objetivos definidos | Se muestran los datos reales sin comparativa. |
 
 ---
-
-## 4. Supuestos de diseño
-
-| # | Supuesto |
-|---|----------|
-| S1 | **CU-32.** El diagrama de casos de uso no detalla qué es el «paso 1» del punto de extensión *pausa*. Se ha situado la extensión tras registrar o actualizar la incidencia, cuando ya está vinculada a una factura. |
-| S2 | **CU-34.** El «paso 3» de *acción masiva* se interpreta como la selección de resultados. |
-| S3 | **CU-37.** El Superadministrador puede ejecutarlo por herencia del Administrador; el Usuario estándar no. |
-| S4 | Los nombres de operaciones, parámetros y estados (`ABIERTA`, etc.) son propuestas de diseño. |
-| S5 | Se asume que el usuario ya está autenticado y que el sistema conoce su rol en cada operación. |
