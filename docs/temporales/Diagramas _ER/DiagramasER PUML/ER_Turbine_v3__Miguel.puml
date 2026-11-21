@@ -1,0 +1,362 @@
+@startuml
+title Turbine - Modelo entidad-relacion V3 (revisado)
+scale max 3000*3000
+hide circle
+skinparam shadowing false
+skinparam linetype ortho
+skinparam nodesep 25
+skinparam ranksep 35
+skinparam packageStyle rectangle
+
+package "Clientes y suscripciones" {
+  entity Usuario {
+    * id_usuario : bigint <<PK>>
+    --
+    * nombre : varchar
+    * correo : varchar <<UQ>>
+    * rol : varchar
+    * estado : varchar
+  }
+  entity Cliente {
+    * id_cliente : bigint <<PK>>
+    --
+    * id_responsable : bigint <<FK>>
+    * razon_social : varchar
+    * nombre_comercial : varchar
+    * identificador_fiscal : varchar <<UQ>>
+    domicilio_fiscal : varchar
+    representante_legal : varchar
+    * pais : char(2)
+    * moneda : char(3)
+    facturacion_anual : decimal
+    * estado : varchar
+  }
+  entity Delegacion {
+    * id_delegacion : bigint <<PK>>
+    --
+    * id_cliente : bigint <<FK>>
+    * id_delegado : bigint <<FK>>
+    * id_administrador : bigint <<FK>>
+    * fecha_inicio : date
+    * fecha_fin : date
+    * estado : varchar
+  }
+  entity Contacto {
+    * id_contacto : bigint <<PK>>
+    --
+    * id_cliente : bigint <<FK>>
+    nombre : varchar
+    correo : varchar
+    telefono : varchar
+    * tipo : varchar
+    * activo : boolean
+  }
+  entity Tarifa {
+    * id_tarifa : bigint <<PK>>
+    --
+    * nivel : varchar
+    * rango_desde : decimal
+    rango_hasta : decimal
+    * cuota_mensual : decimal
+    * moneda : char(3)
+    * vigente_desde : date
+    vigente_hasta : date
+  }
+  entity Suscripcion {
+    * id_suscripcion : bigint <<PK>>
+    --
+    * id_cliente : bigint <<FK>>
+    * id_tarifa : bigint <<FK>>
+    * fecha_inicio : date
+    fecha_fin : date
+    motivo_pausa : varchar
+    fecha_reactivacion : date
+    * estado : varchar
+  }
+  entity PropuestaComercial {
+    * id_propuesta : bigint <<PK>>
+    --
+    * id_suscripcion : bigint <<FK>>
+    id_tarifa_propuesta : bigint <<FK>>
+    * tipo : varchar
+    importe : decimal
+    porcentaje : decimal
+    * motivo : text
+    * vigente_desde : date
+    vigente_hasta : date
+  }
+}
+
+package "Facturacion y aprobaciones" {
+  entity SerieFactura {
+    * id_serie : bigint <<PK>>
+    --
+    * codigo : varchar <<UQ>>
+    * siguiente_numero : bigint
+    * activa : boolean
+  }
+  entity PeriodoFacturacion {
+    * id_periodo : bigint <<PK>>
+    --
+    * fecha_inicio : date
+    * fecha_fin : date
+    * estado : varchar
+    id_admin_cierre : bigint <<FK>>
+    cerrado_en : timestamp
+  }
+  entity Factura {
+    * id_factura : bigint <<PK>>
+    --
+    * id_cliente : bigint <<FK>>
+    id_suscripcion : bigint <<FK>>
+    id_serie : bigint <<FK>>
+    id_periodo : bigint <<FK>>
+    id_original : bigint <<FK>>
+    id_creador : bigint <<FK>>
+    numero : bigint
+    * tipo : varchar
+    periodo_servicio : date
+    fecha_emision : date
+    fecha_vencimiento : date
+    * base_imponible : decimal
+    * total_impuestos : decimal
+    * importe_total : decimal
+    * moneda : char(3)
+    * estado : varchar
+    * migrada : boolean
+    * incobrable : boolean
+    datos_fiscales_emitidos : json
+  }
+  entity LineaFactura {
+    * id_linea : bigint <<PK>>
+    --
+    * id_factura : bigint <<FK>>
+    * concepto : varchar
+    * cantidad : decimal
+    * precio_unitario : decimal
+    * descuento_pct : decimal
+    * impuesto_pct : decimal
+  }
+  entity Aprobacion {
+    * id_aprobacion : bigint <<PK>>
+    --
+    id_factura : bigint <<FK>>
+    id_propuesta : bigint <<FK>>
+    id_solicitante : bigint <<FK>>
+    id_administrador_asignado : bigint <<FK>>
+    id_administrador_resolutor : bigint <<FK>>
+    * motivo_retencion : text
+    * estado : varchar
+    * fecha_solicitud : timestamp
+    fecha_resolucion : timestamp
+    motivo_decision : text
+  }
+  entity DocumentoFactura {
+    * id_documento : bigint <<PK>>
+    --
+    * id_factura : bigint <<FK,UQ>>
+    * ruta_local : varchar
+    * ruta_nube : varchar
+    * huella_pdf : varchar
+    * fecha_firma : timestamp
+  }
+  entity EnvioFactura {
+    * id_envio : bigint <<PK>>
+    --
+    * id_factura : bigint <<FK>>
+    id_contacto : bigint <<FK>>
+    * destinatario_historico : varchar
+    * canal : varchar
+    * fecha : timestamp
+    * resultado : varchar
+    detalle_error : text
+  }
+}
+
+package "Cobros y seguimiento" {
+  entity Cobro {
+    * id_cobro : bigint <<PK>>
+    --
+    * origen : varchar
+    * referencia_externa : varchar
+    * fecha : timestamp
+    * importe : decimal
+    * moneda : char(3)
+    * estado : varchar
+    motivo_revision : text
+  }
+  entity Conciliacion {
+    * id_conciliacion : bigint <<PK>>
+    --
+    * id_cobro : bigint <<FK>>
+    * id_factura : bigint <<FK>>
+    id_usuario : bigint <<FK>>
+    * importe_aplicado : decimal
+    * fecha : timestamp
+    * estado : varchar
+    fecha_reversion : timestamp
+    motivo_reversion : text
+  }
+  entity Recordatorio {
+    * id_recordatorio : bigint <<PK>>
+    --
+    * id_factura : bigint <<FK>>
+    * fecha : timestamp
+    * canal : varchar
+    * destinatario_historico : varchar
+    * resultado : varchar
+  }
+  entity Incidencia {
+    * id_incidencia : bigint <<PK>>
+    --
+    * id_cliente : bigint <<FK>>
+    id_factura : bigint <<FK>>
+    * id_responsable : bigint <<FK>>
+    * descripcion : text
+    * prioridad : varchar
+    * estado : varchar
+    * fecha_apertura : timestamp
+    fecha_cierre : timestamp
+  }
+  entity ActividadIncidencia {
+    * id_actividad : bigint <<PK>>
+    --
+    * id_incidencia : bigint <<FK>>
+    * id_autor : bigint <<FK>>
+    * tipo : varchar
+    contenido : text
+    ruta_adjunto : varchar
+    formato_adjunto : varchar
+    tamano_bytes : bigint
+    * privada : boolean
+    id_usuario_autorizado : bigint <<FK>>
+    * fecha : timestamp
+  }
+  entity PausaRecordatorios {
+    * id_pausa : bigint <<PK>>
+    --
+    * id_factura : bigint <<FK>>
+    id_incidencia : bigint <<FK>>
+    * id_usuario : bigint <<FK>>
+    * motivo : text
+    * fecha_inicio : timestamp
+    * fecha_revision : date
+    fecha_reanudacion : timestamp
+  }
+  entity Tarea {
+    * id_tarea : bigint <<PK>>
+    --
+    * id_responsable : bigint <<FK>>
+    id_cliente : bigint <<FK>>
+    id_factura : bigint <<FK>>
+    * tipo : varchar
+    * descripcion : text
+    * prioridad : varchar
+    * estado : varchar
+    * fecha_creacion : timestamp
+  }
+  entity Notificacion {
+    * id_notificacion : bigint <<PK>>
+    --
+    * id_destinatario : bigint <<FK>>
+    id_cliente : bigint <<FK>>
+    id_tarea : bigint <<FK>>
+    * tipo : varchar
+    * mensaje : text
+    * prioridad : varchar
+    * estado : varchar
+    * fecha : timestamp
+  }
+}
+
+entity Auditoria {
+  * id_auditoria : bigint <<PK>>
+  --
+  id_usuario : bigint <<FK>>
+  id_cliente : bigint <<FK>>
+  * origen : varchar
+  * recurso : varchar
+  * id_recurso : bigint
+  * accion : varchar
+  * fecha : timestamp
+  valor_anterior : json
+  valor_nuevo : json
+}
+
+Usuario ||--o{ Cliente : responsable titular
+Cliente ||--o{ Delegacion
+Usuario ||--o{ Delegacion : delegado
+Usuario ||-[norank]-o{ Delegacion : autoriza
+Cliente ||--o{ Contacto
+Cliente ||--o{ Suscripcion
+Tarifa ||--o{ Suscripcion
+Suscripcion ||--o{ PropuestaComercial
+Tarifa |o--o{ PropuestaComercial : propuesta
+Cliente ||-[norank]-o{ Factura
+Suscripcion |o--o{ Factura
+SerieFactura |o--o{ Factura
+PeriodoFacturacion |o--o{ Factura
+Usuario |o-[norank]-o{ PeriodoFacturacion : cierra
+Factura |o--o{ Factura : original / rectificativa
+Usuario |o-[norank]-o{ Factura : crea
+Factura ||--o{ LineaFactura
+Factura |o--o{ Aprobacion
+PropuestaComercial |o--o{ Aprobacion
+Usuario |o-[norank]-o{ Aprobacion : solicita
+Usuario |o-[norank]-o{ Aprobacion : asignado
+Usuario |o-[norank]-o{ Aprobacion : resuelve
+Factura ||--o| DocumentoFactura
+Factura ||--o{ EnvioFactura
+Contacto |o--o{ EnvioFactura
+Cobro ||--o{ Conciliacion
+Factura ||-[norank]-o{ Conciliacion
+Usuario |o-[norank]-o{ Conciliacion : valida
+Factura ||-[norank]-o{ Recordatorio
+Cliente ||-[norank]-o{ Incidencia
+Factura |o-[norank]-o{ Incidencia
+Usuario ||-[norank]-o{ Incidencia
+Incidencia ||--o{ ActividadIncidencia
+Usuario ||-[norank]-o{ ActividadIncidencia : autor
+Usuario |o-[norank]-o{ ActividadIncidencia : autorizado
+Factura ||-[norank]-o{ PausaRecordatorios
+Incidencia |o--o{ PausaRecordatorios
+Usuario ||-[norank]-o{ PausaRecordatorios
+Usuario ||-[norank]-o{ Notificacion
+Cliente |o-[norank]-o{ Notificacion
+Usuario ||-[norank]-o{ Tarea : responsable
+Cliente |o-[norank]-o{ Tarea
+Factura |o-[norank]-o{ Tarea
+Tarea |o--o{ Notificacion
+Usuario |o-[norank]-o{ Auditoria
+Cliente |o-[norank]-o{ Auditoria
+
+' note right of Factura
+'   UQ(serie, numero) al emitir.
+'   Una recurrente por suscripcion y periodo.
+'   Lineas, datos fiscales y PDF inmutables al emitir.
+'   La factura rectificativa apunta a la original.
+'   Una factura emitida tiene serie, numero
+'   y periodo abierto en el momento de la emision.
+' end note
+' note right of Aprobacion
+'   Exactamente una factura o propuesta comercial.
+'   El creador no puede aprobar.
+' end note
+' note bottom of Cobro
+'   UQ(origen, referencia_externa).
+'   Puede estar pendiente de conciliacion.
+' end note
+' note bottom of Conciliacion
+'   Una conciliacion vigente por cobro como maximo.
+'   Varios cobros pueden cubrir una factura.
+'   La reversion conserva el historial.
+' end note
+' note bottom of Delegacion
+'   Solo una delegacion vigente por cliente.
+'   Al finalizar vuelve al responsable titular.
+' end note
+' note bottom of Auditoria
+'   Registra cambios de factura, suscripcion y permisos.
+'   No se modifica ni elimina.
+' end note
+@enduml
