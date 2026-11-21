@@ -1,0 +1,30 @@
+@startuml
+title CU-34 · Buscar clientes y facturas
+skinparam sequenceMessageAlign left
+actor "Usuario estándar" as U
+participant "Gestor de facturas\n(Turbine)" as G
+database "Base de datos" as DB
+
+U -> G : buscar(texto, filtros)
+activate G
+G -> G : validarCriterios(texto, filtros)
+G -> DB : consultarClientes(texto, filtros)
+DB --> G : clientes
+G -> DB : consultarFacturas(texto, filtros)
+DB --> G : facturas
+G -> G : combinarResultados(clientes, facturas)
+G --> U : resultados (clientes y facturas)
+deactivate G
+
+U -> G : seleccionarResultados(ids)
+activate G
+G --> U : selección registrada (paso 3)
+
+opt se seleccionan varios resultados (punto de extensión: acción masiva, paso 3)
+  U -> G : CU-35 ejecutarAccionMasiva(accion, ids)
+  G -> DB : aplicarAccionMasiva(accion, ids)
+  DB --> G : resultado por elemento
+  G --> U : resumen de la acción masiva
+end
+deactivate G
+@enduml

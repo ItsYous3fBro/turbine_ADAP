@@ -1,0 +1,33 @@
+@startuml
+title CU-37 · Consultar dashboard financiero
+skinparam sequenceMessageAlign left
+actor "Administrador" as A
+participant "Gestor de facturas\n(Turbine)" as G
+database "Base de datos" as DB
+
+A -> G : consultarDashboard(periodo)
+activate G
+G -> G : verificarRol(usuario)
+
+alt el rol es Administrador o Superadministrador
+  G -> DB : obtenerResumenFinanciero(periodo)
+  DB --> G : facturado, cobrado, pendiente, vencido
+  G -> DB : obtenerObjetivos(periodo)
+  DB --> G : objetivos financieros (CU-38)
+  G -> G : calcularIndicadores(resumen, objetivos)
+  G --> A : dashboard (indicadores y cumplimiento de objetivos)
+
+  opt el administrador cambia el periodo
+    A -> G : cambiarPeriodo(nuevoPeriodo)
+    G -> DB : obtenerResumenFinanciero(nuevoPeriodo)
+    DB --> G : resumen del periodo
+    G -> DB : obtenerObjetivos(nuevoPeriodo)
+    DB --> G : objetivos
+    G -> G : calcularIndicadores(resumen, objetivos)
+    G --> A : dashboard actualizado
+  end
+else el rol no está autorizado
+  G --> A : acceso denegado
+end
+deactivate G
+@enduml

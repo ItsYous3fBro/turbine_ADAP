@@ -1,0 +1,39 @@
+@startuml
+title CU-32 · Gestionar incidencia
+skinparam sequenceMessageAlign left
+actor "Usuario estándar" as U
+participant "Gestor de facturas\n(Turbine)" as G
+database "Base de datos" as DB
+
+U -> G : consultarIncidencias(filtros)
+activate G
+G -> DB : obtenerIncidencias(filtros)
+DB --> G : lista de incidencias
+G --> U : listado de incidencias
+
+alt el usuario registra una incidencia nueva
+  U -> G : registrarIncidencia(idFactura, tipo, descripcion)
+  G -> DB : obtenerFactura(idFactura)
+  DB --> G : factura
+  G -> G : validarIncidencia(datos)
+  G -> DB : guardarIncidencia(idFactura, tipo, descripcion, ABIERTA)
+  DB --> G : idIncidencia
+else el usuario actualiza una incidencia existente
+  U -> G : actualizarIncidencia(idIncidencia, estado, notas)
+  G -> DB : obtenerIncidencia(idIncidencia)
+  DB --> G : incidencia
+  G -> G : validarCambio(incidencia, estado)
+  G -> DB : actualizarIncidencia(idIncidencia, estado, notas)
+  DB --> G : ok
+end
+
+opt la incidencia afecta al cobro de una factura (punto de extensión: pausa, paso 1)
+  G -> DB : CU-33 pausarRecordatorios(idFactura, idIncidencia)
+  DB --> G : ok
+end
+
+G -> DB : registrarHistorial(idIncidencia, accion, usuario)
+DB --> G : ok
+G --> U : incidencia gestionada
+deactivate G
+@enduml
