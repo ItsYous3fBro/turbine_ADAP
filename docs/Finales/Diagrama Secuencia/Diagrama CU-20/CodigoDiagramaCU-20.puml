@@ -1,0 +1,39 @@
+@startuml CU20_Enviar_factura
+title CU-20 · Enviar factura
+
+participant "Servicio de\nEmisión" as Invocador
+participant "Gestor de facturas\n(Turbine)" as Sistema
+database "Base de datos" as BD
+actor "Proveedor de correo" as Proveedor
+actor "Cliente" as Cliente
+
+Invocador -> Sistema : enviarFactura(idFactura)
+activate Sistema
+
+Sistema -> BD : obtenerFactura(idFactura)
+BD --> Sistema : factura + email del cliente
+
+Sistema -> Sistema : generarPDF(factura)
+Sistema -> Sistema : componerMensaje(factura, pdf)
+
+Sistema -> Proveedor : enviarCorreo(destinatario, asunto, adjunto)
+activate Proveedor
+Proveedor --> Sistema : aceptado (idMensaje)
+
+Sistema -> BD : registrarEnvio(idFactura, idMensaje, ENVIADA)
+BD --> Sistema : ok
+
+Proveedor -> Cliente : entrega correo con factura
+deactivate Proveedor
+
+Sistema --> Invocador : envío realizado
+deactivate Sistema
+
+opt el proveedor notifica un rebote
+    Proveedor -> Sistema : notificarRebote(idMensaje, motivo)
+    activate Sistema
+    Sistema -> BD : CU-26 registrarRebote(idFactura, motivo)
+    BD --> Sistema : ok
+    deactivate Sistema
+end
+@enduml
