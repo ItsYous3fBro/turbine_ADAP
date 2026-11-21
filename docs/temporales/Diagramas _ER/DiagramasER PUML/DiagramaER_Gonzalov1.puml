@@ -1,0 +1,84 @@
+@startuml
+hide circle
+skinparam linetype ortho
+skinparam nodesep 50
+skinparam ranksep 60
+
+skinparam class {
+  BackgroundColor White
+  BorderColor #4A709C
+  HeaderBackgroundColor #D4E3F7
+}
+
+entity "usuario" {
+  * id : INT <<PK>>
+  --
+  * nombre : VARCHAR(100)
+  * email : VARCHAR(150) <<UNIQUE>>
+  * hash_contrasena : VARCHAR(255)
+  * rol : VARCHAR(50)
+  * estado : VARCHAR(50)
+}
+
+entity "cliente" {
+  * id : INT <<PK>>
+  --
+  * usuario_id : INT <<FK>>
+  * razon_social : VARCHAR(200)
+  * nif : VARCHAR(50) <<UNIQUE>>
+  * estado : VARCHAR(50)
+}
+
+entity "nivel_tarifa" {
+  * id : INT <<PK>>
+  --
+  * nombre : VARCHAR(100)
+  * cuota_mensual : DECIMAL(10,2)
+}
+
+entity "suscripcion" {
+  * id : INT <<PK>>
+  --
+  * cliente_id : INT <<FK>>
+  * nivel_tarifa_id : INT <<FK>>
+  * fecha_inicio : DATE
+  * estado : VARCHAR(50)
+}
+
+entity "factura" {
+  * id : INT <<PK>>
+  --
+  * cliente_id : INT <<FK>>
+  suscripcion_id : INT <<FK>>
+  * numero : VARCHAR(50) <<UNIQUE>>
+  * fecha_emision : DATE
+  * total : DECIMAL(12,2)
+  * estado : VARCHAR(50)
+}
+
+entity "linea_factura" {
+  * id : INT <<PK>>
+  --
+  * factura_id : INT <<FK>>
+  * descripcion : VARCHAR(255)
+  * cantidad : DECIMAL(10,2)
+  * precio_unitario : DECIMAL(12,2)
+}
+
+entity "cobro" {
+  * id : INT <<PK>>
+  --
+  * factura_id : INT <<FK>>
+  * importe : DECIMAL(12,2)
+  * fecha_pago : DATE
+}
+
+' Relaciones
+usuario ||--o{ cliente
+cliente ||--o{ suscripcion
+nivel_tarifa ||--o{ suscripcion
+cliente ||--o{ factura
+suscripcion ||--o{ factura
+factura ||--|{ linea_factura
+factura ||--o| cobro
+@enduml
