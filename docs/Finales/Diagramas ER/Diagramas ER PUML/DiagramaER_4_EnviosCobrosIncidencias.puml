@@ -1,0 +1,174 @@
+@startuml DiagramaER_4_EnviosCobrosIncidencias
+title Diagrama físico Entidad-Relación · 4. Envíos, cobros e incidencias\nGestor de facturas Turbine · versión final (fusión) · 8 tablas
+hide circle
+skinparam linetype ortho
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam nodesep 40
+skinparam ranksep 60
+skinparam class {
+  BackgroundColor #F5F8FF
+  BorderColor #3B6FD8
+}
+legend right
+  * = NOT NULL · <<PK>> clave primaria · <<FK>> clave foránea · <<UK>> único
+  ||  exactamente uno · |o  cero o uno · |{  uno o más · o{  cero o más
+  Columnas de tipo enumerado (rol, estado, tipo…): VARCHAR + CHECK con los valores del diagrama de clases
+  Importes NUMERIC(12,2) · fechas con hora TIMESTAMPTZ (UTC) · claves BIGINT autonuméricas
+  Sección «restricciones»: CHECK, únicos compuestos e índices (IDX) de cada tabla
+  Claves foráneas: ON DELETE RESTRICT salvo las marcadas CASCADE (composiciones y herencia)
+  Tablas en gris: definidas en otro diagrama (solo nombre)
+endlegend
+
+
+package "Envíos y cobros" {
+  entity "envio" as envio {
+    *id : BIGINT <<PK>>
+    --
+    factura_id : BIGINT <<FK>>
+    plantilla_id : BIGINT <<FK>>
+    contacto_id : BIGINT <<FK>>
+    *fecha : TIMESTAMPTZ
+    *tipo : VARCHAR(20)
+    *canal : VARCHAR(20)
+    *destinatarios : TEXT
+    *contenido_enviado : TEXT
+    id_proveedor : VARCHAR(100)
+    *reintentos : INTEGER
+    resultado : VARCHAR(50)
+    .. restricciones ..
+    CHECK tipo = 'INFORME' OR factura_id IS NOT NULL
+    CHECK reintentos >= 0
+  }
+  entity "plantilla_mensaje" as plantilla {
+    *id : BIGINT <<PK>>
+    --
+    *tipo : VARCHAR(30)
+    *idioma : CHAR(2)
+    *asunto : VARCHAR(150)
+    *cuerpo : TEXT
+    *activa : BOOLEAN
+    .. restricciones ..
+    UNIQUE (tipo, idioma) WHERE activa
+  }
+  entity "cobro" as cobro {
+    *id : BIGINT <<PK>>
+    --
+    *importe : NUMERIC(12,2)
+    *moneda : CHAR(3)
+    *fecha : DATE
+    *origen : VARCHAR(20)
+    *referencia : VARCHAR(100)
+    *estado : VARCHAR(20)
+    motivo_discrepancia : VARCHAR(255)
+    .. restricciones ..
+    UNIQUE (origen, referencia)
+    CHECK importe > 0
+  }
+  entity "conciliacion" as conciliacion {
+    *id : BIGINT <<PK>>
+    --
+    *cobro_id : BIGINT <<FK>>
+    *factura_id : BIGINT <<FK>>
+    validada_por_id : BIGINT <<FK>>
+    revertida_por_id : BIGINT <<FK>>
+    *importe_aplicado : NUMERIC(12,2)
+    *fecha : TIMESTAMPTZ
+    *estado : VARCHAR(20)
+    fecha_reversion : TIMESTAMPTZ
+    motivo_reversion : VARCHAR(255)
+    .. restricciones ..
+    CHECK importe_aplicado > 0
+    CHECK estado <> 'REVERTIDA' OR (fecha_reversion
+      y revertida_por_id NOT NULL)
+    TRIGGER: Σ importe_aplicado VIGENTE <= cobro.importe
+      y <= factura.total (PAGADA cuando Σ = total)
+    IDX (factura_id) · IDX (cobro_id)
+  }
+  entity "pausa_recordatorios" as pausa {
+    *id : BIGINT <<PK>>
+    --
+    *factura_id : BIGINT <<FK>> CASCADE
+    incidencia_id : BIGINT <<FK>>
+    *creada_por_id : BIGINT <<FK>>
+    *motivo : VARCHAR(255)
+    *inicio : TIMESTAMPTZ
+    *fecha_revision : DATE
+    fecha_reanudacion : TIMESTAMPTZ
+    *activa : BOOLEAN
+    .. restricciones ..
+    UNIQUE (factura_id) WHERE activa
+    CHECK activa = (fecha_reanudacion IS NULL)
+  }
+}
+
+package "Seguimiento y control" {
+  entity "incidencia" as incidencia {
+    *id : BIGINT <<PK>>
+    --
+    *cliente_id : BIGINT <<FK>>
+    factura_id : BIGINT <<FK>>
+    *responsable_id : BIGINT <<FK>>
+    *descripcion : TEXT
+    *prioridad : VARCHAR(10)
+    *estado : VARCHAR(10)
+    *fecha_apertura : TIMESTAMPTZ
+    fecha_cierre : TIMESTAMPTZ
+    .. restricciones ..
+    CHECK fecha_cierre >= fecha_apertura
+  }
+  entity "comentario" as comentario {
+    *id : BIGINT <<PK>>
+    --
+    *incidencia_id : BIGINT <<FK>> CASCADE
+    *autor_id : BIGINT <<FK>>
+    autorizado_id : BIGINT <<FK>>
+    *texto : TEXT
+    *fecha : TIMESTAMPTZ
+    *privado : BOOLEAN
+    .. restricciones ..
+    CHECK privado OR autorizado_id IS NULL
+  }
+  entity "adjunto" as adjunto {
+    *id : BIGINT <<PK>>
+    --
+    *incidencia_id : BIGINT <<FK>> CASCADE
+    *nombre : VARCHAR(255)
+    *formato : VARCHAR(10)
+    *tamano : BIGINT
+    *ruta : VARCHAR(255)
+    .. restricciones ..
+    CHECK tamano > 0
+  }
+}
+
+entity "cliente" as cliente #EEEEEE ##999999 {
+}
+entity "contacto" as contacto #EEEEEE ##999999 {
+}
+entity "factura" as factura #EEEEEE ##999999 {
+}
+entity "notificacion" as notificacion #EEEEEE ##999999 {
+}
+entity "usuario" as usuario #EEEEEE ##999999 {
+}
+
+incidencia |o--o{ notificacion : "sobre"
+usuario ||--o{ pausa : "pausa"
+factura |o--o{ envio : "se envía en"
+plantilla |o--o{ envio : "usada en"
+cobro ||--o{ conciliacion : "se aplica en"
+factura ||--o{ conciliacion : "saldada por"
+usuario |o--o{ conciliacion : "valida"
+usuario |o--o{ conciliacion : "revierte"
+contacto |o--o{ envio : "destinatario"
+factura ||--o{ pausa : "pausada por"
+incidencia |o--o{ pausa : "motiva"
+cliente ||--o{ incidencia : "sobre"
+factura |o--o{ incidencia : "afecta a"
+usuario ||--o{ incidencia : "responsable"
+incidencia ||--o{ comentario : "tiene"
+usuario ||--o{ comentario : "escribe"
+usuario |o--o{ comentario : "autoriza a leer"
+incidencia ||--o{ adjunto : "tiene"
+@enduml

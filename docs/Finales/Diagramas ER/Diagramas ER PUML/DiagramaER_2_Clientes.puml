@@ -1,0 +1,175 @@
+@startuml DiagramaER_2_Clientes
+title Diagrama físico Entidad-Relación · 2. Clientes y suscripciones\nGestor de facturas Turbine · versión final (fusión) · 9 tablas
+hide circle
+skinparam linetype ortho
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam nodesep 40
+skinparam ranksep 60
+skinparam class {
+  BackgroundColor #F5F8FF
+  BorderColor #3B6FD8
+}
+legend right
+  * = NOT NULL · <<PK>> clave primaria · <<FK>> clave foránea · <<UK>> único
+  ||  exactamente uno · |o  cero o uno · |{  uno o más · o{  cero o más
+  Columnas de tipo enumerado (rol, estado, tipo…): VARCHAR + CHECK con los valores del diagrama de clases
+  Importes NUMERIC(12,2) · fechas con hora TIMESTAMPTZ (UTC) · claves BIGINT autonuméricas
+  Sección «restricciones»: CHECK, únicos compuestos e índices (IDX) de cada tabla
+  Claves foráneas: ON DELETE RESTRICT salvo las marcadas CASCADE (composiciones y herencia)
+  Tablas en gris: definidas en otro diagrama (solo nombre)
+endlegend
+
+
+package "Clientes y suscripciones" {
+  entity "cliente" as cliente {
+    *id : BIGINT <<PK>>
+    --
+    *responsable_id : BIGINT <<FK>>
+    *nombre_comercial : VARCHAR(150)
+    razon_social : VARCHAR(150)
+    identificador_fiscal : VARCHAR(20) <<UK>>
+    domicilio : VARCHAR(255)
+    pais : CHAR(2)
+    *moneda : CHAR(3)
+    representante_legal : VARCHAR(150)
+    facturacion_anual : NUMERIC(12,2)
+    *fecha_alta : DATE
+    *estado : VARCHAR(20)
+    .. restricciones ..
+    IDX (nombre_comercial)
+  }
+  entity "contacto" as contacto {
+    *id : BIGINT <<PK>>
+    --
+    *cliente_id : BIGINT <<FK>> CASCADE
+    *nombre : VARCHAR(100)
+    *email : VARCHAR(150)
+    telefono : VARCHAR(20)
+    *funcion : VARCHAR(20)
+    *idioma : CHAR(2)
+    *activo : BOOLEAN
+  }
+  entity "delegacion" as delegacion {
+    *id : BIGINT <<PK>>
+    --
+    *usuario_id : BIGINT <<FK>>
+    *cliente_id : BIGINT <<FK>>
+    *autorizada_por_id : BIGINT <<FK>>
+    *fecha_inicio : DATE
+    *fecha_fin : DATE
+    *estado : VARCHAR(20)
+    .. restricciones ..
+    CHECK fecha_fin >= fecha_inicio
+    UNIQUE (cliente_id) WHERE estado = 'VIGENTE'
+  }
+  entity "nivel_tarifa" as nivel_tarifa {
+    *id : BIGINT <<PK>>
+    --
+    *nombre : VARCHAR(50)
+    *facturacion_minima : NUMERIC(12,2)
+    facturacion_maxima : NUMERIC(12,2)
+    *cuota_mensual : NUMERIC(12,2)
+    *vigente_desde : DATE
+    vigente_hasta : DATE
+    .. restricciones ..
+    CHECK facturacion_maxima > facturacion_minima
+    CHECK cuota_mensual >= 0
+  }
+  entity "suscripcion" as suscripcion {
+    *id : BIGINT <<PK>>
+    --
+    *cliente_id : BIGINT <<FK>>
+    *nivel_tarifa_id : BIGINT <<FK>>
+    *fecha_inicio : DATE
+    fecha_fin : DATE
+    *estado : VARCHAR(20)
+    motivo_pausa : VARCHAR(255)
+    fecha_reactivacion : DATE
+    .. restricciones ..
+    UNIQUE (cliente_id) WHERE estado <> 'CANCELADA'
+  }
+  entity "excepcion_comercial" as excepcion {
+    *id : BIGINT <<PK>>
+    --
+    *suscripcion_id : BIGINT <<FK>>
+    *tipo : VARCHAR(30)
+    *valor : NUMERIC(12,2)
+    *vigente_desde : DATE
+    vigente_hasta : DATE
+    *motivo : VARCHAR(255)
+    .. restricciones ..
+    CHECK vigente_hasta >= vigente_desde
+  }
+  entity "propuesta_cambio_nivel" as propuesta {
+    *id : BIGINT <<PK>>
+    --
+    *suscripcion_id : BIGINT <<FK>>
+    *nivel_propuesto_id : BIGINT <<FK>>
+    *fecha : DATE
+    *facturacion_anual : NUMERIC(12,2)
+  }
+  entity "solicitud_baja" as baja {
+    *id : BIGINT <<PK>>
+    --
+    *cliente_id : BIGINT <<FK>>
+    revisada_por_id : BIGINT <<FK>>
+    credencial_api_id : BIGINT <<FK>>
+    *origen : VARCHAR(10)
+    *fecha_solicitud : TIMESTAMPTZ
+    *motivo : VARCHAR(255)
+    *estado : VARCHAR(20)
+    .. restricciones ..
+    CHECK origen <> 'API' OR credencial_api_id IS NOT NULL
+    UNIQUE (cliente_id) WHERE estado = 'PENDIENTE'
+  }
+  entity "importacion" as importacion {
+    *id : BIGINT <<PK>>
+    --
+    *usuario_id : BIGINT <<FK>>
+    *tipo : VARCHAR(20)
+    *fecha : TIMESTAMPTZ
+    *filas_validas : INTEGER
+    *filas_erroneas : INTEGER
+    informe_errores : TEXT
+  }
+}
+
+entity "credencial_api" as credencial #EEEEEE ##999999 {
+}
+entity "envio" as envio #EEEEEE ##999999 {
+}
+entity "factura" as factura #EEEEEE ##999999 {
+}
+entity "incidencia" as incidencia #EEEEEE ##999999 {
+}
+entity "notificacion" as notificacion #EEEEEE ##999999 {
+}
+entity "solicitud_aprobacion" as solicitud #EEEEEE ##999999 {
+}
+entity "usuario" as usuario #EEEEEE ##999999 {
+}
+
+cliente |o--o{ notificacion : "sobre"
+baja |o--o{ notificacion : "tarea de"
+usuario ||--o{ cliente : "responsable de"
+cliente ||--|{ contacto : "tiene"
+usuario ||--o{ delegacion : "delegado"
+cliente ||--o{ delegacion : "sobre"
+cliente ||--o{ suscripcion : "tiene"
+nivel_tarifa ||--o{ suscripcion : "aplica"
+suscripcion ||--o{ excepcion : "ajustada por"
+suscripcion ||--o{ propuesta : "revisada por"
+nivel_tarifa ||--o{ propuesta : "propuesto"
+cliente ||--o{ baja : "sobre"
+usuario |o--o{ baja : "revisa"
+credencial |o--o{ baja : "recibida de"
+usuario ||--o{ importacion : "realiza"
+cliente ||--o{ factura : "recibe"
+suscripcion |o--o{ factura : "genera"
+excepcion |o--o{ solicitud : "retenida en"
+propuesta |o--o{ solicitud : "retenida en"
+usuario ||--o{ delegacion : "autoriza"
+contacto |o--o{ envio : "destinatario"
+cliente ||--o{ incidencia : "sobre"
+@enduml

@@ -2,19 +2,19 @@
 
 **Proyecto:** Gestor de facturas Turbine · **Grupo:** Ramón Llull · 3.º B
 **Entrega 2:** Diagrama UML de clases
-**Base:** Documento de requisitos v3 y Casos de uso v7 (CU-01 a CU-42). Evolución: v1 (modelo base), v2 (modelo completo), v3 (revisión cruzada con los casos de uso) versión final (presentación en vistas) y **fusión** con las mejores aportaciones del diagrama de Miguel.
+**Base:** Documento de requisitos v3 y Casos de uso v7 (CU-01 a CU-42). Evolución: v1 (modelo base), v2 (modelo completo), v3 (revisión cruzada con los casos de uso) versión final (presentación en vistas) y **fusión** con las mejores aportaciones de los diagramas de los compañeros.
 
 ## 1. Cómo se presenta el modelo
 
-El sistema tiene un único **modelo de clases** (39 clases, 1 interfaz y 13 enumerados). Para que se lea bien, se presenta en **varios diagramas**, cada uno una vista del mismo modelo. Es la práctica habitual en UML y la misma decisión que tomamos con los casos de uso (6 diagramas en lugar de uno ilegible).
+El sistema tiene un único **modelo de clases** (40 clases, 1 interfaz y 16 enumerados). Para que se lea bien, se presenta en **varios diagramas**, cada uno una vista del mismo modelo. Es la práctica habitual en UML y la misma decisión que tomamos con los casos de uso (6 diagramas en lugar de uno ilegible).
 
 | Diagrama | Archivo | Qué muestra |
 |---|---|---|
-| 0 · Vista general | `DiagramaClases_0_VistaGeneral` | Las 39 clases y la interfaz, solo con el nombre, agrupadas en 6 paquetes con todas sus relaciones. Es el mapa del sistema. |
+| 0 · Vista general | `DiagramaClases_0_VistaGeneral` | Las 40 clases y la interfaz, solo con el nombre, agrupadas en 6 paquetes con todas sus relaciones. Es el mapa del sistema. |
 | 1 · Usuarios, acceso y control | `DiagramaClases_1_UsuariosControl` | Detalle de 16 clases: usuarios, sesiones, tokens, credenciales API, notificaciones, auditoría, procesos, copias de seguridad, configuración e informes. |
 | 2 · Clientes y suscripciones | `DiagramaClases_2_Clientes` | Detalle de 9 clases: cliente, contactos, delegaciones, suscripción, tarifas, excepciones, propuestas de cambio de nivel, solicitudes de baja e importación. |
-| 3 · Facturación y cobros | `DiagramaClases_3_Facturacion` | Detalle de 15 clases: factura, rectificativa, líneas, conceptos, series, documento PDF, periodos, aprobaciones, envíos, cobros, pausas de recordatorios, incidencias, comentarios y adjuntos. |
-| 4 · Enumerados | `DiagramaClases_4_Enumerados` | Los 13 enumerados con sus valores permitidos. |
+| 3 · Facturación y cobros | `DiagramaClases_3_Facturacion` | Detalle de 16 clases: factura, rectificativa, líneas, conceptos, series, documento PDF, periodos, aprobaciones, envíos, cobros, conciliaciones, pausas de recordatorios, incidencias, comentarios y adjuntos. |
+| 4 · Enumerados | `DiagramaClases_4_Enumerados` | Los 16 enumerados con sus valores permitidos. |
 | Anexo · Modelo completo | `DiagramaClases_Anexo_Completo` | Todo en un solo diagrama, por si el profesorado lo pide. |
 
 **Reglas de las vistas**
@@ -62,6 +62,22 @@ Se parte de nuestro diagrama final y se incorporan las aportaciones del diagrama
 - **ElementoTrabajo**: equivale a nuestra Notificacion (regla R2), que se mantiene.
 - **Rol «titular» en Delegacion**: se deduce del responsable del cliente.
 
+### 2.4 Cambios para cuadrar con el diagrama Entidad-Relación
+
+Al fusionar el diagrama Entidad-Relación con el de Miguel se incorporaron estas mejoras, y se trasladan aquí para que los dos modelos coincidan:
+
+| Cambio | Clases | Casos de uso |
+|---|---|---|
+| **Clase nueva Conciliacion** (importe aplicado, estado vigente o revertida, reversión con fecha, motivo y usuario). Sustituye la asociación directa Factura — Cobro: un cobro puede repartirse entre varias facturas y una factura pagarse con varios cobros. Responde a la observación del profesor sobre el pago parcial. | Cobro, Conciliacion, Factura, Usuario | CU-28, CU-29, CU-30 |
+| **Contexto de las notificaciones:** asociaciones 0..1 con Cliente, Factura, Incidencia y SolicitudBaja | Notificacion | CU-14, CU-31 |
+| **Quién hizo cada cosa:** Factura creada por, PeriodoFacturacion cerrado por (y `cerradoEn`), Delegacion autorizada por, SolicitudAprobacion asignada a (y `motivoDecision`), PausaRecordatorios creada por | Varias → Usuario | CU-06, CU-15, CU-18, CU-19, CU-24, CU-33 |
+| **Fechas y estados de seguimiento:** Incidencia `fechaApertura` y `fechaCierre` · PausaRecordatorios `fechaReanudacion` · Delegacion `estado` · PeriodoFacturacion `estado` (ABIERTO, INCOMPLETO, CERRADO) | Incidencia, PausaRecordatorios, Delegacion, PeriodoFacturacion | CU-06, CU-16, CU-24, CU-32, CU-33 |
+| **Datos de la factura emitida:** `datosFiscalesEmitidos` | Factura | CU-17, CU-22 |
+| **Contacto del envío:** Envio 0..* — 0..1 Contacto | Envio | CU-20, CU-21 |
+| **Nota privada autorizada:** Comentario 0..* — 0..1 Usuario «autorizado» | Comentario | CU-32 |
+| **Id de la entidad auditada:** RegistroAuditoria `entidadId` | RegistroAuditoria | CU-41 |
+| **Enumerados nuevos:** EstadoConciliacion, EstadoDelegacion y EstadoPeriodo | — | — |
+
 ## 3. Elementos que pide la guía
 
 | Elemento | Dónde verlo |
@@ -84,7 +100,7 @@ Se parte de nuestro diagrama final y se incorporan las aportaciones del diagrama
 6. **Las composiciones marcan dependencia de vida:** las líneas no existen sin su factura, ni los contactos sin su cliente, ni los comentarios sin su incidencia. El periodo de facturación **agrega** facturas, porque estas no desaparecen al cerrarlo.
 7. **Histórico de suscripciones (Cliente 1 — 0..* Suscripcion)** con la regla de que como máximo una no está cancelada (CU-09).
 8. **Los destinatarios se guardan como texto en Envio**, para conservar el historial (FR6) aunque se anonimice un contacto (NFR6).
-9. **Un cobro paga como máximo una factura.** El pago parcial ya está contemplado (CU-29).
+9. **Los cobros se aplican a las facturas mediante Conciliacion.** Un cobro puede repartirse entre varias facturas y una factura pagarse con varios cobros. Lo aplicado no supera el importe del cobro ni el pendiente de la factura, y una conciliación revertida se conserva en el histórico (CU-29 y CU-30).
 10. **Importes en `Decimal` y fechas con hora en `DateTime` UTC** (NFR9 y NFR10).
 11. **Notificaciones, auditoría y ejecuciones de procesos son clases**, coherentes con las reglas R2 y R3 del documento de casos de uso.
 12. **La configuración es una clase tipada y versionada** (`vigenteDesde`): cada cambio crea una configuración nueva y la anterior se conserva.
@@ -126,6 +142,7 @@ Se parte de nuestro diagrama final y se incorporan las aportaciones del diagrama
 | SolicitudAprobacion | Retención de una operación, con quién la crea y quién la resuelve |
 | Envio | Envío de una factura, un recordatorio o un informe, y su resultado |
 | Cobro | Pago recibido por pasarela, transferencia o Revolut |
+| Conciliacion | Aplicación de una parte o de todo un cobro a una factura; se puede revertir |
 | PausaRecordatorios | Pausa de los recordatorios de una factura, con motivo y fecha de revisión |
 | Notificacion | Aviso o tarea del trabajo diario de un empleado |
 | Incidencia | Problema de facturación de un cliente, con prioridad y estado |
@@ -135,7 +152,7 @@ Se parte de nuestro diagrama final y se incorporan las aportaciones del diagrama
 | RegistroAuditoria | Quién cambió qué, cuándo, y el valor anterior y nuevo |
 | EjecucionProceso | Ejecución de un proceso automático y si quedó completa |
 | CopiaSeguridad | Copia de seguridad y su estado de verificación |
-| Configuracion | Parámetros de negocio tipados (plazos, umbrales, monedas…) vigentes desde una fecha |
+| Configuracion | Parámetros de negocio tipados (plazos, umbrales, impuestos…) vigentes desde una fecha. Las monedas las gestiona Stripe |
 | PlantillaMensaje | Texto de un mensaje por tipo e idioma |
 | ObjetivoFinanciero | Objetivo de ingresos vigente desde una fecha |
 | Exportacion | Informe o exportación generada, con su caducidad |
@@ -172,10 +189,10 @@ Se parte de nuestro diagrama final y se incorporan las aportaciones del diagrama
 | CU-25 Consultar facturas y estado de cobro | Factura, DocumentoFactura, Envio, Cobro |
 | CU-26 Registrar rebote de envío | Envio, Factura, Notificacion |
 | CU-27 Enviar recordatorios de cobro | Factura, PausaRecordatorios, Envio, PlantillaMensaje |
-| CU-28 Registrar cobro de la pasarela | Cobro |
-| CU-29 Conciliar cobros | Cobro, Factura |
-| CU-30 Vincular cobro con factura | Cobro, Factura, Notificacion |
-| CU-31 Gestionar trabajo diario | Notificacion |
+| CU-28 Registrar cobro de la pasarela | Cobro, Conciliacion |
+| CU-29 Conciliar cobros | Cobro, Conciliacion, Factura |
+| CU-30 Vincular cobro con factura | Cobro, Conciliacion, Factura, Notificacion |
+| CU-31 Gestionar trabajo diario | Notificacion, Cliente, Factura, Incidencia |
 | CU-32 Gestionar incidencia | Incidencia, Comentario, Adjunto |
 | CU-33 Pausar recordatorios | PausaRecordatorios, Factura, Incidencia |
 | CU-34 Buscar clientes y facturas | VistaGuardada, Cliente, Factura |
@@ -189,3 +206,4 @@ Se parte de nuestro diagrama final y se incorporan las aportaciones del diagrama
 | CU-42 Configurar el sistema | Configuracion, SerieFacturacion, PlantillaMensaje, NivelTarifa, Concepto |
 
 Los 42 casos de uso tienen al menos una clase, y todas las clases se usan en al menos un caso de uso.
+

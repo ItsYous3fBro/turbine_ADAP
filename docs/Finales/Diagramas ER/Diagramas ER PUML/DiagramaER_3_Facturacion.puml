@@ -1,0 +1,184 @@
+@startuml DiagramaER_3_Facturacion
+title Diagrama físico Entidad-Relación · 3. Facturación y aprobaciones\nGestor de facturas Turbine · versión final (fusión) · 8 tablas
+hide circle
+skinparam linetype ortho
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam nodesep 40
+skinparam ranksep 60
+skinparam class {
+  BackgroundColor #F5F8FF
+  BorderColor #3B6FD8
+}
+legend right
+  * = NOT NULL · <<PK>> clave primaria · <<FK>> clave foránea · <<UK>> único
+  ||  exactamente uno · |o  cero o uno · |{  uno o más · o{  cero o más
+  Columnas de tipo enumerado (rol, estado, tipo…): VARCHAR + CHECK con los valores del diagrama de clases
+  Importes NUMERIC(12,2) · fechas con hora TIMESTAMPTZ (UTC) · claves BIGINT autonuméricas
+  Sección «restricciones»: CHECK, únicos compuestos e índices (IDX) de cada tabla
+  Claves foráneas: ON DELETE RESTRICT salvo las marcadas CASCADE (composiciones y herencia)
+  Tablas en gris: definidas en otro diagrama (solo nombre)
+endlegend
+
+
+package "Facturación y aprobaciones" {
+  entity "serie_facturacion" as serie {
+    *id : BIGINT <<PK>>
+    --
+    *codigo : VARCHAR(10) <<UK>>
+    *formato : VARCHAR(30)
+    *ultimo_numero : INTEGER
+    *activa : BOOLEAN
+    .. restricciones ..
+    CHECK ultimo_numero >= 0
+  }
+  entity "periodo_facturacion" as periodo {
+    *id : BIGINT <<PK>>
+    --
+    cerrado_por_id : BIGINT <<FK>>
+    *fecha_inicio : DATE <<UK>>
+    *fecha_fin : DATE
+    *estado : VARCHAR(20)
+    cerrado_en : TIMESTAMPTZ
+    .. restricciones ..
+    CHECK (estado = 'CERRADO') = (cerrado_en IS NOT NULL)
+  }
+  entity "factura" as factura {
+    *id : BIGINT <<PK>>
+    --
+    *cliente_id : BIGINT <<FK>>
+    suscripcion_id : BIGINT <<FK>>
+    serie_id : BIGINT <<FK>>
+    periodo_id : BIGINT <<FK>>
+    ejecucion_proceso_id : BIGINT <<FK>>
+    creada_por_id : BIGINT <<FK>>
+    numero : VARCHAR(20)
+    fecha_emision : DATE
+    fecha_vencimiento : DATE
+    *tipo : VARCHAR(20)
+    *estado : VARCHAR(25)
+    periodo_servicio : VARCHAR(50)
+    *moneda : CHAR(3)
+    *subtotal : NUMERIC(12,2)
+    *impuestos : NUMERIC(12,2)
+    *total : NUMERIC(12,2)
+    *migrada : BOOLEAN
+    *incobrable : BOOLEAN
+    datos_fiscales_emitidos : JSONB
+    .. restricciones ..
+    UNIQUE (serie_id, numero)
+    UNIQUE (suscripcion_id, periodo_id) WHERE tipo = 'RECURRENTE'
+    CHECK estado = 'BORRADOR' OR numero, serie_id, periodo_id,
+      fecha_emision y datos_fiscales_emitidos NOT NULL
+    CHECK total = subtotal + impuestos
+    CHECK NOT incobrable OR estado = 'VENCIDA'
+    IDX (cliente_id) · IDX (estado, fecha_vencimiento)
+  }
+  entity "factura_rectificativa" as rectificativa {
+    *factura_id : BIGINT <<PK, FK>> CASCADE
+    --
+    *factura_original_id : BIGINT <<FK>>
+    *motivo : VARCHAR(255)
+    *anula_totalmente : BOOLEAN
+    .. restricciones ..
+    CHECK factura_id <> factura_original_id
+  }
+  entity "linea_factura" as linea {
+    *id : BIGINT <<PK>>
+    --
+    *factura_id : BIGINT <<FK>> CASCADE
+    concepto_id : BIGINT <<FK>>
+    *descripcion : VARCHAR(255)
+    *cantidad : NUMERIC(10,2)
+    *precio_unitario : NUMERIC(12,2)
+    *descuento : NUMERIC(5,2)
+    *impuesto : NUMERIC(5,2)
+    .. restricciones ..
+    CHECK cantidad > 0
+    CHECK descuento e impuesto entre 0 y 100
+  }
+  entity "concepto" as concepto {
+    *id : BIGINT <<PK>>
+    --
+    *nombre : VARCHAR(100) <<UK>>
+    *precio_base : NUMERIC(12,2)
+    *impuesto : NUMERIC(5,2)
+  }
+  entity "documento_factura" as documento {
+    *id : BIGINT <<PK>>
+    --
+    *factura_id : BIGINT <<FK, UK>> CASCADE
+    *ruta_local : VARCHAR(255)
+    ruta_nube : VARCHAR(255)
+    *huella : CHAR(64)
+    *firmado : BOOLEAN
+    *creado_en : TIMESTAMPTZ
+  }
+  entity "solicitud_aprobacion" as solicitud {
+    *id : BIGINT <<PK>>
+    --
+    factura_id : BIGINT <<FK>>
+    excepcion_comercial_id : BIGINT <<FK>>
+    propuesta_cambio_nivel_id : BIGINT <<FK>>
+    *creada_por_id : BIGINT <<FK>>
+    asignada_a_id : BIGINT <<FK>>
+    resuelta_por_id : BIGINT <<FK>>
+    *motivo : VARCHAR(255)
+    *estado : VARCHAR(20)
+    *fecha_solicitud : TIMESTAMPTZ
+    fecha_resolucion : TIMESTAMPTZ
+    motivo_decision : VARCHAR(255)
+    .. restricciones ..
+    CHECK num_nonnulls(factura_id, excepcion_comercial_id,
+      propuesta_cambio_nivel_id) = 1
+    CHECK resuelta_por_id <> creada_por_id
+  }
+}
+
+entity "cliente" as cliente #EEEEEE ##999999 {
+}
+entity "conciliacion" as conciliacion #EEEEEE ##999999 {
+}
+entity "ejecucion_proceso" as ejecucion #EEEEEE ##999999 {
+}
+entity "envio" as envio #EEEEEE ##999999 {
+}
+entity "excepcion_comercial" as excepcion #EEEEEE ##999999 {
+}
+entity "incidencia" as incidencia #EEEEEE ##999999 {
+}
+entity "notificacion" as notificacion #EEEEEE ##999999 {
+}
+entity "pausa_recordatorios" as pausa #EEEEEE ##999999 {
+}
+entity "propuesta_cambio_nivel" as propuesta #EEEEEE ##999999 {
+}
+entity "suscripcion" as suscripcion #EEEEEE ##999999 {
+}
+entity "usuario" as usuario #EEEEEE ##999999 {
+}
+
+factura |o--o{ notificacion : "sobre"
+cliente ||--o{ factura : "recibe"
+suscripcion |o--o{ factura : "genera"
+serie |o--o{ factura : "numera"
+periodo |o--o{ factura : "agrupa"
+ejecucion |o--o{ factura : "genera"
+factura ||--|{ linea : "contiene"
+concepto |o--o{ linea : "usado en"
+factura ||--o| rectificativa : "es (herencia)"
+factura ||--o{ rectificativa : "rectificada por"
+factura ||--o| documento : "tiene"
+factura |o--o{ solicitud : "retenida en"
+excepcion |o--o{ solicitud : "retenida en"
+propuesta |o--o{ solicitud : "retenida en"
+usuario ||--o{ solicitud : "crea"
+usuario |o--o{ solicitud : "resuelve"
+usuario |o--o{ solicitud : "asignada a"
+usuario |o--o{ factura : "crea"
+usuario |o--o{ periodo : "cierra"
+factura |o--o{ envio : "se envía en"
+factura ||--o{ conciliacion : "saldada por"
+factura ||--o{ pausa : "pausada por"
+factura |o--o{ incidencia : "afecta a"
+@enduml

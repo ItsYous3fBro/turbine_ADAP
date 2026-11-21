@@ -42,6 +42,11 @@ enum FuncionContacto {
   ADMINISTRACION
   IMPAGOS
   }
+enum EstadoDelegacion {
+  VIGENTE
+  FINALIZADA
+  REVOCADA
+  }
 enum EstadoSuscripcion {
   PROGRAMADA
   ACTIVA
@@ -67,6 +72,11 @@ enum EstadoFactura {
   RECTIFICADA
   ANULADA
   }
+enum EstadoPeriodo {
+  ABIERTO
+  INCOMPLETO
+  CERRADO
+  }
 enum EstadoAprobacion {
   PENDIENTE
   APROBADA
@@ -88,6 +98,10 @@ enum EstadoCobro {
   VINCULADO
   EN_REVISION
   NO_IDENTIFICADO
+  }
+enum EstadoConciliacion {
+  VIGENTE
+  REVERTIDA
   }
 }
 package "Seguimiento y control" {

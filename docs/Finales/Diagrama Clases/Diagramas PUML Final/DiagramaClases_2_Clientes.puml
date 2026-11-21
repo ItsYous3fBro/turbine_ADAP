@@ -49,7 +49,9 @@ class Contacto {
 class Delegacion {
   - fechaInicio : Date
   - fechaFin : Date
+  - estado : EstadoDelegacion
   + estaVigente(fecha : Date) : Boolean
+  + revocar() : void
   }
 class Suscripcion {
   - fechaInicio : Date
@@ -102,8 +104,10 @@ class Importacion {
 }
 interface Aprobable <<ref>>
 class CredencialAPI <<ref>>
+class Envio <<ref>>
 class Factura <<ref>>
 class Incidencia <<ref>>
+class Notificacion <<ref>>
 class Usuario <<ref>>
 note bottom of Suscripcion
   Como máximo una suscripción
@@ -116,6 +120,7 @@ end note
 Usuario "1" -- "0..*" Cliente : responsable de >
 Delegacion "0..*" --> "1" Cliente : sobre >
 Delegacion "0..*" --> "1" Usuario : delegado >
+Delegacion "0..*" --> "1" Usuario : autorizada por >
 Cliente "1" *-- "1..*" Contacto
 Cliente "1" -- "0..*" Suscripcion : tiene >
 Suscripcion "0..*" --> "1" NivelTarifa : aplica >
@@ -130,6 +135,9 @@ Cliente "1" -- "0..*" Factura : recibe >
 Suscripcion "0..1" -- "0..*" Factura : genera >
 ExcepcionComercial ..|> Aprobable
 PropuestaCambioNivel ..|> Aprobable
+Envio "0..*" --> "0..1" Contacto : dirigido a >
+Notificacion "0..*" --> "0..1" Cliente : sobre >
+Notificacion "0..*" --> "0..1" SolicitudBaja : tarea de >
 Incidencia "0..*" --> "1" Cliente : sobre >
 legend right
   <b>Leyenda</b>

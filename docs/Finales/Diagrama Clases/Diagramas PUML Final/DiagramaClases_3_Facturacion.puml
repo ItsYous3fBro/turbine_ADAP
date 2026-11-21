@@ -36,6 +36,7 @@ class Factura {
   - total : Decimal
   - migrada : Boolean
   - incobrable : Boolean
+  - datosFiscalesEmitidos : String
   + calcularTotales() : Decimal
   + esImporteAtipico() : Boolean
   + emitir(numero : String) : void
@@ -84,8 +85,10 @@ class DocumentoFactura {
 class PeriodoFacturacion {
   - fechaInicio : Date
   - fechaFin : Date
-  - cerrado : Boolean
+  - estado : EstadoPeriodo
+  - cerradoEn : DateTime
   + admiteFecha(fecha : Date) : Boolean
+  + marcarIncompleto() : void
   + cerrar() : void
   }
 class SolicitudAprobacion {
@@ -93,6 +96,7 @@ class SolicitudAprobacion {
   - estado : EstadoAprobacion
   - fechaSolicitud : DateTime
   - fechaResolucion : DateTime
+  - motivoDecision : String
   + aprobar(aprobador : Usuario) : void
   + rechazar(aprobador : Usuario, motivo : String) : void
   + reasignar(aprobador : Usuario) : void
@@ -119,14 +123,24 @@ class Cobro {
   - referencia : String
   - estado : EstadoCobro
   - motivoDiscrepancia : String
-  + vincular(factura : Factura) : void
+  + aplicar(factura : Factura, importe : Decimal) : Conciliacion
+  + importeSinAplicar() : Decimal
   + marcarNoIdentificado() : void
-  + revertir(motivo : String) : void
+  }
+class Conciliacion {
+  - importeAplicado : Decimal
+  - fecha : DateTime
+  - estado : EstadoConciliacion
+  - fechaReversion : DateTime
+  - motivoReversion : String
+  + estaVigente() : Boolean
+  + revertir(usuario : Usuario, motivo : String) : void
   }
 class PausaRecordatorios {
   - motivo : String
   - inicio : DateTime
   - fechaRevision : Date
+  - fechaReanudacion : DateTime
   - activa : Boolean
   + reanudar() : void
   }
@@ -136,6 +150,8 @@ class Incidencia {
   - descripcion : String
   - prioridad : PrioridadIncidencia
   - estado : EstadoIncidencia
+  - fechaApertura : DateTime
+  - fechaCierre : DateTime
   + anadirComentario(c : Comentario) : void
   + reasignar(responsable : Usuario) : void
   + cerrar() : void
@@ -144,6 +160,7 @@ class Comentario {
   - texto : String
   - fecha : DateTime
   - privado : Boolean
+  + autorizar(usuario : Usuario) : void
   }
 class Adjunto {
   - nombre : String
@@ -154,8 +171,10 @@ class Adjunto {
   }
 }
 class Cliente <<ref>>
+class Contacto <<ref>>
 class EjecucionProceso <<ref>>
 class ExcepcionComercial <<ref>>
+class Notificacion <<ref>>
 class PlantillaMensaje <<ref>>
 class PropuestaCambioNivel <<ref>>
 class Suscripcion <<ref>>
@@ -163,6 +182,7 @@ class Usuario <<ref>>
 note bottom of Factura
   Una factura emitida no se modifica ni se borra:
 se corrige con una FacturaRectificativa (FR15).
+Una recurrente por suscripción y periodo.
 end note
 note bottom of DocumentoFactura
   PDF firmado e inalterable, guardado en
@@ -180,6 +200,11 @@ note bottom of Cobro
   La referencia externa es única:
 un aviso repetido no crea otro cobro (NFR7).
 end note
+note bottom of Conciliacion
+  Lo aplicado vigente no supera el importe del cobro
+ni el pendiente de la factura; la factura pasa a
+PAGADA cuando lo aplicado iguala su total (CU-29, CU-30).
+end note
 Cliente "1" -- "0..*" Factura : recibe >
 Suscripcion "0..1" -- "0..*" Factura : genera >
 Factura "1" *-- "1..*" LineaFactura
@@ -196,17 +221,28 @@ PropuestaCambioNivel ..|> Aprobable
 SolicitudAprobacion "0..*" --> "1" Aprobable : retiene >
 SolicitudAprobacion "0..*" --> "1" Usuario : creada por >
 SolicitudAprobacion "0..*" --> "0..1" Usuario : resuelta por >
+SolicitudAprobacion "0..*" --> "0..1" Usuario : asignada a >
+Factura "0..*" --> "0..1" Usuario : creada por >
+PeriodoFacturacion "0..*" --> "0..1" Usuario : cerrado por >
+PausaRecordatorios "0..*" --> "1" Usuario : creada por >
 Factura "1" -- "0..*" Envio : se envía en >
 Envio "0..*" --> "0..1" PlantillaMensaje : usa >
-Factura "0..1" -- "0..*" Cobro : pagada por >
+Cobro "1" -- "0..*" Conciliacion : se aplica en >
+Conciliacion "0..*" --> "1" Factura : salda >
+Conciliacion "0..*" --> "0..1" Usuario : validada por >
+Conciliacion "0..*" --> "0..1" Usuario : revertida por >
+Envio "0..*" --> "0..1" Contacto : dirigido a >
 Factura "1" *-- "0..*" PausaRecordatorios
 PausaRecordatorios "0..*" --> "0..1" Incidencia : motivada por >
+Notificacion "0..*" --> "0..1" Factura : sobre >
+Notificacion "0..*" --> "0..1" Incidencia : sobre >
 Incidencia "0..*" --> "1" Cliente : sobre >
 Incidencia "0..*" --> "0..1" Factura : afecta a >
 Incidencia "0..*" --> "1" Usuario : responsable >
 Incidencia "1" *-- "0..*" Comentario
 Incidencia "1" *-- "0..*" Adjunto
 Comentario "0..*" --> "1" Usuario : autor >
+Comentario "0..*" --> "0..1" Usuario : autorizado >
 legend right
   <b>Leyenda</b>
   Clase gris = definida en otro diagrama (solo referencia)

@@ -1,0 +1,240 @@
+@startuml DiagramaER_1_UsuariosControl
+title Diagrama físico Entidad-Relación · 1. Usuarios, acceso, control e informes\nGestor de facturas Turbine · versión final (fusión) · 13 tablas
+hide circle
+skinparam linetype ortho
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam nodesep 40
+skinparam ranksep 60
+skinparam class {
+  BackgroundColor #F5F8FF
+  BorderColor #3B6FD8
+}
+legend right
+  * = NOT NULL · <<PK>> clave primaria · <<FK>> clave foránea · <<UK>> único
+  ||  exactamente uno · |o  cero o uno · |{  uno o más · o{  cero o más
+  Columnas de tipo enumerado (rol, estado, tipo…): VARCHAR + CHECK con los valores del diagrama de clases
+  Importes NUMERIC(12,2) · fechas con hora TIMESTAMPTZ (UTC) · claves BIGINT autonuméricas
+  Sección «restricciones»: CHECK, únicos compuestos e índices (IDX) de cada tabla
+  Claves foráneas: ON DELETE RESTRICT salvo las marcadas CASCADE (composiciones y herencia)
+  Tablas en gris: definidas en otro diagrama (solo nombre)
+endlegend
+
+
+package "Usuarios y acceso" {
+  entity "usuario" as usuario {
+    *id : BIGINT <<PK>>
+    --
+    *nombre : VARCHAR(100)
+    *email : VARCHAR(150) <<UK>>
+    hash_contrasena : VARCHAR(255)
+    cuenta_microsoft : VARCHAR(150) <<UK>>
+    *rol : VARCHAR(20)
+    *estado : VARCHAR(20)
+    *intentos_fallidos : INTEGER
+    bloqueado_hasta : TIMESTAMPTZ
+    .. restricciones ..
+    CHECK intentos_fallidos >= 0
+  }
+  entity "sesion" as sesion {
+    *id : BIGINT <<PK>>
+    --
+    *usuario_id : BIGINT <<FK>> CASCADE
+    *creada_en : TIMESTAMPTZ
+    *ultima_actividad : TIMESTAMPTZ
+    *expira_en : TIMESTAMPTZ
+    *activa : BOOLEAN
+    .. restricciones ..
+    IDX (usuario_id) WHERE activa
+  }
+  entity "token_temporal" as token {
+    *id : BIGINT <<PK>>
+    --
+    *usuario_id : BIGINT <<FK>> CASCADE
+    *tipo : VARCHAR(20)
+    *token_hash : VARCHAR(255) <<UK>>
+    *fecha_caducidad : TIMESTAMPTZ
+    *usado : BOOLEAN
+    .. restricciones ..
+    CHECK tipo IN ('INVITACION','RECUPERACION')
+  }
+  entity "credencial_api" as credencial {
+    *id : BIGINT <<PK>>
+    --
+    *sistema : VARCHAR(100) <<UK>>
+    *hash_clave : VARCHAR(255)
+    *activa : BOOLEAN
+    ultimo_uso : TIMESTAMPTZ
+  }
+  entity "notificacion" as notificacion {
+    *id : BIGINT <<PK>>
+    --
+    *usuario_id : BIGINT <<FK>>
+    cliente_id : BIGINT <<FK>>
+    factura_id : BIGINT <<FK>>
+    incidencia_id : BIGINT <<FK>>
+    solicitud_baja_id : BIGINT <<FK>>
+    *tipo : VARCHAR(30)
+    *mensaje : TEXT
+    *prioridad : VARCHAR(10)
+    *fecha : TIMESTAMPTZ
+    *leida : BOOLEAN
+    *atendida : BOOLEAN
+    .. restricciones ..
+    CHECK num_nonnulls(cliente_id, factura_id,
+      incidencia_id, solicitud_baja_id) <= 1
+    IDX (usuario_id, atendida)
+  }
+  entity "vista_guardada" as vista {
+    *id : BIGINT <<PK>>
+    --
+    *usuario_id : BIGINT <<FK>> CASCADE
+    *nombre : VARCHAR(100)
+    *filtros : JSONB
+    *predeterminada : BOOLEAN
+    .. restricciones ..
+    UNIQUE (usuario_id, nombre)
+    UNIQUE (usuario_id) WHERE predeterminada
+  }
+}
+
+package "Seguimiento y control" {
+  entity "registro_auditoria" as auditoria {
+    *id : BIGINT <<PK>>
+    --
+    usuario_id : BIGINT <<FK>>
+    *fecha : TIMESTAMPTZ
+    *accion : VARCHAR(50)
+    *entidad : VARCHAR(50)
+    *entidad_id : BIGINT
+    valor_anterior : JSONB
+    valor_nuevo : JSONB
+    .. restricciones ..
+    Solo INSERT (sin UPDATE ni DELETE)
+    IDX (entidad, entidad_id, fecha)
+  }
+  entity "ejecucion_proceso" as ejecucion {
+    *id : BIGINT <<PK>>
+    --
+    *proceso : VARCHAR(50)
+    *inicio : TIMESTAMPTZ
+    fin : TIMESTAMPTZ
+    *completa : BOOLEAN
+    resultado : TEXT
+  }
+  entity "copia_seguridad" as copia {
+    *id : BIGINT <<PK>>
+    --
+    *fecha : TIMESTAMPTZ
+    *estado : VARCHAR(20)
+    *ubicacion : VARCHAR(255)
+    *tamano : BIGINT
+  }
+}
+
+package "Configuración e informes" {
+  entity "configuracion" as configuracion {
+    *id : BIGINT <<PK>>
+    --
+    *vigente_desde : TIMESTAMPTZ <<UK>>
+    *plazo_pago_dias : INTEGER
+    *cadencia_recordatorios : VARCHAR(50)
+    *fecha_revision_anual : DATE
+    *umbral_descuento : NUMERIC(12,2)
+    *umbral_importe_atipico : NUMERIC(12,2)
+    *umbral_rectificacion : NUMERIC(12,2)
+    *minutos_bloqueo_acceso : INTEGER
+    *retencion_exportaciones_dias : INTEGER
+    *impuestos_permitidos : VARCHAR(100)
+    correo_gestoria : VARCHAR(150)
+    .. restricciones ..
+    CHECK plazos, minutos y días > 0
+  }
+  entity "objetivo_financiero" as objetivo {
+    *id : BIGINT <<PK>>
+    --
+    *definido_por_id : BIGINT <<FK>>
+    *tipo : VARCHAR(30)
+    *importe : NUMERIC(12,2)
+    *moneda : CHAR(3)
+    *vigente_desde : DATE
+  }
+  entity "exportacion" as exportacion {
+    *id : BIGINT <<PK>>
+    --
+    *usuario_id : BIGINT <<FK>>
+    programacion_id : BIGINT <<FK>>
+    *tipo_informe : VARCHAR(50)
+    *formato : VARCHAR(10)
+    filtros : JSONB
+    *fecha_generacion : TIMESTAMPTZ
+    *caduca_el : DATE
+    *ruta : VARCHAR(255)
+  }
+  entity "programacion_informe" as programacion {
+    *id : BIGINT <<PK>>
+    --
+    *usuario_id : BIGINT <<FK>>
+    *tipo_informe : VARCHAR(50)
+    *periodicidad : VARCHAR(20)
+    *destinatarios : TEXT
+    *proxima_ejecucion : TIMESTAMPTZ
+    *activa : BOOLEAN
+  }
+}
+
+entity "solicitud_baja" as baja #EEEEEE ##999999 {
+}
+entity "cliente" as cliente #EEEEEE ##999999 {
+}
+entity "comentario" as comentario #EEEEEE ##999999 {
+}
+entity "conciliacion" as conciliacion #EEEEEE ##999999 {
+}
+entity "delegacion" as delegacion #EEEEEE ##999999 {
+}
+entity "factura" as factura #EEEEEE ##999999 {
+}
+entity "importacion" as importacion #EEEEEE ##999999 {
+}
+entity "incidencia" as incidencia #EEEEEE ##999999 {
+}
+entity "pausa_recordatorios" as pausa #EEEEEE ##999999 {
+}
+entity "periodo_facturacion" as periodo #EEEEEE ##999999 {
+}
+entity "solicitud_aprobacion" as solicitud #EEEEEE ##999999 {
+}
+
+usuario ||--o{ sesion : "abre"
+usuario ||--o{ token : "recibe"
+usuario ||--o{ notificacion : "recibe"
+cliente |o--o{ notificacion : "sobre"
+factura |o--o{ notificacion : "sobre"
+incidencia |o--o{ notificacion : "sobre"
+baja |o--o{ notificacion : "tarea de"
+usuario ||--o{ vista : "guarda"
+usuario ||--o{ cliente : "responsable de"
+usuario ||--o{ delegacion : "delegado"
+usuario |o--o{ baja : "revisa"
+credencial |o--o{ baja : "recibida de"
+usuario ||--o{ importacion : "realiza"
+ejecucion |o--o{ factura : "genera"
+usuario ||--o{ solicitud : "crea"
+usuario |o--o{ solicitud : "resuelve"
+usuario |o--o{ solicitud : "asignada a"
+usuario |o--o{ factura : "crea"
+usuario |o--o{ periodo : "cierra"
+usuario ||--o{ delegacion : "autoriza"
+usuario ||--o{ pausa : "pausa"
+usuario |o--o{ conciliacion : "valida"
+usuario |o--o{ conciliacion : "revierte"
+usuario ||--o{ incidencia : "responsable"
+usuario ||--o{ comentario : "escribe"
+usuario |o--o{ comentario : "autoriza a leer"
+usuario |o--o{ auditoria : "realiza"
+usuario ||--o{ objetivo : "define"
+usuario ||--o{ exportacion : "solicita"
+usuario ||--o{ programacion : "programa"
+programacion |o--o{ exportacion : "genera"
+@enduml

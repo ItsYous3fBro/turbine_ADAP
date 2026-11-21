@@ -1,0 +1,166 @@
+@startuml DiagramaER_0_VistaGeneral
+title Diagrama físico Entidad-Relación · 0. Vista general\nGestor de facturas Turbine · versión final (fusión) · 38 tablas y 62 relaciones (columnas en los diagramas 1–4)
+hide circle
+skinparam linetype polyline
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam nodesep 40
+skinparam ranksep 60
+skinparam class {
+  BackgroundColor #F5F8FF
+  BorderColor #3B6FD8
+}
+legend right
+  ||  exactamente uno · |o  cero o uno · |{  uno o más · o{  cero o más
+  Diagramas de detalle: 1 Usuarios y control · 2 Clientes · 3 Facturación · 4 Envíos, cobros e incidencias
+endlegend
+
+
+package "1 · Usuarios, acceso, control e informes" #E8F0FF {
+  entity "usuario" as usuario {
+  }
+  entity "sesion" as sesion {
+  }
+  entity "token_temporal" as token {
+  }
+  entity "credencial_api" as credencial {
+  }
+  entity "notificacion" as notificacion {
+  }
+  entity "vista_guardada" as vista {
+  }
+  entity "registro_auditoria" as auditoria {
+  }
+  entity "ejecucion_proceso" as ejecucion {
+  }
+  entity "copia_seguridad" as copia {
+  }
+  entity "configuracion" as configuracion {
+  }
+  entity "objetivo_financiero" as objetivo {
+  }
+  entity "exportacion" as exportacion {
+  }
+  entity "programacion_informe" as programacion {
+  }
+}
+package "2 · Clientes y suscripciones" #E9F7EC {
+  entity "cliente" as cliente {
+  }
+  entity "contacto" as contacto {
+  }
+  entity "delegacion" as delegacion {
+  }
+  entity "nivel_tarifa" as nivel_tarifa {
+  }
+  entity "suscripcion" as suscripcion {
+  }
+  entity "excepcion_comercial" as excepcion {
+  }
+  entity "propuesta_cambio_nivel" as propuesta {
+  }
+  entity "solicitud_baja" as baja {
+  }
+  entity "importacion" as importacion {
+  }
+}
+package "3 · Facturación y aprobaciones" #FFF4E0 {
+  entity "serie_facturacion" as serie {
+  }
+  entity "periodo_facturacion" as periodo {
+  }
+  entity "factura" as factura {
+  }
+  entity "factura_rectificativa" as rectificativa {
+  }
+  entity "linea_factura" as linea {
+  }
+  entity "concepto" as concepto {
+  }
+  entity "documento_factura" as documento {
+  }
+  entity "solicitud_aprobacion" as solicitud {
+  }
+}
+package "4 · Envíos, cobros e incidencias" #F6E9F7 {
+  entity "envio" as envio {
+  }
+  entity "plantilla_mensaje" as plantilla {
+  }
+  entity "cobro" as cobro {
+  }
+  entity "conciliacion" as conciliacion {
+  }
+  entity "pausa_recordatorios" as pausa {
+  }
+  entity "incidencia" as incidencia {
+  }
+  entity "comentario" as comentario {
+  }
+  entity "adjunto" as adjunto {
+  }
+}
+
+usuario ||--o{ sesion
+usuario ||--o{ token
+usuario ||--o{ notificacion
+cliente |o--o{ notificacion
+factura |o--o{ notificacion
+incidencia |o--o{ notificacion
+baja |o--o{ notificacion
+usuario ||--o{ vista
+usuario ||--o{ cliente
+cliente ||--|{ contacto
+usuario ||--o{ delegacion
+cliente ||--o{ delegacion
+cliente ||--o{ suscripcion
+nivel_tarifa ||--o{ suscripcion
+suscripcion ||--o{ excepcion
+suscripcion ||--o{ propuesta
+nivel_tarifa ||--o{ propuesta
+cliente ||--o{ baja
+usuario |o--o{ baja
+credencial |o--o{ baja
+usuario ||--o{ importacion
+cliente ||--o{ factura
+suscripcion |o--o{ factura
+serie |o--o{ factura
+periodo |o--o{ factura
+ejecucion |o--o{ factura
+factura ||--|{ linea
+concepto |o--o{ linea
+factura ||--o| rectificativa
+factura ||--o{ rectificativa
+factura ||--o| documento
+factura |o--o{ solicitud
+excepcion |o--o{ solicitud
+propuesta |o--o{ solicitud
+usuario ||--o{ solicitud
+usuario |o--o{ solicitud
+usuario |o--o{ solicitud
+usuario |o--o{ factura
+usuario |o--o{ periodo
+usuario ||--o{ delegacion
+usuario ||--o{ pausa
+factura |o--o{ envio
+plantilla |o--o{ envio
+cobro ||--o{ conciliacion
+factura ||--o{ conciliacion
+usuario |o--o{ conciliacion
+usuario |o--o{ conciliacion
+contacto |o--o{ envio
+factura ||--o{ pausa
+incidencia |o--o{ pausa
+cliente ||--o{ incidencia
+factura |o--o{ incidencia
+usuario ||--o{ incidencia
+incidencia ||--o{ comentario
+usuario ||--o{ comentario
+usuario |o--o{ comentario
+incidencia ||--o{ adjunto
+usuario |o--o{ auditoria
+usuario ||--o{ objetivo
+usuario ||--o{ exportacion
+usuario ||--o{ programacion
+programacion |o--o{ exportacion
+@enduml

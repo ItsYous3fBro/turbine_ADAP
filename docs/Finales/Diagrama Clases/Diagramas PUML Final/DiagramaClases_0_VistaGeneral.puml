@@ -1,5 +1,5 @@
 @startuml DiagramaClases_0_VistaGeneral
-title Diagrama de clases · Vista general (39 clases y 1 interfaz, sin atributos ni operaciones)
+title Diagrama de clases · Vista general (40 clases y 1 interfaz, sin atributos ni operaciones)
 skinparam shadowing false
 skinparam classAttributeIconSize 0
 skinparam packageStyle rectangle
@@ -51,6 +51,7 @@ package "Facturación y aprobaciones" {
 package "Envíos y cobros" {
   class Envio
   class Cobro
+  class Conciliacion
   class PausaRecordatorios
 }
 package "Seguimiento y control" {
@@ -76,6 +77,7 @@ Usuario *-- TokenTemporal
 Usuario *-- Sesion
 Usuario -- Cliente
 Delegacion --> Cliente
+Delegacion --> Usuario
 Delegacion --> Usuario
 Cliente *-- Contacto
 Cliente -- Suscripcion
@@ -103,17 +105,30 @@ PropuestaCambioNivel ..|> Aprobable
 SolicitudAprobacion --> Aprobable
 SolicitudAprobacion --> Usuario
 SolicitudAprobacion --> Usuario
+SolicitudAprobacion --> Usuario
+Factura --> Usuario
+PeriodoFacturacion --> Usuario
+PausaRecordatorios --> Usuario
 Factura -- Envio
 Envio --> PlantillaMensaje
-Factura -- Cobro
+Cobro -- Conciliacion
+Conciliacion --> Factura
+Conciliacion --> Usuario
+Conciliacion --> Usuario
+Envio --> Contacto
 Factura *-- PausaRecordatorios
 PausaRecordatorios --> Incidencia
 Usuario -- Notificacion
+Notificacion --> Cliente
+Notificacion --> Factura
+Notificacion --> Incidencia
+Notificacion --> SolicitudBaja
 Incidencia --> Cliente
 Incidencia --> Factura
 Incidencia --> Usuario
 Incidencia *-- Comentario
 Incidencia *-- Adjunto
+Comentario --> Usuario
 Comentario --> Usuario
 Usuario *-- VistaGuardada
 Usuario -- RegistroAuditoria

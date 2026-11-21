@@ -82,6 +82,7 @@ class RegistroAuditoria {
   - fecha : DateTime
   - accion : String
   - entidad : String
+  - entidadId : Long
   - valorAnterior : String
   - valorNuevo : String
   }
@@ -111,7 +112,6 @@ class Configuracion {
   - umbralRectificacion : Decimal
   - minutosBloqueoAcceso : Integer
   - retencionExportacionesDias : Integer
-  - monedasPermitidas : String
   - impuestosPermitidos : String
   - correoGestoria : String
   + validar() : Boolean
@@ -153,11 +153,14 @@ class ProgramacionInforme {
 }
 class Cliente <<ref>>
 class Comentario <<ref>>
+class Conciliacion <<ref>>
 class Delegacion <<ref>>
 class Envio <<ref>>
 class Factura <<ref>>
 class Importacion <<ref>>
 class Incidencia <<ref>>
+class PausaRecordatorios <<ref>>
+class PeriodoFacturacion <<ref>>
 class SolicitudAprobacion <<ref>>
 class SolicitudBaja <<ref>>
 note bottom of Sesion
@@ -174,16 +177,28 @@ Usuario "1" *-- "0..*" TokenTemporal
 Usuario "1" *-- "0..*" Sesion
 Usuario "1" -- "0..*" Cliente : responsable de >
 Delegacion "0..*" --> "1" Usuario : delegado >
+Delegacion "0..*" --> "1" Usuario : autorizada por >
 Usuario "1" -- "0..*" Importacion : realiza >
 SolicitudBaja "0..*" --> "0..1" Usuario : revisada por >
 SolicitudBaja "0..*" --> "0..1" CredencialAPI : recibida de >
 EjecucionProceso "0..1" -- "0..*" Factura : genera >
 SolicitudAprobacion "0..*" --> "1" Usuario : creada por >
 SolicitudAprobacion "0..*" --> "0..1" Usuario : resuelta por >
+SolicitudAprobacion "0..*" --> "0..1" Usuario : asignada a >
+Factura "0..*" --> "0..1" Usuario : creada por >
+PeriodoFacturacion "0..*" --> "0..1" Usuario : cerrado por >
+PausaRecordatorios "0..*" --> "1" Usuario : creada por >
 Envio "0..*" --> "0..1" PlantillaMensaje : usa >
+Conciliacion "0..*" --> "0..1" Usuario : validada por >
+Conciliacion "0..*" --> "0..1" Usuario : revertida por >
 Usuario "1" -- "0..*" Notificacion : recibe >
+Notificacion "0..*" --> "0..1" Cliente : sobre >
+Notificacion "0..*" --> "0..1" Factura : sobre >
+Notificacion "0..*" --> "0..1" Incidencia : sobre >
+Notificacion "0..*" --> "0..1" SolicitudBaja : tarea de >
 Incidencia "0..*" --> "1" Usuario : responsable >
 Comentario "0..*" --> "1" Usuario : autor >
+Comentario "0..*" --> "0..1" Usuario : autorizado >
 Usuario "1" *-- "0..*" VistaGuardada
 Usuario "0..1" -- "0..*" RegistroAuditoria : realiza >
 Usuario "1" -- "0..*" Exportacion : solicita >
