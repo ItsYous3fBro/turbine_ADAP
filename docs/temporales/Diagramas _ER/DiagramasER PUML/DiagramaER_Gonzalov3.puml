@@ -1,0 +1,164 @@
+@startuml
+hide circle
+skinparam linetype ortho
+skinparam nodesep 50
+skinparam ranksep 60
+
+skinparam class {
+  BackgroundColor White
+  BorderColor #4A709C
+  HeaderBackgroundColor #D4E3F7
+}
+
+entity "usuario" {
+  * id : INT <<PK>>
+  --
+  * nombre : VARCHAR(100)
+  * email : VARCHAR(150) <<UNIQUE>>
+  * hash_contrasena : VARCHAR(255)
+  * rol : VARCHAR(50)
+  * estado : VARCHAR(50)
+}
+
+entity "sesion" {
+  * id : INT <<PK>>
+  --
+  * usuario_id : INT <<FK>>
+  * token_hash : VARCHAR(255) <<UNIQUE>>
+  * fecha_creacion : TIMESTAMP
+  * fecha_caducidad : TIMESTAMP
+}
+
+entity "cliente" {
+  * id : INT <<PK>>
+  --
+  * usuario_id : INT <<FK>>
+  * razon_social : VARCHAR(200)
+  * nif : VARCHAR(50) <<UNIQUE>>
+  * fecha_alta : DATE
+  facturacion_anual : DECIMAL(12,2)
+  * estado : VARCHAR(50)
+}
+
+entity "contacto" {
+  * id : INT <<PK>>
+  --
+  * cliente_id : INT <<FK>>
+  * nombre : VARCHAR(100)
+  email : VARCHAR(150)
+  telefono : VARCHAR(20)
+  idioma : VARCHAR(10)
+}
+
+entity "nivel_tarifa" {
+  * id : INT <<PK>>
+  --
+  * nombre : VARCHAR(100)
+  * cuota_mensual : DECIMAL(10,2)
+  * vigente_desde : TIMESTAMP
+}
+
+entity "suscripcion" {
+  * id : INT <<PK>>
+  --
+  * cliente_id : INT <<FK>>
+  * nivel_tarifa_id : INT <<FK>>
+  * fecha_inicio : DATE
+  * estado : VARCHAR(50)
+}
+
+entity "factura" {
+  * id : INT <<PK>>
+  --
+  * cliente_id : INT <<FK>>
+  suscripcion_id : INT <<FK>>
+  * numero : VARCHAR(50) <<UNIQUE>>
+  * fecha_emision : DATE
+  fecha_vencimiento : DATE
+  * moneda : VARCHAR(3)
+  * subtotal : DECIMAL(12,2)
+  * impuestos : DECIMAL(12,2)
+  * total : DECIMAL(12,2)
+  * estado : VARCHAR(50)
+  * migrada : BOOLEAN
+  * incobrable : BOOLEAN
+}
+
+entity "documento_factura" {
+  * id : INT <<PK>>
+  --
+  * factura_id : INT <<FK>> <<UNIQUE>>
+  * ruta_local : VARCHAR(255)
+  * ruta_nube : VARCHAR(255)
+  * huella : VARCHAR(255)
+  enlace_temporal : VARCHAR(255)
+}
+
+entity "linea_factura" {
+  * id : INT <<PK>>
+  --
+  * factura_id : INT <<FK>>
+  * descripcion : VARCHAR(255)
+  * cantidad : DECIMAL(10,2)
+  * precio_unitario : DECIMAL(12,2)
+  descuento : DECIMAL(10,2)
+  impuesto : DECIMAL(5,2)
+}
+
+entity "cobro" {
+  * id : INT <<PK>>
+  --
+  * factura_id : INT <<FK>>
+  * importe : DECIMAL(12,2)
+  * moneda : VARCHAR(3)
+  * fecha_pago : DATE
+  referencia : VARCHAR(100)
+  motivo_discrepancia : VARCHAR(255)
+}
+
+entity "incidencia" {
+  * id : INT <<PK>>
+  --
+  * factura_id : INT <<FK>>
+  * descripcion : TEXT
+  * prioridad : VARCHAR(20)
+  * estado : VARCHAR(50)
+}
+
+entity "pausa_recordatorios" {
+  * id : INT <<PK>>
+  --
+  * factura_id : INT <<FK>>
+  * incidencia_id : INT <<FK>>
+  * motivo : VARCHAR(255)
+  * fecha_revision : DATE
+}
+
+entity "registro_auditoria" {
+  * id : INT <<PK>>
+  --
+  * usuario_id : INT <<FK>>
+  * fecha : TIMESTAMP
+  * accion : VARCHAR(100)
+  * entidad : VARCHAR(100)
+  valor_anterior : TEXT
+  valor_nuevo : TEXT
+}
+
+' Relaciones
+usuario ||--o{ sesion
+usuario ||--o{ cliente
+usuario ||--o{ registro_auditoria
+cliente ||--|{ contacto
+cliente ||--o{ suscripcion
+cliente ||--o{ factura
+nivel_tarifa ||--o{ suscripcion
+suscripcion ||--o{ factura
+factura ||--|| documento_factura
+factura ||--|{ linea_factura
+factura ||--o| cobro
+factura ||--o{ incidencia
+factura ||--o| pausa_recordatorios
+incidencia ||--o| pausa_recordatorios
+
+@enduml
