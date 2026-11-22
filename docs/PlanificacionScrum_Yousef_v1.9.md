@@ -2,7 +2,7 @@
 
 **Planificación del proyecto**
 
-Equipo de 7 personas · 6 sprints · Proyecto teórico de análisis y diseño de software para ADAP
+Equipo de 7 personas · 6 sprints · proyecto teórico de análisis y diseño de software
 
 | **Proyecto** | Gestor de facturas Turbine (diseño teórico) |
 |---|---|
@@ -12,7 +12,7 @@ Equipo de 7 personas · 6 sprints · Proyecto teórico de análisis y diseño de
 | **Fecha de inicio / fin** | 30/09/2026 – 15/12/2026 |
 | **Duración del sprint** | S1–S2: 10 días (hasta la exposición del 20/10) · S3–S4: 16 días · S5: 3 días (hasta la exposición del 24/11) · S6: 3 semanas |
 | **Número de sprints** | 6 + Sprint 0 de preparación |
-| **Versión del documento** | 1.8 · 06/11/2026 |
+| **Versión del documento** | 1.9 · 24/11/2026 |
 
 ### Contenido
 
@@ -43,6 +43,7 @@ Anexos: checklists, glosario y fuentes
 | 1.6 | 18/10/2026 | Yousef AL Haidar | Cierre de los Sprints 1 y 2: capacidad, seguimiento (burndown y velocidad), impedimentos, riesgos, decisiones, actas de Review, Retrospectiva, acciones de mejora y plan de comunicación. |
 | 1.7 | 21/10/2026 | Yousef Al Haidar | Planificación del Sprint 3 (Sprint Backlog y carga por miembro). |
 | 1.8 | 06/11/2026 | Yousef Al Haidar | Cierre del Sprint 3 (diagrama de clases y diagrama de componentes); feedback del primer parcial; nuevas fechas por los exámenes; planificación de los Sprints 4 y 5. |
+| 1.9 | 24/11/2026 | Yousef Al Haidar | Cierre de los Sprints 4 y 5: diagrama Entidad-Relación, diagramas de secuencia, correcciones del primer parcial, planteamiento de la demo, guía para exponer y exposición del 24/11. |
 
 # 1. Visión y objetivos
 
@@ -51,7 +52,7 @@ Anexos: checklists, glosario y fuentes
 
 | **Visión** | Una aplicación web capaz de emitir, gestionar y seguir facturas puntuales y recurrentes, y sus cobros. |
 |---|---|
-| **Product Goal actual** | Diseñar de forma teórica la aplicación siguiendo buenas prácticas de ingeniería y arquitectura del software: requisitos, casos de uso, diagramas UML, documentación e informes Scrum, más una demo ilustrativa en el Sprint 5. |
+| **Product Goal actual** | Diseñar de forma teórica la aplicación siguiendo buenas prácticas de ingeniería y arquitectura del software: requisitos, casos de uso, diagramas UML, documentación e informes Scrum, más una demo ilustrativa: su planteamiento en el Sprint 5 y la demo en el Sprint 6. |
 
 ## 1.1 Objetivos y métricas de éxito
 
@@ -59,10 +60,10 @@ Anexos: checklists, glosario y fuentes
 |---|---|---|---|
 | O1 | Definir los requisitos funcionales y no funcionales | Archivo final de requisitos consensuado; cada requisito trazado a la entrevista; RNF medibles | Sprint 2 (dom. 18/10) · **Cumplido** |
 | O2 | Modelar los casos de uso | Diagrama PlantUML sin errores y documento de casos de uso que indica en qué requisitos se basa cada caso | Sprint 2 (dom. 18/10) · **Cumplido** |
-| O3 | Modelar la estructura del sistema | Diagrama de clases coherente con los casos de uso y modelo de datos (Entidad-Relación) | Sprint 3 (clases) · **Cumplido** · Sprint 4 (Entidad-Relación) |
+| O3 | Modelar la estructura del sistema | Diagrama de clases coherente con los casos de uso y modelo de datos (Entidad-Relación) | Sprint 3 (clases) · **Cumplido** · Sprint 4 (Entidad-Relación) · **Cumplido** |
 | O4 | Documentar la arquitectura | Diagrama de componentes y su documentación aprobados por el PO | Sprint 3 · **Cumplido** |
-| O5 | Presentar una demo ilustrativa (micro-proyecto) | Demo sencilla de los flujos principales mostrada en la exposición | Sprint 5 |
-| O6 | Aplicar Scrum y documentarlo | Un informe Scrum (Review y Retro) por sprint | Cada sprint · S1 a S3 cumplidos |
+| O5 | Presentar una demo ilustrativa (micro-proyecto) | Demo sencilla de los flujos principales mostrada al cliente | Planteamiento en el Sprint 5 · **Cumplido** · Demo en el Sprint 6 · Pendiente |
+| O6 | Aplicar Scrum y documentarlo | Un informe Scrum (Review y Retro) por sprint | Cada sprint · S1 a S5 cumplidos |
 
 ## 1.2 Épicas
 
@@ -75,7 +76,7 @@ Seis bloques de trabajo, uno por tipo de entregable. Se descomponen en elementos
 | E3 | Modelado estructural | Diagrama de clases de dominio y modelo de datos | Alto | Must |
 | E4 | Arquitectura y documentación | Documento de arquitectura, decisiones (ADR) y documentación del repositorio | Medio | Should |
 | E5 | Gestión Scrum | Planificación, informes de sprint, Review y Retrospectiva | Medio | Must |
-| E6 | Demo (micro-proyecto) | Prototipo ilustrativo de los flujos principales para el Sprint 5 | Medio | Should |
+| E6 | Demo (micro-proyecto) | Prototipo ilustrativo de los flujos principales: planteamiento en el Sprint 5 y demo en el Sprint 6 | Medio | Should |
 
 # 2. Equipo y roles
 
@@ -135,7 +136,7 @@ La Guía Scrum define tres responsabilidades dentro del Scrum Team: un Product O
 | Arquitectura y decisiones (ADR) | I | I | A/R | R | C | C | C |
 | Revisión de calidad y trazabilidad | C | I | R | R | R | A/R | R |
 | Repositorio y documentación | C | I | R | R | R | R | A/R |
-| Demo ilustrativa (Sprint 5) | A | I | R | R | A/R | C | R |
+| Demo ilustrativa (planteamiento en S5, demo en S6) | A | I | R | R | A/R | C | R |
 | Informes Scrum (Review y Retro) | C | A/R | R | R | R | R | R |
 | Aceptar artefactos terminados | A/R | I | C | C | C | C | I |
 
@@ -145,9 +146,9 @@ Rotar tareas de facilitación reparte la carga y evita depender de una sola pers
 
 | **Responsabilidad** | **S1** | **S2** | **S3** | **S4** | **S5** | **S6** |
 |---|---|---|---|---|---|---|
-| Facilitador/a de la retrospectiva | Yousef | Yousef | Yousef | *[Nombre]* | *[Nombre]* | *[Nombre]* |
-| Encargado/a del acta (Review y Retro) | Yousef | Yousef | Yousef | *[Nombre]* | *[Nombre]* | *[Nombre]* |
-| Guardián/a del tablero | Yousef | Yousef | Yousef | *[Nombre]* | *[Nombre]* | *[Nombre]* |
+| Facilitador/a de la retrospectiva | Yousef | Yousef | Yousef | Yousef | Yousef | *[Nombre]* |
+| Encargado/a del acta (Review y Retro) | Yousef | Yousef | Yousef | Yousef | Yousef | *[Nombre]* |
+| Guardián/a del tablero | Yousef | Yousef | Yousef | Yousef | Yousef | *[Nombre]* |
 | Responsable de la exposición | Decidido por el profesor | Decidido por el profesor | Yousef | Adrian | Javier | *[Nombre]* |
 
 # 3. Reparto de trabajo por miembro
@@ -209,9 +210,9 @@ Responsabilidades comunes a todos los Developers: participar en el refinamiento 
 |---|---|
 | **Especialización** | Usabilidad: requisitos no funcionales, prototipos y demo |
 | **Dedicación al proyecto** | 16 % del tiempo semanal |
-| **Responsabilidades permanentes** | Redacta los requisitos no funcionales, siempre medibles (usabilidad, seguridad, rendimiento, portabilidad).<br>Diseña los prototipos (wireframes) de las pantallas principales.<br>Lidera la demo ilustrativa del Sprint 5.<br>Cuida que el diseño respete la estética de Turbine y funcione en móvil, tablet y PC. |
+| **Responsabilidades permanentes** | Redacta los requisitos no funcionales, siempre medibles (usabilidad, seguridad, rendimiento, portabilidad).<br>Diseña los prototipos (wireframes) de las pantallas principales.<br>Lidera el planteamiento (Sprint 5) y la construcción (Sprint 6) de la demo ilustrativa.<br>Cuida que el diseño respete la estética de Turbine y funcione en móvil, tablet y PC. |
 | **Trabajo típico en cada sprint** | Antes del sprint: bocetos de las pantallas de los casos de uso candidatos.<br>Define el criterio de verificación de cada requisito no funcional.<br>Prepara el material visual para la Sprint Review. |
-| **Artefactos y entregables que posee** | Catálogo de requisitos no funcionales, prototipos y demo del Sprint 5. |
+| **Artefactos y entregables que posee** | Catálogo de requisitos no funcionales, prototipos y demo ilustrativa. |
 | **Suplente / backup** | Gonzalo |
 | **Formación o apoyo necesario** | Herramienta de prototipado (Figma o similar); calidad del software según ISO/IEC 25010. |
 
@@ -340,17 +341,17 @@ Se estima en puntos de historia (esfuerzo relativo, no horas), usando planning p
 | H-006 | E2 | Diagrama de casos de uso final (archivo único consensuado) | Must | 3 | S2 | Hecho (6 diagramas por área) |
 | H-007 | E3 | Diagrama de clases de dominio | Must | 8 | S3 | Hecho (5 vistas + anexo completo) |
 | H-008 | E4 | Diagrama de componentes y documento de arquitectura | Should | 5 | S3 | Hecho |
-| H-009 | E3 | Diagramas de secuencia de los casos críticos | Should | 5 | S4 | Ready |
+| H-009 | E3 | Diagramas de secuencia de los casos críticos | Should | 5 | S4 | Hecho |
 | H-010 | E1 | Matriz de trazabilidad requisitos ↔ casos de uso ↔ clases | Should | 3 | S2–S3 | Hecho (requisitos ↔ casos de uso en S2; casos de uso ↔ clases en S3) |
 | H-011 | E4 | Documento final consolidado | Must | 5 | S6 | Pendiente |
-| H-012 | E6 | Demo ilustrativa sencilla de los flujos principales, hecha con IA, para ir enseñando avances al cliente | Should | 5 | S5 | Ready (reducida de 13 a 5 pts) |
-| H-013 | E5 | Informe Scrum de cada sprint (Review y Retro) | Must | 2 | Todos | Recurrente (S1 a S3 hechos) |
+| H-012 | E6 | Planteamiento de la demo ilustrativa con IA: qué flujos principales enseñar al cliente (crear y emitir factura, envío y cobro) y cómo construirla | Should | 2 | S5 | Hecho |
+| H-013 | E5 | Informe Scrum de cada sprint (Review y Retro) | Must | 2 | Todos | Recurrente (S1 a S5 hechos) |
 | H-014 | E1 | Confirmar con el cliente las cuestiones abiertas P1–P12 del documento de casos de uso | Should | 2 | S6 | Pendiente (nueva en la Review del S2) |
-
-| H-015 | E3 | Diagrama Entidad-Relación (modelo de datos) a partir del diagrama de clases | Must | 5 | S4 | Ready |
-| H-016 | E2 | Correcciones del primer parcial: pago parcial (CU-29 y CU-30), retención, aprobación y emisión (CU-17 a CU-19) y umbrales de NFR13 | Must | 3 | S4 | Ready |
-| H-017 | E5 | Exposición del 24/11: clases, componentes, Entidad-Relación, secuencia, informe Scrum y demo | Must | 3 | S5 | Pendiente |
-
+| H-015 | E3 | Diagrama Entidad-Relación (modelo de datos) a partir del diagrama de clases | Must | 5 | S4 | Hecho |
+| H-016 | E2 | Correcciones del primer parcial: pago parcial (CU-29 y CU-30), retención, aprobación y emisión (CU-17 a CU-19) y umbrales de NFR13 | Must | 3 | S4 | Hecho |
+| H-017 | E5 | Crear la presentación para la exposición del 24/11: clases, componentes, Entidad-Relación, secuencia, informe Scrum | Must | 3 | S5 | Hecho |
+| H-018 | E5 | Creación de una guía sobre la información necesaria para exponer el trabajo de cada miembro del equipo | Must | 3 | S5 | Hecho |
+| H-019 | E6 | Demo ilustrativa sencilla de los flujos principales, hecha con IA, para ir enseñando avances al cliente | Should | 3 | S6 | Pendiente |
 *Estados sugeridos: Pendiente · Ready · En sprint · En curso · Hecho · Recurrente · Descartada.*
 
 # 7. Hoja de ruta y entregables
@@ -363,8 +364,8 @@ Se estima en puntos de historia (esfuerzo relativo, no horas), usando planning p
 | S2 | 10/10 – 19/10 | Cerrar requisitos y casos de uso a partir de las versiones temporales y preparar la exposición. | Archivos finales (dom. 18/10); documento de casos de uso; informe Scrum; presentación. | Primer parcial (20/10) |
 | S3 | 21/10 – 05/11 | Modelo de dominio y arquitectura. | Diagrama de clases; diagrama de componentes y su documentación. | — |
 | S4 | 06/11 – 21/11 | Modelo de datos, diagramas dinámicos y correcciones del primer parcial. | Diagrama Entidad-Relación; diagramas de secuencia; casos de uso y requisitos corregidos. | — |
-| S5 | 22/11 – 24/11 | Microsprint: demo y exposición. | Demo ilustrativa sencilla; presentación. | Segundo parcial (24/11) |
-| S6 | 25/11 – 15/12 | Tercera parte: revisión de calidad, documento consolidado, entrega final y retrospectiva del proyecto. | Documento consolidado; informe Scrum final; lecciones aprendidas. | Tercera exposición y entrega final |
+| S5 | 22/11 – 24/11 | Microsprint: planteamiento de la demo y exposición. | Planteamiento de la demo; guía para exponer; presentación. | Segundo parcial (24/11) |
+| S6 | 25/11 – 15/12 | Tercera parte: revisión de calidad, documento consolidado, entrega final y retrospectiva del proyecto. | Documento consolidado; demo ilustrativa con IA; informe Scrum final; lecciones aprendidas. | Tercera exposición y entrega final |
 
 ## Calendario de referencia
 
@@ -384,7 +385,7 @@ Anota festivos, exámenes, entregas de otras asignaturas y vacaciones que afecte
 | Sáb. 14/11 · 10:00 | Check-in del S4 con versión intermedia obligatoria | Ver avances de Entidad-Relación y secuencia |
 | Jue. 19/11 · 10:00 | Fecha límite de los archivos finales de Entidad-Relación y secuencia | Todo terminado antes de la Review |
 | Sáb. 21/11 · 10:00 | Review y Retro del S4 | Cierre del Sprint 4 |
-| Dom. 22/11 · 10:00 | Reunión de preparación de la exposición y la demo | Inicio del S5 |
+| Dom. 22/11 · 10:00 | Reunión de preparación de la exposición y planteamiento de la demo | Inicio del S5 |
 | Lun. 23/11 · 15:00 | Último check de la exposición, repaso y asignación de roles de exposición | Todo a punto para la presentación |
 | Mar. 24/11 | Segundo parcial: exposición | Entrega fija |
 
@@ -425,7 +426,7 @@ El equipo mide la capacidad en **puntos de historia**, no en horas: cada miembro
 | S2 | 10 (10/10 – 19/10) | 7 personas · 16 % · check-in, reunión de preparación y último repaso | Sin ausencias registradas; carga concentrada en el fin de semana del 17–18/10 | 23 pts | 12 pts (S1) |
 | S3 | 16 (21/10 – 05/11) | 7 personas · 16 % | Exámenes de otras asignaturas: nos han retrasado un poco y el sprint se alarga 2 días | 22 pts | 17,5 pts (media S1–S2) |
 | S4 | 16 (06/11 – 21/11) | 7 personas · 16 % | Sin ausencias registradas; se alarga 2 días por el retraso arrastrado de los exámenes | 18 pts | 19 pts (media S1–S3) |
-| S5 | 3 (22/11 – 24/11) | 7 personas · 16 % | Microsprint hasta la exposición del 24/11 | 9 pts | — |
+| S5 | 3 (22/11 – 24/11) | 7 personas · 16 % | Microsprint hasta la exposición del 24/11 | 9 pts | 18,8 pts (media S1–S4) |
 
 # 10. Fichas de sprint (Sprint 1 a 6)
 
@@ -509,7 +510,7 @@ El equipo mide la capacidad en **puntos de historia**, no en horas: cada miembro
 | **Fechas** | 21/10/2026 – 05/11/2026 (2 días más por los exámenes) |
 |---|---|
 | **Objetivo del sprint (Sprint Goal)** | Diagrama de clases y diagrama de componentes, con su documentación. |
-| **Capacidad y compromiso** | Puntos comprometidos: 22 · Velocidad de referencia: 17,5 (media S1–S2) |
+| **Capacidad y compromiso** | Puntos comprometidos: 22  |
 | **Dependencias y riesgos** | Comprensión de cómo representar los diagramas; exámenes de otras asignaturas (I-06); archivos finales el 04/11/2026; Review y Retro el 05/11/2026. |
 
 ### Sprint Backlog
@@ -517,10 +518,10 @@ El equipo mide la capacidad en **puntos de historia**, no en horas: cada miembro
 | **ID** | **Historia / tarea** | **Responsable** | **Pts** | **Horas** | **Estado** |
 |---|---|---|---|---|---|
 | 1 | H-007 · Revisar el diagrama de clases actual frente a los 42 casos de uso y los requisitos: clases, atributos y operaciones que faltan o sobran | Yousef, Miguel, Gonzalo | 2 |   | Hecho (26/10) |
-| 2 | H-007 · Diagrama UML de clases final, dividido por paquetes (usuarios y permisos, clientes y suscripciones, facturación y aprobaciones, cobros, seguimiento y control): clases, atributos, operaciones, etc. Versiones temporales (DiagramaClases_Nombre_vN) y archivo final con el PO | Yousef, Miguel, Gonzalo | 8 |   | Hecho (03/11) |
+| 2 | H-007 · Diagrama UML de clases final, dividido por paquetes: clases, atributos, operaciones, etc. Versiones temporales y archivo final con el PO | Yousef, Miguel, Gonzalo | 8 |   | Hecho (03/11) |
 | 3 | H-010 · Diccionario de clases y trazabilidad casos de uso ↔ clases | Yousef, Miguel, Gonzalo | 2 |   | Hecho (04/11) |
 | 4 | H-008 · Diagrama de componentes: componentes por capas, interfaces ofrecidas y requeridas y sistemas externos. Versiones temporales (DiagramaComponentes_Nombre_vN) y archivo final con el PO | Irene, Adrian, Javier, Nestor | 5 |   | Hecho (01/11) |
-| 5 | Revisión cruzada clases ↔ componentes ↔ casos de uso antes de la fusión final | Nestor, Irene | 1 |   | Hecho (04/11) |
+| 5 | Revisión cruzada clases ↔ componentes ↔ casos de uso antes de la fusión final | Nestor, Irene, Yousef | 1 |   | Hecho (04/11) |
 | 6 | Informe y documentación de ambos diagramas a partir de los archivos finales | Nestor | 2 |   | Hecho (05/11) |
 | 7 | H-013 · Informe Scrum del Sprint 3 (Review, Retro y burndown cada 2–3 días) | Yousef | 2 |   | Hecho (05/11) |
 | 8 | Check-in con versión intermedia obligatoria (mitad de sprint) y reunión de fusión y cierre | Todos | — |   | Hecho (27/10 y 05/11) |
@@ -542,52 +543,52 @@ El equipo mide la capacidad en **puntos de historia**, no en horas: cada miembro
 | **Objetivo cumplido** | Sí |
 |---|---|
 | **Puntos completados** | 22 de 22 · Historias completadas: 4 de 4 (H-007, H-008, H-010, H-013) |
-| **Notas** | Se ha completado todo, aunque los exámenes nos han retrasado un poco y el sprint se alargó 2 días (hasta el 05/11). Resultado: diagrama de clases final (39 clases, 1 interfaz y 13 enumerados en 5 vistas y un anexo completo), fusionado con las mejoras de la versión de Miguel; diccionario de clases y trazabilidad casos de uso ↔ clases; diagrama de componentes con su documentación. La demo (H-012) pasa al S5. |
+| **Notas** | Se ha completado todo, aunque los exámenes nos han retrasado un poco y el sprint se alargó 2 días (hasta el 05/11). Resultado: diagrama de clases final, diccionario de clases y trazabilidad casos de uso ↔ clases; diagrama de componentes con su documentación. La demo (H-012) pasa al S5. |
 
 ## Sprint 4
 
 | **Fechas** | 06/11/2026 – 21/11/2026 (2 días más por el retraso de los exámenes) |
 |---|---|
 | **Objetivo del sprint (Sprint Goal)** | Diagrama Entidad-Relación, diagramas de secuencia de los casos críticos y correcciones del primer parcial. |
-| **Capacidad y compromiso** | Puntos comprometidos: 18 · Velocidad de referencia: 19 (media S1–S3) |
+| **Capacidad y compromiso** | Puntos comprometidos: 18 |
 | **Dependencias y riesgos** | El Entidad-Relación y las secuencias salen del diagrama de clases final del S3; check-in el sáb. 14/11; archivos finales el jue. 19/11; Review y Retro el sáb. 21/11. Riesgo: retraso arrastrado de los exámenes. |
 
 ### Sprint Backlog
 
 | **ID** | **Historia / tarea** | **Responsable** | **Pts** | **Horas** | **Estado** |
 |---|---|---|---|---|---|
-| 1 | H-016 · Correcciones del primer parcial: pago parcial en CU-29 y CU-30 (saldo restante y estado de la factura), condición entre retención, aprobación y emisión (CU-17 a CU-19) y umbrales de NFR13 | Miguel, Javier | 3 |   | Pendiente |
-| 2 | H-015 · Diagrama Entidad-Relación: atributos con tipo de dato, claves primarias y foráneas, relaciones, cardinalidades, tablas intermedias N:M y restricciones. Incluye el paso de clases a tablas (herencia, estados de factura, importes en DECIMAL y fechas en UTC). Versiones temporales (DiagramaER_Nombre_vN) y archivo final con el PO | Yousef, Miguel, Gonzalo | 5 |   | Pendiente |
-| 3 | H-009 · Diagramas de secuencia de los casos críticos (emisión con aprobación, cobro y conciliación, recordatorios). Versiones temporales (DiagramaSecuencia_Nombre_vN) y archivo final con el PO | Irene, Adrian, Javier (apoyo de Nestor) | 5 |   | Pendiente |
-| 4 | Revisión cruzada tablas ↔ clases ↔ secuencias ↔ casos de uso antes de la fusión final | Miguel, Irene | 1 |   | Pendiente |
-| 5 | Informe y documentación de ambos diagramas a partir de los archivos finales | Nestor | 2 |   | Pendiente |
-| 6 | H-013 · Informe Scrum del Sprint 4 (Review, Retro y burndown cada 2–3 días) | Yousef | 2 |   | Pendiente |
-| 7 | Check-in con versión intermedia obligatoria (mitad de sprint) y reunión de fusión y cierre | Todos | — |   | Pendiente |
+| 1 | H-016 · Correcciones del primer parcial: pago parcial en CU-29 y CU-30 (saldo restante y estado de la factura), condición entre retención, aprobación y emisión (CU-17 a CU-19) y umbrales de NFR13 | Miguel, Javier | 3 |   | Hecho (11/11) |
+| 2 | H-015 · Diagrama Entidad-Relación: atributos con tipo de dato, claves primarias y foráneas, relaciones, cardinalidades, tablas intermedias N:M y restricciones. Incluye el paso de clases a tablas (herencia, estados de factura, importes en DECIMAL y fechas en UTC). Versiones temporales (DiagramaER_Nombre_vN) y archivo final con el PO | Yousef, Miguel, Gonzalo | 5 |   | Hecho (18/11) |
+| 3 | H-009 · Diagramas de secuencia de los casos críticos (emisión con aprobación, cobro y conciliación, recordatorios). Versiones temporales (DiagramaSecuencia_Nombre_vN) y archivo final con el PO | Irene, Adrian, Javier (apoyo de Nestor) | 5 |   | Hecho (19/11) |
+| 4 | Revisión cruzada tablas ↔ clases ↔ secuencias ↔ casos de uso antes de la fusión final | Miguel, Irene | 1 |   | Hecho (19/11) |
+| 5 | Informe y documentación de ambos diagramas a partir de los archivos finales | Nestor | 2 |   | Hecho (21/11) |
+| 6 | H-013 · Informe Scrum del Sprint 4 (Review, Retro y burndown cada 2–3 días) | Yousef | 2 |   | Hecho (21/11) |
+| 7 | Check-in con versión intermedia obligatoria (mitad de sprint) y reunión de fusión y cierre | Todos | — |   | Hecho (14/11 y 21/11) |
 
 ### Carga por miembro
 
 | **Miembro (rol)** | **Historias / tareas** | **Observaciones** |
 |---|---|---|
-| Nestor · PO | Apoyo en los diagramas de secuencia; validar y fusionar las versiones finales; documentación de ambos diagramas |    |
-| Yousef · SM | Desarrollo del diagrama Entidad-Relación; Informe Scrum del S4; Burndown cada 2–3 días |    |
-| Irene · Developer | Desarrollo de los diagramas de secuencia; revisión cruzada |    |
-| Adrian · Developer | Desarrollo de los diagramas de secuencia |    |
-| Javier · Developer | Desarrollo de los diagramas de secuencia; corrección de NFR13 |    |
-| Miguel · Developer | Desarrollo del diagrama Entidad-Relación; corrección de CU-29 y CU-30; revisión cruzada |    |
-| Gonzalo · Developer | Desarrollo del diagrama Entidad-Relación |    |
+| Nestor · PO | Apoyo en los diagramas de secuencia; validar y fusionar las versiones finales; documentación de ambos diagramas | COMPLETADO |
+| Yousef · SM | Desarrollo del diagrama Entidad-Relación; Informe Scrum del S4; Burndown cada 2–3 días | COMPLETADO |
+| Irene · Developer | Desarrollo de los diagramas de secuencia; revisión cruzada | COMPLETADO |
+| Adrian · Developer | Desarrollo de los diagramas de secuencia | COMPLETADO |
+| Javier · Developer | Desarrollo de los diagramas de secuencia; corrección de NFR13 | COMPLETADO |
+| Miguel · Developer | Desarrollo del diagrama Entidad-Relación; corrección de CU-29 y CU-30; revisión cruzada | COMPLETADO |
+| Gonzalo · Developer | Desarrollo del diagrama Entidad-Relación | COMPLETADO |
 
 ### Resultado (se rellena en la Review)
 
-| **Objetivo cumplido** | *[Sí / Parcial / No]* |
+| **Objetivo cumplido** | Sí |
 |---|---|
-| **Puntos completados** | *[___ de ___]* · Historias completadas: *[___ de ___]* |
-| **Notas** | *[Qué se movió al siguiente sprint y por qué]* |
+| **Puntos completados** | 18 de 18 · Historias completadas: 4 de 4 (H-009, H-015, H-016, H-013) |
+| **Notas** | Se ha completado todo; de nuevo con 2 días más por el retraso arrastrado de los exámenes. Resultado: diagrama Entidad-Relación sacado del diagrama de clases, diagramas de secuencia de los casos críticos con su documentación y correcciones del primer parcial aplicadas a casos de uso y requisitos. |
 
 ## Sprint 5
 
 | **Fechas** | 22/11/2026 – 24/11/2026 (microsprint de 3 días) |
 |---|---|
-| **Objetivo del sprint (Sprint Goal)** | Demo ilustrativa sencilla y exposición del segundo parcial (24/11). |
+| **Objetivo del sprint (Sprint Goal)** | Presentación, guía para exponer y planteamiento de la demo; exposición del segundo parcial (24/11). |
 | **Capacidad y compromiso** | Puntos comprometidos: 9 (microsprint de 3 días) |
 | **Dependencias y riesgos** | Archivos finales del S4; reunión de preparación el dom. 22/11 y último repaso el lun. 23/11. Riesgo: poco margen hasta la exposición (R-07). |
 
@@ -595,29 +596,30 @@ El equipo mide la capacidad en **puntos de historia**, no en horas: cada miembro
 
 | **ID** | **Historia / tarea** | **Responsable** | **Pts** | **Horas** | **Estado** |
 |---|---|---|---|---|---|
-| 1 | H-012 · Demo ilustrativa sencilla hecha con IA: prototipo navegable de los flujos principales (crear y emitir factura, envío y cobro) para ir enseñando avances al cliente | Javier, Gonzalo | 5 |   | Pendiente |
-| 2 | H-017 · Presentación de la exposición del 24/11: clases, componentes, Entidad-Relación, secuencia, informe Scrum y demo | Yousef (planteamiento) · Todos | 3 |   | Pendiente |
-| 3 | H-013 · Informe Scrum del Sprint 5 | Yousef | 1 |   | Pendiente |
-| 4 | Reunión de preparación (dom. 22/11) y último repaso (lun. 23/11) | Todos | — |   | Pendiente |
+| 1 | H-018 · Creación de una guía sobre la información necesaria para exponer el trabajo de cada miembro del equipo | Todos | 3 |   | Hecho (23/11) |
+| 2 | H-012 · Planteamiento de la demo ilustrativa con IA: flujos que se enseñarán al cliente (crear y emitir factura, envío y cobro) y cómo construirla | Javier, Gonzalo | 2 |   | Hecho (23/11) |
+| 3 | H-017 · Crear la presentación para la exposición del 24/11: clases, componentes, Entidad-Relación, secuencia, informe Scrum | Todos | 3 |   | Hecho (24/11) |
+| 4 | H-013 · Informe Scrum del Sprint 5 | Yousef | 1 |   | Hecho (24/11) |
+| 5 | Reunión de preparación (dom. 22/11) y último repaso (lun. 23/11) | Todos | — |   | Hecho (23/11) |
 
 ### Carga por miembro
 
 | **Miembro (rol)** | **Historias / tareas** | **Observaciones** |
 |---|---|---|
-| Nestor · PO | Presentación: documentación de los diagramas |    |
-| Yousef · SM | Planteamiento de la presentación; Informe Scrum del S5 |    |
-| Irene · Developer | Presentación: diagramas de componentes y de secuencia |    |
-| Adrian · Developer | Presentación: diagramas de secuencia |    |
-| Javier · Developer | Demo ilustrativa con IA |    |
-| Miguel · Developer | Presentación: diagramas de clases y Entidad-Relación |    |
-| Gonzalo · Developer | Demo ilustrativa con IA |    |
+| Nestor · PO | Presentación: documentación de los diagramas | COMPLETADO |
+| Yousef · SM | Planteamiento de la presentación; Informe Scrum del S5 | COMPLETADO |
+| Irene · Developer | Presentación: diagramas de componentes y de secuencia | COMPLETADO |
+| Adrian · Developer | Presentación: diagramas de secuencia | COMPLETADO |
+| Javier · Developer | Planteamiento de la demo ilustrativa con IA | COMPLETADO |
+| Miguel · Developer | Presentación: diagramas de clases y Entidad-Relación | COMPLETADO |
+| Gonzalo · Developer | Planteamiento de la demo ilustrativa con IA | COMPLETADO |
 
 ### Resultado (se rellena en la Review)
 
-| **Objetivo cumplido** | *[Sí / Parcial / No]* |
+| **Objetivo cumplido** | Sí |
 |---|---|
-| **Puntos completados** | *[___ de ___]* · Historias completadas: *[___ de ___]* |
-| **Notas** | *[Qué se movió al siguiente sprint y por qué]* |
+| **Puntos completados** | 9 de 9 · Historias completadas: 4 de 4 (H-018, H-012, H-017, H-013) |
+| **Notas** | Microsprint centrado en la exposición del 24/11. De la demo solo se hace el planteamiento (H-012); la demo en sí (H-019) pasa al S6 (D-16). |
 
 ## Sprint 6
 
@@ -664,7 +666,7 @@ Columnas del tablero con su límite de trabajo en curso (WIP). Un tablero visibl
 | Límite WIP: — | Límite WIP: 10 | Límite WIP: 4 | Límite WIP: 4 | Límite WIP: — | Límite WIP: 0–2 |
 | Elementos comprometidos y sin empezar | Alguien lo está elaborando | Pull request abierta | El PO lo valida | Cumple la DoD | Con impedimento registrado |
 
-**Estado al cierre del Sprint 3 (05/11):** todos los elementos del Sprint Backlog en «Hecho»; ninguno bloqueado.
+**Estado al cierre del Sprint 5 (24/11):** todos los elementos del Sprint Backlog en «Hecho»; ninguno bloqueado.
 
 ## 11.2 Burndown del sprint
 
@@ -690,6 +692,22 @@ Puntos restantes por día. La línea ideal baja de forma lineal desde los puntos
 
 **Lectura:** la versión intermedia del check-in (27/10) hace que el trabajo se cierre de forma más continua que en el S2. El tramo plano del 27/10 al 30/10 son los exámenes (I-06).
 
+**Sprint 4** (06/11 – 21/11).
+
+| **Sprint 4** | **06/11** | **09/11** | **12/11** | **15/11** | **18/11** | **21/11** |
+|---|---|---|---|---|---|---|
+| **Ideal** | 18 | 14,4 | 10,8 | 7,2 | 3,6 | 0 |
+| **Real** | 18 | 18 | 15 | 15 | 10 | 0 |
+
+**Lectura:** las correcciones del primer parcial se cerraron pronto (11/11); los diagramas se cierran al final, tras la revisión cruzada.
+
+**Sprint 5** (22/11 – 24/11), por día al ser un microsprint.
+
+| **Sprint 5** | **22/11** | **23/11** | **24/11** |
+|---|---|---|---|
+| **Ideal** | 9 | 4,5 | 0 |
+| **Real** | 9 | 4 | 0 |
+
 ## 11.3 Velocidad del equipo
 
 | **Sprint** | **Pts comprometidos** | **Pts completados** | **Capacidad (h)** | **% objetivo cumplido** | **Notas** |
@@ -697,22 +715,22 @@ Puntos restantes por día. La línea ideal baja de forma lineal desde los puntos
 | S1 | 26 | 12 | — (se mide en puntos) | Parcial (46 % de los puntos) | Proyecto planteado inicialmente como práctico; versiones finales trasladadas a S2. |
 | S2 | 23 | 23 | — (se mide en puntos) | Sí (100 %) | Nueva forma de trabajo con versiones temporales y fusión con el PO. |
 | S3 | 22 | 22 | — (se mide en puntos) | Sí (100 %) | Exámenes: el sprint se alarga 2 días; versión intermedia en el check-in. |
-| S4 |   |   |   |   |   |
-| S5 |   |   |   |   |   |
+| S4 | 18 | 18 | — (se mide en puntos) | Sí (100 %) | Se alarga 2 días por el retraso arrastrado de los exámenes. |
+| S5 | 9 | 9 | — (se mide en puntos) | Sí (100 %) | Microsprint de 3 días hasta la exposición del 24/11. |
 | S6 |   |   |   |   |   |
-| Media | 23,7 | 19 | — | — | Referencia para comprometer el S4: 18–19 pts. |
+| Media | 19,6 | 16,8 | — | — | El S5 fue un microsprint; referencia para comprometer el S6: ≈ 20 pts. |
 
 *Usamos la velocidad para calibrar, no para comparar personas ni presionar al equipo: medimos capacidad, no un rendimiento individual.*
 
 ## 11.4 Indicadores adicionales
 
-| **Indicador** | **Qué mide** | **Frecuencia** | **S1** | **S2** | **S3** |
-|---|---|---|---|---|---|
-| Cumplimiento del objetivo del sprint | ¿Se logró el Sprint Goal? (Sí / Parcial / No) | Cada sprint | Parcial | Sí | Sí |
-| Observaciones de revisión | Observaciones abiertas y resueltas en los artefactos | Cada sprint | — (sin revisión formal) | Casos de uso: varias rondas de revisión crítica; todas las observaciones resueltas antes del cierre | Clases: revisión cruzada de las versiones de Yousef, Miguel y Gonzalo; todas las observaciones resueltas antes de la fusión |
-| Tiempo de ciclo | Días desde "En curso" hasta "Hecho" | Cada sprint | 9 días | ≈ 9 días (cierre concentrado al final) | ≈ 5 días |
-| Trazabilidad | % de requisitos con al menos un caso de uso asociado | Cada sprint | 10% | 100 % (28/28 FR y 18/18 UR) | 100 % (42/42 casos de uso con al menos una clase) |
-| Satisfacción del equipo | Voto de 1 a 5 en la retrospectiva | Cada sprint | 2 | 5 | 4 |
+| **Indicador** | **Qué mide** | **Frecuencia** | **S1** | **S2** | **S3** | **S4** | **S5** |
+|---|---|---|---|---|---|---|---|
+| Cumplimiento del objetivo del sprint | ¿Se logró el Sprint Goal? (Sí / Parcial / No) | Cada sprint | Parcial | Sí | Sí | Sí | Sí |
+| Observaciones de revisión | Observaciones abiertas y resueltas en los artefactos | Cada sprint | — (sin revisión formal) | Casos de uso: varias rondas de revisión crítica; todas las observaciones resueltas antes del cierre | Clases: revisión cruzada de las versiones de Yousef, Miguel y Gonzalo; todas las observaciones resueltas antes de la fusión | Entidad-Relación y secuencia: revisión cruzada con clases y casos de uso; todas resueltas | Ensayo de la exposición; observaciones resueltas el 23/11 |
+| Tiempo de ciclo | Días desde "En curso" hasta "Hecho" | Cada sprint | 9 días | ≈ 9 días (cierre concentrado al final) | ≈ 5 días | ≈ 5 días | ≈ 2 días |
+| Trazabilidad | % de requisitos con al menos un caso de uso asociado | Cada sprint | 10% | 100 % (28/28 FR y 18/18 UR) | 100 % (42/42 casos de uso con al menos una clase) | 100 % (clases ↔ tablas ↔ casos de uso) | 100 % |
+| Satisfacción del equipo | Voto de 1 a 5 en la retrospectiva | Cada sprint | 2 | 5 | 4 | 4 | 5 |
 
 # 12. Impedimentos, riesgos y decisiones
 
@@ -742,7 +760,7 @@ Puntuación = probabilidad (1–5) × impacto (1–5). Verde 1–7: vigilar en r
 | R-04 | Artefactos de distintos subgrupos que no encajan entre sí | Calidad | 3 | 4 | 12 | PO | Plantillas y nomenclatura comunes; revisión cruzada antes de integrar | Mitigado en S2 (trazabilidad 100 % requisitos ↔ casos de uso) |
 | R-05 | Requisitos ambiguos o contradictorios en la entrevista | Requisitos | 3 | 3 | 9 | PO | Lista de preguntas abiertas al cliente; registrar los supuestos | Abierto (P1–P12 registradas; ver I-04) |
 | R-06 | Trabajo concentrado en los últimos días del sprint | Planificación | 4 | 3 | 12 | SM | Hito intermedio con versión obligatoria en el check-in; burndown cada 2–3 días | Mitigado en S3 (A-03 y A-04) |
-| R-07 | Poco margen entre el cierre del S4 y la exposición del 24/11 | Planificación | 3 | 3 | 9 | SM | Demo sencilla; presentación preparada en un microsprint de 3 días | Abierto |
+| R-07 | Poco margen entre el cierre del S4 y la exposición del 24/11 | Planificación | 3 | 3 | 9 | SM | En el S5 solo se plantea la demo y se hace en el S6 (D-16); presentación preparada en un microsprint de 3 días | Cerrado (exposición realizada el 24/11) |
 |   |   |   |   |   |   |   |   |   |
 
 ## 12.3 Registro de decisiones
@@ -762,6 +780,9 @@ Puntuación = probabilidad (1–5) × impacto (1–5). Verde 1–7: vigilar en r
 | D-11 | 03/11 | Diagrama de clases final: la versión de Yousef como base, con las mejoras de la de Miguel (sesiones, series de facturación, documento de factura, pausas de recordatorios…) | Alternativa: elegir una sola versión. Se revisaron y puntuaron las dos versiones y la fusión. | Subgrupo de clases y PO |
 | D-12 | 05/11 | Alargar el S3 y el S4 dos días y dejar el S5 como microsprint de 3 días hasta la exposición (24/11) | Exámenes (I-06). Alternativa: recortar alcance. | Equipo |
 | D-13 | 05/11 | La demo pasa al S5 y se hace sencilla, con ayuda de IA, para ir enseñando avances al cliente | Alternativa: prototipo completo (13 pts), inviable con el calendario. | Equipo y PO |
+| D-14 | 09/11 | El Entidad-Relación se obtiene del diagrama de clases final, con los mismos nombres; los enumerados pasan a columnas con valores permitidos | Alternativa: diseñar las tablas desde cero, con riesgo de incoherencias entre modelos. | Subgrupo de Entidad-Relación |
+| D-15 | 10/11 | Diagramas de secuencia solo de los casos críticos: emisión con aprobación (CU-17 a CU-19), cobro y conciliación (CU-28 a CU-30) y recordatorios (CU-27) | Alternativa: uno por caso de uso (42), inviable. Además aclara lo que pidió el profesor sobre la aprobación y el pago parcial. | Subgrupo de secuencia |
+| D-16 | 21/11 | La demo se divide: en el S5 solo su planteamiento (H-012, 5 → 2 pts) y la demo en sí pasa al S6 como H-019 | Alternativa: hacer la demo completa en el microsprint de 3 días, sin margen para preparar la exposición (R-07). | Equipo y PO |
 
 # 13. Sprint Review y Retrospectiva
 
@@ -811,6 +832,28 @@ Puntuación = probabilidad (1–5) × impacto (1–5). Verde 1–7: vigilar en r
 | **Feedback recibido** | Nota del primer parcial: 9,77/10. Mejoras pedidas: pago parcial en CU-29 y CU-30, secuencia de retención, aprobación y emisión, umbrales de NFR13, seguimiento Scrum al día y cierre de A-03 a A-05. Internamente: las vistas hacen legible el diagrama de clases. |
 | **Cambios al backlog** | Nuevas H-015 (Entidad-Relación), H-016 (correcciones del primer parcial) y H-017 (exposición del 24/11); H-009, H-015 y H-016 al S4; H-012 se reduce a una demo sencilla con IA (13 → 5 pts) y pasa al S5; H-011 y H-014 al S6. |
 
+### Sprint 4
+
+| **Sprint / fecha** | Sprint 4 · 21/11/2026 |
+|---|---|
+| **Asistentes** | Nestor (PO), Yousef (SM), Irene, Adrian, Javier, Miguel, Gonzalo |
+| **Objetivo del sprint** | Diagrama Entidad-Relación, diagramas de secuencia y correcciones del primer parcial → Cumplido: Sí |
+| **Historias completadas** | H-015 (Entidad-Relación), H-009 (diagramas de secuencia), H-016 (correcciones del primer parcial), H-013 (informe Scrum) |
+| **Historias no completadas** | Ninguna. |
+| **Feedback recibido** | Internamente: el diagrama de secuencia deja clara la secuencia de retención, aprobación y emisión que pidió el profesor. |
+| **Cambios al backlog** | Nueva H-018 (guía para exponer). H-012 se reduce al planteamiento de la demo (5 → 2 pts) y se crea H-019 (la demo en sí) para el S6 (D-16). H-012, H-017 y H-018 confirmadas para el S5. |
+
+### Sprint 5
+
+| **Sprint / fecha** | Sprint 5 · 24/11/2026 (tras la exposición) |
+|---|---|
+| **Asistentes** | Nestor (PO), Yousef (SM), Irene, Adrian, Javier, Miguel, Gonzalo |
+| **Objetivo del sprint** | Presentación, guía para exponer y planteamiento de la demo; exposición del segundo parcial → Cumplido: Sí |
+| **Historias completadas** | H-018 (guía para exponer), H-012 (planteamiento de la demo), H-017 (exposición del 24/11), H-013 (informe Scrum) |
+| **Historias no completadas** | Ninguna. |
+| **Feedback recibido** | Pendiente del feedback del profesorado tras la exposición del 24/11. |
+| **Cambios al backlog** | H-011 (documento final), H-014 (cuestiones abiertas con el cliente) y H-019 (demo con IA) quedan para el S6. |
+
 ## 13.3 Retrospectiva (1,5 h)
 
 Formato base: Qué fue bien · Qué no fue bien · Qué probaremos. Antes de la Review, cada miembro envía al Scrum Master por privado sus sugerencias, ideas o quejas sobre el sprint. Secuencia: revisar acciones anteriores (10 min) → recopilar datos (20 min) → generar ideas (25 min) → elegir 1–3 acciones concretas (25 min) → cerrar (10 min).
@@ -823,6 +866,9 @@ Formato base: Qué fue bien · Qué no fue bien · Qué probaremos. Antes de la 
 | (S2) Comunicación rápida por WhatsApp y llamadas por Discord. | (S1) Estimaciones demasiado optimistas (12 de 26 puntos). | Comprometer según la velocidad media (≈ 18–20 pts en S3). |
 | (S3) La versión intermedia del check-in: el trabajo avanzó de forma continua. | (S3) Los exámenes nos han retrasado un poco (+2 días). | Tener en cuenta el calendario de exámenes en cada Sprint Planning. |
 | (S3) La fusión de las versiones del diagrama de clases con revisión cruzada. | | |
+| (S4) Las correcciones del primer parcial se cerraron al principio del sprint. | (S4) Seguimos arrastrando 2 días de retraso. | Cerrar el S6 en su fecha, sin alargarlo. |
+| | (S5) Poco tiempo para ensayar la exposición. | Preparar la presentación durante el sprint, no al final. |
+
 
 ## 13.4 Acciones de mejora
 
@@ -835,10 +881,12 @@ Una retrospectiva sin acciones no cambia nada. Cada acción tiene responsable y 
 | A-03 | S2 | Actualizar el burndown cada 2–3 días | Yousef | 03/11 | Hecho (desde el S3) |
 | A-04 | S2 | Versión intermedia obligatoria de cada artefacto en el check-in de mitad de sprint | Todos | 27/10 | Hecho (27/10) |
 | A-05 | S2 | Revisión cruzada entre subgrupos antes de cada fusión | Nestor | 03/11 | Hecho (04/11) |
-| A-06 | S3 | Tener en cuenta el calendario de exámenes en cada Sprint Planning | Yousef | 06/11 | Pendiente |
-| A-07 | S3 | Aplicar las correcciones del primer parcial (H-016) | Miguel y Javier | 21/11 | Pendiente |
+| A-06 | S3 | Tener en cuenta el calendario de exámenes en cada Sprint Planning | Yousef | 06/11 | Hecho |
+| A-07 | S3 | Aplicar las correcciones del primer parcial (H-016) | Miguel y Javier | 21/11 | Hecho (11/11) |
+| A-08 | S4 | Cerrar el S6 en su fecha, sin alargarlo | Yousef | 15/12 | Pendiente |
+| A-09 | S5 | Preparar la presentación durante el sprint, no al final | Todos | 15/12 | Pendiente |
 
-**Voto de satisfacción del equipo (1–5):** S1: 2 · S2: 5 · S3: 4
+**Voto de satisfacción del equipo (1–5):** S1: 2 · S2: 5 · S3: 4 · S4: 4 · S5: 5
 
 # 14. Partes interesadas y comunicación
 
@@ -879,7 +927,7 @@ Una retrospectiva sin acciones no cambia nada. Cada acción tiene responsable y 
 
 ✓  Calculada la capacidad del Sprint 1 (sección 9).
 
-## B. Checklist de cierre de sprint (Sprint 3)
+## B. Checklist de cierre de sprint (Sprint 5)
 
 ✓  Todos los elementos "Hecho" cumplen la Definición de Terminado.
 
